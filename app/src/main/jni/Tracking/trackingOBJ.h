@@ -77,6 +77,8 @@ namespace cvar {
                  \return Homography from previous frame
                  */
                 virtual cv::Mat& getHomographyMat() = 0;
+
+                virtual void setHomographyMat(const cv::Mat& newHomographyMat) = 0;
         };
 
     }

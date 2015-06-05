@@ -77,7 +77,11 @@ namespace cvar {
                 cv::Mat& getHomographyMat() {
                     return homographyMat;
                 }
-                ;
+
+                void setHomographyMat(const cv::Mat& newHomographyMat) {
+                    this->homographyMat = newHomographyMat;
+                }
+
         };
 
     }
