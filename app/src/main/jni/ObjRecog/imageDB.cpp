@@ -31,8 +31,8 @@
  //
  //M*/
 #include "imageDB.h"
-#include "../Main/orException.h"
-#include "../Main/commonCvFunctions.h"
+#include "Main/orException.h"
+#include "Main/commonCvFunctions.h"
 #include <iostream>
 #include <opencv2/calib3d/calib3d.hpp>
 

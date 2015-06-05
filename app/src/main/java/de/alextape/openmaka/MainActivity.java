@@ -69,7 +69,9 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Vie
                     Log.i(TAG, "OpenCV loaded successfully");
 
                     // Load native library after(!) OpenCV initialization
-                    System.loadLibrary("nonfree");
+
+                    // TODO load libs
+                    //System.loadLibrary("nonfree");
                     System.loadLibrary("native_openmaka");
 
                     mOpenCvCameraView.enableView();

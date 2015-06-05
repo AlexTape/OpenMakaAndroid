@@ -31,8 +31,8 @@
  //
  //M*/
 #include "visualWords.h"
-#include "../Main/commonCvFunctions.h"
-#include "../Main/orException.h"
+#include "Main/commonCvFunctions.h"
+#include "Main/orException.h"
 #include <opencv2/flann/flann.hpp>
 #include <fstream>
 

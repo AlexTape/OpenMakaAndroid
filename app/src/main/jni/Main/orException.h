@@ -33,7 +33,7 @@
 #ifndef __OR_EXCEPTION__
 #define __OR_EXCEPTION__
 
-#include<string>
+#include <string>
 #include <opencv2/core/core.hpp>
 
 namespace cvar {

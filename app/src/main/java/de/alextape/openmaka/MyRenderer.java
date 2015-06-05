@@ -13,6 +13,7 @@ class MyRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onSurfaceCreated(GL10 gl, javax.microedition.khronos.egl.EGLConfig arg1) {
 			/* do nothing */
+        // TODO native start here
         MainActivity.native_start();
     }
 

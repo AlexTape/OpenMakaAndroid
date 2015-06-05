@@ -142,9 +142,9 @@ public class JavaCameraView extends CameraBridgeViewBase implements PreviewCallb
                     /* Select the size that fits surface considering maximum size allowed */
                     Size frameSize = calculateCameraFrameSize(sizes, new JavaCameraSizeAccessor(), width, height);
 
-                    // TODO DEFINE IMAGE SIZE: /4 = 480x272
-                    frameSize.width = frameSize.width / 4;
-                    frameSize.height = frameSize.height / 4;
+                    // TODO DEFINE IMAGE SIZE: /2 = 960x544
+                    frameSize.width = frameSize.width / 2;
+                    frameSize.height = frameSize.height / 2;
 
                     params.setPreviewFormat(ImageFormat.NV21);
                     Log.d(TAG, "Set preview size to " + Integer.valueOf((int)frameSize.width) + "x" + Integer.valueOf((int)frameSize.height));

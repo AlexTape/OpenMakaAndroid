@@ -12,6 +12,8 @@
 #include <GLES/gl.h>
 #include <GLES/glext.h>
 
+#include <libpng/png.h>
+
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/features2d/features2d.hpp>
@@ -237,7 +239,7 @@ int native_FindFeatures(JNIEnv *env,jclass clazz,jlong addrGray, jlong addrRgba,
 		int max_query_size = 320;
 		fs["max_query_size"] >> max_query_size;
 
-		// クエリー用画像サイズを適切な大きさへ縮小して領域確保
+		// Area secured by reducing the image size for the query to the appropriate size
 		int frame_max_size;
 		if(frame_size.width > frame_size.height){
 			frame_max_size = frame_size.width;
