@@ -90,6 +90,6 @@
     <orderEntry type="library" exported="" name="appcompat-v7-19.1.0" level="project" />
     <orderEntry type="library" exported="" name="support-v4-19.1.0" level="project" />
     <orderEntry type="library" exported="" name="commons-io-1.3.2" level="project" />
-    <orderEntry type="module" module-name="openCVLibrary2410" exported="" />
+    <orderEntry type="module" module-name="openCVLibrary2411" exported="" />
   </component>
 </module>
