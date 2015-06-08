@@ -57,7 +57,8 @@ void native_gl_resize(JNIEnv *env UNUSED, jclass clazz UNUSED, jint width, jint 
 
 void native_gl_render(JNIEnv *env UNUSED, jclass clazz UNUSED)
 {
-	//LOGI("native_render ");
+
+	LOGI("native_gl_render");
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
 	glLoadIdentity();									// Reset The Current Modelview Matrix
 	glScalef(2,2,2);
@@ -76,7 +77,7 @@ void native_gl_render(JNIEnv *env UNUSED, jclass clazz UNUSED)
 
  	GLfloat vertex[3*2*10];
  	int vertexIndex = 0; 
- 	vertex[vertexIndex++] =-20.0;
+ 	vertex[vertexIndex++] =-30.0;
  	vertex[vertexIndex++] =-10.0;
  	vertex[vertexIndex++] = 5; 
  	vertex[vertexIndex++] =-20.0;
