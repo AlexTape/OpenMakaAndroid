@@ -31,7 +31,7 @@ include $(BUILD_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
 
-LOCAL_C_INCLUDES:= /home/thinker/Android/OpenCV/sdk/native/jni/include
+LOCAL_C_INCLUDES:= /home/thinker/Android/OpenCV-2-4-10/sdk/native/jni/include
 LOCAL_MODULE    := native_openmaka
 
 FILE_LIST := $(wildcard $(LOCAL_PATH)/**/*.cpp)
