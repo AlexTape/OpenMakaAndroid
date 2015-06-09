@@ -39,6 +39,8 @@ bool isObjectDetection = false;
 bool isTracking = false;
 bool isOpenGL = false;
 
+int recognizedObjectId = 0;
+
 void native_gl_resize(JNIEnv *env UNUSED, jclass clazz UNUSED, jint width, jint height)
 {
 	LOGI("native_resize ");
@@ -62,51 +64,56 @@ void native_gl_resize(JNIEnv *env UNUSED, jclass clazz UNUSED, jint width, jint 
 
 void native_gl_render(JNIEnv *env UNUSED, jclass clazz UNUSED)
 {
+    if (recognizedObjectId > 0) {
 
-	LOGI("native_gl_render");
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
-	glLoadIdentity();									// Reset The Current Modelview Matrix
-	glScalef(2,2,2);
-	glTranslatef(-1.5f,0.0f,-6.0f);						// Move Left 1.5 Units And Into The Screen 6.0
-	glClearColor(0,0,0,0);
-
-
-	//glDeleteTextures(1,&Name);
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, Name);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
+        glLoadIdentity();									// Reset The Current Modelview Matrix
+        glScalef(2,2,2);
+        glTranslatef(-1.5f,0.0f,-6.0f);						// Move Left 1.5 Units And Into The Screen 6.0
+        glClearColor(0,0,0,0);
 
 
- 	GLfloat vertex[3*2*10];
- 	int vertexIndex = 0;
- 	vertex[vertexIndex++] =-30.0;
- 	vertex[vertexIndex++] =-10.0;
- 	vertex[vertexIndex++] = 5;
- 	vertex[vertexIndex++] =-20.0;
- 	vertex[vertexIndex++] =10.0;
- 	vertex[vertexIndex++] =5;
- 	vertex[vertexIndex++] =0.0;
- 	vertex[vertexIndex++] =10.0;
- 	vertex[vertexIndex++] = 5;
- 	vertex[vertexIndex++] =0.0;
- 	vertex[vertexIndex++] =10.0;
- 	vertex[vertexIndex++] = 5;
- 	vertex[vertexIndex++] =0.0;
- 	vertex[vertexIndex++] =-10.0;
- 	vertex[vertexIndex++] = 5;
- 	vertex[vertexIndex++] =-20.0;
- 	vertex[vertexIndex++] =-10.0;
- 	vertex[vertexIndex++] = 5;
- 	glColor4f(1,1,1,1);
- 	glEnableClientState(GL_VERTEX_ARRAY);
- 	glVertexPointer(3,GL_FLOAT,0,vertex);
- 	glDrawArrays(GL_TRIANGLE_FAN,0,6);
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glFlush();
-	return;
+        //glDeleteTextures(1,&Name);
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, Name);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+
+        GLfloat vertex[3*2*10];
+        int vertexIndex = 0;
+        vertex[vertexIndex++] =-30.0;
+        vertex[vertexIndex++] =-10.0;
+        vertex[vertexIndex++] = 5;
+        vertex[vertexIndex++] =-20.0;
+        vertex[vertexIndex++] =10.0;
+        vertex[vertexIndex++] =5;
+        vertex[vertexIndex++] =0.0;
+        vertex[vertexIndex++] =10.0;
+        vertex[vertexIndex++] = 5;
+        vertex[vertexIndex++] =0.0;
+        vertex[vertexIndex++] =10.0;
+        vertex[vertexIndex++] = 5;
+        vertex[vertexIndex++] =0.0;
+        vertex[vertexIndex++] =-10.0;
+        vertex[vertexIndex++] = 5;
+        vertex[vertexIndex++] =-20.0;
+        vertex[vertexIndex++] =-10.0;
+        vertex[vertexIndex++] = 5;
+        glColor4f(1,1,1,1);
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glVertexPointer(3,GL_FLOAT,0,vertex);
+        glDrawArrays(GL_TRIANGLE_FAN,0,6);
+        glDisableClientState(GL_VERTEX_ARRAY);
+        glFlush();
+
+    } else {
+
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffe
+		glClearColor(0,0,0,0);
+	}
 
 }
 
@@ -242,8 +249,6 @@ void native_touch_event(JNIEnv *env,jclass clazz,jfloat x,jfloat y,jint status)
 {
 }
 
-
-
 double featureFinished = 0;
 
 // from android samples
@@ -268,54 +273,11 @@ int native_displayFunction(JNIEnv *env,jclass clazz,jlong mRgbaAddr, jlong mGray
     double period = 1000;
     double deltaTime = thisTime - featureFinished;
     if (deltaTime >= period) {
-	    int objID = findFeatures(mRgbaFrame, mGrayFrame);
+	    recognizedObjectId = findFeatures(mRgbaFrame, mGrayFrame);
 	    featureFinished = now_ms();
 	    double featureRuntime = featureFinished - thisTime;
 	    LOGI("FIND FEATURE RUNTIME: %d ms", featureRuntime);
     }
-
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
-	glLoadIdentity();									// Reset The Current Modelview Matrix
-	glScalef(2,2,2);
-	glTranslatef(-1.5f,0.0f,-6.0f);						// Move Left 1.5 Units And Into The Screen 6.0
-	glClearColor(0,0,0,0);
-
-
-	//glDeleteTextures(1,&Name);
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, Name);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-
- 	GLfloat vertex[3*2*10];
- 	int vertexIndex = 0;
- 	vertex[vertexIndex++] =-30.0;
- 	vertex[vertexIndex++] =-10.0;
- 	vertex[vertexIndex++] = 5;
- 	vertex[vertexIndex++] =-20.0;
- 	vertex[vertexIndex++] =10.0;
- 	vertex[vertexIndex++] =5;
- 	vertex[vertexIndex++] =0.0;
- 	vertex[vertexIndex++] =10.0;
- 	vertex[vertexIndex++] = 5;
- 	vertex[vertexIndex++] =0.0;
- 	vertex[vertexIndex++] =10.0;
- 	vertex[vertexIndex++] = 5;
- 	vertex[vertexIndex++] =0.0;
- 	vertex[vertexIndex++] =-10.0;
- 	vertex[vertexIndex++] = 5;
- 	vertex[vertexIndex++] =-20.0;
- 	vertex[vertexIndex++] =-10.0;
- 	vertex[vertexIndex++] = 5;
- 	glColor4f(1,1,1,1);
- 	glEnableClientState(GL_VERTEX_ARRAY);
- 	glVertexPointer(3,GL_FLOAT,0,vertex);
- 	glDrawArrays(GL_TRIANGLE_FAN,0,6);
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glFlush();
 
 	return i;
 }
@@ -331,13 +293,9 @@ bool native_initialize(JNIEnv *env,jclass clazz,jlong addrFrame, jstring configP
     //env->ReleaseStringChars(configPath, (jchar *)strMsgPtr);
 
     Mat& frame  = *(Mat*)addrFrame;
-
     Size frame_size = Size(frame.cols, frame.rows);
 
     cv::FileStorage cvfs(strMsgPtr, cv::FileStorage::READ);
-
-
-    printf(strMsgPtr);
 
     // reading of visual word
     FileNode fn;
@@ -350,8 +308,7 @@ bool native_initialize(JNIEnv *env,jclass clazz,jlong addrFrame, jstring configP
     fn["index"] >> idxfile;
     if(idxfile.empty()){
         ctrlOR.loadVisualWords(vwfile);
-    }
-    else{
+    } else{
         ctrlOR.loadVisualWordsBinary(vwfile, idxfile);
     }
 
@@ -366,8 +323,7 @@ bool native_initialize(JNIEnv *env,jclass clazz,jlong addrFrame, jstring configP
     int frame_max_size;
     if(frame_size.width > frame_size.height){
         frame_max_size = frame_size.width;
-    }
-    else{
+    } else{
         frame_max_size = frame_size.height;
     }
 
@@ -378,10 +334,10 @@ bool native_initialize(JNIEnv *env,jclass clazz,jlong addrFrame, jstring configP
     }
     query_image.create(frame_size.height/query_scale, frame_size.width/query_scale, CV_8UC1);
 
-    LOGI("frame_max_size = %d",frame_max_size);   //800
+    LOGI("frame_max_size = %d",frame_max_size);         //800
     LOGI("frame_size.height = %d",frame_size.height);   //480
-    LOGI("frame_size.width = %d",frame_size.width);      //800
-    LOGI("query_scale = %d",query_scale);                //4
+    LOGI("frame_size.width = %d",frame_size.width);     //800
+    LOGI("query_scale = %d",query_scale);               //4
 
     LOGI("NATIVE INITIALIZATION.. DONE!");
     return !isInitialized;
