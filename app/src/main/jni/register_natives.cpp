@@ -16,7 +16,13 @@ static JNINativeMethod s_methods[] = {
 	{"native_gl_render", "()V", (void*) native_gl_render},
 	{"native_key_event", "(II)V", (void*) native_key_event},
 	{"native_touch_event", "(FFI)V", (void*) native_touch_event},
-	{"native_FindFeatures", "(JJLjava/lang/String;)I", (int*) native_FindFeatures}
+	{"native_displayFunction", "(JJ)I", (int*) native_displayFunction},
+	{"native_initialize", "(JLjava/lang/String;)Z", (bool*) native_initialize},
+    // {"native_findFeatures", "(JJ)I", (int*) native_findFeatures},
+    {"native_setObjectDetection", "(Z)V", (void*) native_setObjectDetection},
+    {"native_setTracking", "(Z)V", (void*) native_setTracking},
+    {"native_setOpenGL", "(Z)V", (void*) native_setOpenGL}
+
 };
 
 static int register_native_methods(JNIEnv* env,

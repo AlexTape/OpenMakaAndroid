@@ -38,20 +38,15 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Vie
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private static final int VIEW_MODE_RGBA = 0;
-    private static final int VIEW_MODE_GRAY = 1;
-    private static final int VIEW_MODE_CANNY = 2;
-    private static final int VIEW_MODE_FEATURES = 5;
+    private static boolean VIEW_MODE_OBJECT_DETECTION = false;
+    private static boolean VIEW_MODE_TRACKING = false;
+    private static boolean VIEW_MODE_OPEN_GL = false;
 
-    private int mViewMode;
+    private static boolean initizalized = false;
+
     private Mat mRgba;
     private Mat mIntermediateMat;
     private Mat mGray;
-
-    private MenuItem mItemPreviewRGBA;
-    private MenuItem mItemPreviewGray;
-    private MenuItem mItemPreviewCanny;
-    private MenuItem mItemPreviewFeatures;
 
     private CameraBridgeViewBase mOpenCvCameraView;
 
@@ -117,21 +112,9 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Vie
 
         menuItems = new ArrayList<>();
         menuItems.clear();
-        menuItems.add("Preview RGBA");
-        menuItems.add("Preview GRAY");
-        menuItems.add("Canny");
-        menuItems.add("Find features");
-
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        Log.i(TAG, "called onCreateOptionsMenu");
-        mItemPreviewRGBA = menu.add("Preview RGBA");
-        mItemPreviewGray = menu.add("Preview GRAY");
-        mItemPreviewCanny = menu.add("Canny");
-        mItemPreviewFeatures = menu.add("Find features");
-        return true;
+        menuItems.add("Trigger ObjectDetection");
+        menuItems.add("Trigger Tracking");
+        menuItems.add("Trigger OpenGL");
     }
 
     @Override
@@ -170,61 +153,37 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Vie
     }
 
     public Mat onCameraFrame(CvCameraViewFrame inputFrame) {
-        final int viewMode = mViewMode;
-        switch (viewMode) {
-            case VIEW_MODE_GRAY:
-                // input frame has gray scale format
-                Imgproc.cvtColor(inputFrame.gray(), mRgba, Imgproc.COLOR_GRAY2RGBA, 4);
-                break;
-            case VIEW_MODE_RGBA:
-                // input frame has RBGA format
-                mRgba = inputFrame.rgba();
-                break;
-            case VIEW_MODE_CANNY:
-                // input frame has gray scale format
-                mRgba = inputFrame.rgba();
-                Imgproc.Canny(inputFrame.gray(), mIntermediateMat, 80, 100);
-                Imgproc.cvtColor(mIntermediateMat, mRgba, Imgproc.COLOR_GRAY2RGBA, 4);
-                break;
-            case VIEW_MODE_FEATURES:
-                // input frame has RGBA format
-                mRgba = inputFrame.rgba();
-                mGray = inputFrame.gray();
 
-                if (SystemClock.uptimeMillis() - time >= 1000) {
-                    time = SystemClock.uptimeMillis();
+        mRgba = inputFrame.rgba();
+        mGray = inputFrame.gray();
+        long mRgbaAddr = mRgba.getNativeObjAddr();
+        long mGrayAddr = mGray.getNativeObjAddr();
 
-                    String configFile = "/storage/emulated/0/Android/data/de.alextape.openmaka/files/config/config.xml";
-                    result = native_FindFeatures(mGray.getNativeObjAddr(), mRgba.getNativeObjAddr(), configFile);
-
-                    //Log.i("GLAndroid","recog result = " + result);
-                }
-
-                break;
+        if (!initizalized) {
+            String configFile = "/storage/emulated/0/Android/data/de.alextape.openmaka/files/config/config.xml";
+            initizalized = native_initialize(mRgbaAddr, configFile);
         }
 
-        //Log.i(TAG,Environment.getExternalStorageDirectory().getAbsolutePath());
+        if (VIEW_MODE_OBJECT_DETECTION || VIEW_MODE_TRACKING || VIEW_MODE_OPEN_GL) {
+            if (SystemClock.uptimeMillis() - time >= 1000) {
+                native_displayFunction(mRgbaAddr, mGrayAddr);
+            }
+        }
 
         return mRgba;
     }
 
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Log.i(TAG, "called onOptionsItemSelected; selected item: " + item);
+    //    static native void native_findFeatures(long matAddrGr, long matAddrRgba);
 
-        if (item == mItemPreviewRGBA) {
-            mViewMode = VIEW_MODE_RGBA;
-        } else if (item == mItemPreviewGray) {
-            mViewMode = VIEW_MODE_GRAY;
-        } else if (item == mItemPreviewCanny) {
-            mViewMode = VIEW_MODE_CANNY;
-        } else if (item == mItemPreviewFeatures) {
-            mViewMode = VIEW_MODE_FEATURES;
-        }
+    static native int native_displayFunction(long matAddrRgba, long matAddrGray);
 
-        return true;
-    }
+    static native boolean native_initialize(long matAddrRgba, String configPath);
 
-    static native int native_FindFeatures(long matAddrGr, long matAddrRgba, String configPath);
+    static native void native_setObjectDetection(boolean isActive);
+
+    static native void native_setTracking(boolean isActive);
+
+    static native void native_setOpenGL(boolean isActive);
 
     static native void native_start();
 
@@ -269,18 +228,19 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Vie
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
         switch (position) {
             case 0:
-                mViewMode = VIEW_MODE_RGBA;
+                VIEW_MODE_OBJECT_DETECTION = !VIEW_MODE_OBJECT_DETECTION;
+                native_setObjectDetection(VIEW_MODE_OBJECT_DETECTION);
                 break;
             case 1:
-                mViewMode = VIEW_MODE_GRAY;
+                VIEW_MODE_TRACKING = !VIEW_MODE_TRACKING;
+                native_setTracking(VIEW_MODE_TRACKING);
                 break;
             case 2:
-                mViewMode = VIEW_MODE_CANNY;
-                break;
-            case 3:
-                mViewMode = VIEW_MODE_FEATURES;
+                VIEW_MODE_OPEN_GL = !VIEW_MODE_OPEN_GL;
+                native_setOpenGL(VIEW_MODE_OPEN_GL);
                 break;
         }
         if (this.menuDialog != null && this.menuDialog.isShowing()) {
@@ -290,32 +250,24 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Vie
 
     private void copyAssets() {
 
-        Log.i("ARGH","test");
-
+        // TODO save destination
+        Log.i(TAG, "Copy assets.. /storage/emulated/0/Android/data/de.alextape.openmaka/files/");
         String configFile = null;
+
         try {
-
-            // TODO save destination
-            // /storage/emulated/0/Android/data/de.alextape.openmaka/files/*
-
             InputStream inputStream = getAssets().open("config/config.xml");
             configFile = IOUtils.toString(inputStream, "UTF-8");
 
-            Log.i("ARGH",configFile);
-
-            String[] dataFiles = new String[]{"config/config.xml","config/camera_matrix_qcam.txt", "config/db.txt", "config/visualWord.bin", "config/vw_index.txt", "slides/slide.xml", "miku/miku.xml"};
+            String[] dataFiles = new String[]{"config/config.xml", "config/camera_matrix_qcam.txt", "config/db.txt", "config/visualWord.bin", "config/vw_index.txt", "slides/slide.xml", "miku/miku.xml"};
 
             File storage = this.getExternalFilesDir(null);
             storage.mkdirs();
-
-            Log.i("ARGH", storage.getAbsolutePath());
 
             String[] folders = new String[]{"config", "slides", "miku"};
 
             for (String folder : folders) {
                 File f = new File(storage.getPath() + "/" + folder);
                 f.mkdirs();
-                Log.i("ARGH", f.getAbsolutePath());
             }
 
             for (int i = 0; i < dataFiles.length; i++) {
@@ -340,7 +292,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Vie
 
                 Log.i(TAG, "filepath: " + filepath);
                 configFile = configFile.replace(filename, filepath);
-                configFile = configFile.replace("Visual", "ARGH");
+                //configFile = configFile.replace("Visual", "ARGH");
             }
 
 
@@ -359,7 +311,7 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Vie
         }
     }
 
-
+    @Deprecated
     private void writeBytesToFile(InputStream is, File file) throws Exception {
 
         Log.i("CHECK", file.getAbsolutePath());
