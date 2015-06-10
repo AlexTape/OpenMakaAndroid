@@ -216,6 +216,7 @@ int findFeatures(Mat addrGray, Mat addrRgba)
 	Mat& mGr  = addrGray;
 	int returnThis = 0;
 
+    // essential to do this
 	cv::resize(mGr, query_image, query_image.size());
 
 	vector<cvar::orns::resultInfo> recog_result = ctrlOR.queryImage(query_image);

@@ -292,7 +292,6 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Vie
 
                 Log.i(TAG, "filepath: " + filepath);
                 configFile = configFile.replace(filename, filepath);
-                //configFile = configFile.replace("Visual", "ARGH");
             }
 
 
@@ -313,9 +312,6 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Vie
 
     @Deprecated
     private void writeBytesToFile(InputStream is, File file) throws Exception {
-
-        Log.i("CHECK", file.getAbsolutePath());
-
         try {
             final FileOutputStream output = new FileOutputStream(file);
             try {
