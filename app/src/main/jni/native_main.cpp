@@ -26,8 +26,12 @@
 #include "ObjRecog/controlOR.h"
 #include "ObjRecog/imageDB.h"
 
+#include "Main/utilFunctions.h"
+
+#include "Tracking/kltTrackingOBJ.h"
+#include "Tracking/trackingOBJ.h"
+
 using namespace std;
-using namespace cv;
 
 #define LOG_TAG "NATIVE_MAIN"
 #define LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
@@ -37,11 +41,42 @@ GLubyte* ImagePtr;
 #define SIZE 1024
 bool textured;
 
+cvar::tracking::trackingOBJ* trckOBJ = 0;	// Object tracking class
+//cvar::overlay::viewModel *viewMDL;	// OpenGL image display class (singleton)
+
 bool isObjectDetection = false;
 bool isTracking = false;
 bool isOpenGL = false;
 
+int seq_id = 0;	// Sequence ID of tracking
+int wait_seq_id = 0; // Sequence ID at the time of non-tracking
+int query_scale = 1.0;	// Query image reduction scale
+bool track_f = false;	// Tracking flag
+
 int recognizedObjectId = 0;
+
+string type2str(int type) {
+  string r;
+
+  uchar depth = type & CV_MAT_DEPTH_MASK;
+  uchar chans = 1 + (type >> CV_CN_SHIFT);
+
+  switch ( depth ) {
+    case CV_8U:  r = "8U"; break;
+    case CV_8S:  r = "8S"; break;
+    case CV_16U: r = "16U"; break;
+    case CV_16S: r = "16S"; break;
+    case CV_32S: r = "32S"; break;
+    case CV_32F: r = "32F"; break;
+    case CV_64F: r = "64F"; break;
+    default:     r = "User"; break;
+  }
+
+  r += "C";
+  r += (chans+'0');
+
+  return r;
+}
 
 void native_gl_resize(JNIEnv *env UNUSED, jclass clazz UNUSED, jint width, jint height)
 {
@@ -122,6 +157,10 @@ void native_gl_render(JNIEnv *env UNUSED, jclass clazz UNUSED)
 void native_start(JNIEnv *env UNUSED, jclass clazz UNUSED)
 {
 	LOGI("native_start ");
+
+    // acquisition of viewModel
+    //viewMDL = cvar::overlay::viewModel::getInstance();
+
 	glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
 	//glClearColor(0.0f, 0.0f, 0.0f, 0.5f);				// Black Background
 	glEnable(GL_DEPTH_TEST);							// Enables Depth Testing
@@ -208,26 +247,83 @@ void native_key_event(JNIEnv *env,jclass clazz,jint key,jint status)
 }
 
 cvar::orns::controlOR	ctrlOR;
-Mat query_image;
+cv::Mat query_image;
 
-int findFeatures(Mat addrGray, Mat addrRgba)
+int findFeatures(cv::Mat addrGray, cv::Mat addrRgba)
 {
 
-	Mat& mGr  = addrGray;
+	cv::Mat& mGray  = addrGray;
+    cv::Mat& mRgba  = addrRgba;
+
 	int returnThis = 0;
 
-    // essential to do this
-	cv::resize(mGr, query_image, query_image.size());
+    if (!track_f) {
+        try {
 
-	vector<cvar::orns::resultInfo> recog_result = ctrlOR.queryImage(query_image);
-	if(!recog_result.empty()){
-		LOGI("Recognized id=%d,probility=%f,matchnum=%d, size=%d",
-			recog_result[0].img_id,
-			recog_result[0].probability,
-			recog_result[0].matched_num,
-			recog_result[0].object_position.size());
-		returnThis = recog_result[0].img_id;
-	}
+        // essential to do this
+        cv::resize(mGray, query_image, query_image.size());
+
+        vector<cvar::orns::resultInfo> recog_result = ctrlOR.queryImage(query_image);
+        if(!recog_result.empty()){
+            LOGI("Recognized id=%d,probility=%f,matchnum=%d, size=%d",
+                recog_result[0].img_id,
+                recog_result[0].probability,
+                recog_result[0].matched_num,
+                recog_result[0].object_position.size());
+            returnThis = recog_result[0].img_id;
+        }
+
+	    // Convert homography for reduced image for the camera image
+	    // CV_8UC1 to CV_32FC1
+	    LOGI("QUERY_SCALE: %d",query_scale);
+//                    cv::Mat pose_mat_scale = recog_result[0].pose_mat;
+//                    recog_result[0].pose_mat.row(0) *= query_scale;
+//                    recog_result[0].pose_mat.row(1) *= query_scale;
+//
+//                    const cv::Mat& test = mGray;
+
+//        std::vector<cv::Point2f> objPos = recog_result[0].object_position;
+//
+//        std::vector<cv::Point2f> test1 = cvar::scalePoints(
+//                objPos,
+//                (double) query_scale);
+
+        //trckOBJ->startTracking(test, test1);
+        //track_f = viewMDL->setRecogId(recog_result[0].img_id,
+        //        pose_mat_scale);
+
+        seq_id = 0;
+        wait_seq_id = 0;
+
+        // Draw Result
+        // drawLineContour(mRgba, trckOBJ.object_position, cv::Scalar(255));
+        // vector<Point2f>::iterator itr = trckOBJ.corners.begin();
+        // while(itr!=trckOBJ.corners.end()){
+        //     circle(frame, *itr, 3, Scalar(255,0,0));
+        //     itr++;
+        // }
+        } catch (exception& e) {
+                    LOGI("BUG TRACKING 1");
+        }
+
+    } else {
+
+        //track_f = trckOBJ->onTracking(mGray);
+        seq_id++;
+    }
+
+    if(track_f) {
+
+//        const std::vector<cv::Point2f> objPosition = trckOBJ->getObjectPosition();
+//        const std::vector<cv::Point2f> objCorners = trckOBJ->getCorners();
+//        const std::vector<unsigned char> objTrackStatus = trckOBJ->getTrackStatus();
+//
+//        cvar::drawLineContour(mRgba, objPosition, cv::Scalar(255));
+//        cvar::drawPoints(mRgba, objCorners, objTrackStatus, cv::Scalar(255));
+    }
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //viewMDL->drawScene(mRgba);
 
 	return returnThis;
 }
@@ -252,14 +348,17 @@ int native_displayFunction(JNIEnv *env,jclass clazz,jlong mRgbaAddr, jlong mGray
 
     int i =0;
 
-	Mat& mRgbaFrame  = *(Mat*)mRgbaAddr;
-	Mat& mGrayFrame  = *(Mat*)mGrayAddr;
+	cv::Mat& mRgbaFrame  = *(cv::Mat*)mRgbaAddr;
+	cv::Mat& mGrayFrame  = *(cv::Mat*)mGrayAddr;
 
     double thisTime = 0;
     thisTime = now_ms();
 
-    if (isObjectDetection) {
-        double period = 1000;
+    // TODO reactivate obj detection switch for feature detection
+    //if (isObjectDetection) {
+    if (true) {
+        // TODO manipulate findFeature Period
+        double period = 10000;
         double deltaTime = thisTime - featureFinished;
         if (deltaTime >= period) {
             recognizedObjectId = findFeatures(mRgbaFrame, mGrayFrame);
@@ -270,20 +369,37 @@ int native_displayFunction(JNIEnv *env,jclass clazz,jlong mRgbaAddr, jlong mGray
 
         // if opengl is off, show feature circles
         if (!isOpenGL) {
-            vector<KeyPoint> v;
+            vector<cv::KeyPoint> v;
 
-            FastFeatureDetector detector(50);
+            cv::FastFeatureDetector detector(50);
             detector.detect(mGrayFrame, v);
 
             for( unsigned int i = 0; i < v.size(); i++ )
             {
-                const KeyPoint& kp = v[i];
-                circle(mRgbaFrame, Point(kp.pt.x, kp.pt.y), 10, Scalar(255,0,0,255));
+                const cv::KeyPoint& kp = v[i];
+                cv::circle(mRgbaFrame, cv::Point(kp.pt.x, kp.pt.y), 10, cv::Scalar(255,0,0,255));
             }
         }
     }
 
 	return i;
+}
+
+void native_initTracking()
+{
+//    try {
+//        cvar::tracking::trackingOBJ::TRACKER_TYPE trackingType = cvar::tracking::trackingOBJ::TRACKER_KLT;
+//        trckOBJ = cvar::tracking::trackingOBJ::create(trackingType);
+//    } catch (std::exception &e) {
+//        LOGI("initTracking Exception");
+//        throw e;
+//    }
+//
+//    track_f = true;
+//    double d2[] = {1,0,0,0,1,0,0,0,1};
+//    cv::Mat diagMat = cv::Mat(3,3,CV_64FC1,d2).clone();
+//    trckOBJ->setHomographyMat(diagMat);
+    //viewMDL->setRecogId(4,diagMat);
 }
 
 
@@ -296,13 +412,13 @@ bool native_initialize(JNIEnv *env,jclass clazz,jlong addrFrame, jstring configP
     const char *strMsgPtr = env->GetStringUTFChars( configPath , 0);
     //env->ReleaseStringChars(configPath, (jchar *)strMsgPtr);
 
-    Mat& frame  = *(Mat*)addrFrame;
-    Size frame_size = Size(frame.cols, frame.rows);
+    cv::Mat& frame  = *(cv::Mat*)addrFrame;
+    cv::Size frame_size = cv::Size(frame.cols, frame.rows);
 
     cv::FileStorage cvfs(strMsgPtr, cv::FileStorage::READ);
 
     // reading of visual word
-    FileNode fn;
+    cv::FileNode fn;
     fn = cvfs["VisualWord"];
     std::string vwfile;
     fn["visualWord"] >> vwfile;
@@ -331,7 +447,6 @@ bool native_initialize(JNIEnv *env,jclass clazz,jlong addrFrame, jstring configP
         frame_max_size = frame_size.height;
     }
 
-    int query_scale=1;
     query_scale = 1;
     while((frame_max_size / query_scale) > max_query_size){
         query_scale*=2;
@@ -342,6 +457,8 @@ bool native_initialize(JNIEnv *env,jclass clazz,jlong addrFrame, jstring configP
     LOGI("frame_size.height = %d",frame_size.height);   //480
     LOGI("frame_size.width = %d",frame_size.width);     //800
     LOGI("query_scale = %d",query_scale);               //4
+
+    native_initTracking();
 
     LOGI("NATIVE INITIALIZATION.. DONE!");
     return !isInitialized;

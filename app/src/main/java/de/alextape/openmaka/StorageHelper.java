@@ -9,7 +9,7 @@ import android.content.SharedPreferences;
 public class StorageHelper {
 
     Context context;
-    final String STORAGE = "alex.ist.kacke";
+    final String STORAGE = "de.alextape.openmaka";
 
     public StorageHelper (Context context) {
         this.context = context;

@@ -82,6 +82,18 @@ namespace cvar {
                     this->homographyMat = newHomographyMat;
                 }
 
+                std::vector<cv::Point2f>& getCorners() {
+                    return corners;
+                }
+
+                std::vector<cv::Point2f>& getObjectPosition() {
+                    return object_position;
+                }
+
+                std::vector<unsigned char>& getTrackStatus() {
+                    return track_status;
+                }
+
         };
 
     }

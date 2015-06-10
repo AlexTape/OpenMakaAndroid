@@ -79,6 +79,9 @@ namespace cvar {
                 virtual cv::Mat& getHomographyMat() = 0;
 
                 virtual void setHomographyMat(const cv::Mat& newHomographyMat) = 0;
+                virtual std::vector<cv::Point2f>& getCorners() = 0;
+                virtual std::vector<cv::Point2f>& getObjectPosition() = 0;
+                virtual std::vector<unsigned char>& getTrackStatus() = 0;
         };
 
     }
