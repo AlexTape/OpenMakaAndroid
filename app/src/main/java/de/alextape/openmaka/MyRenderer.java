@@ -1,6 +1,7 @@
 package de.alextape.openmaka;
 
 import android.opengl.GLSurfaceView;
+import android.os.SystemClock;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -19,7 +20,16 @@ class MyRenderer implements GLSurfaceView.Renderer {
     }
 
     public void onDrawFrame(GL10 gl) {
-        MainActivity.native_gl_render();
+
+        if (MainActivity.isViewModeOpenGl()) {
+            MainActivity.native_gl_render();
+        } else {
+            // clear screen
+            gl.glClearColor(0, 0, 0, 0);
+            gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
+        }
+
+
     }
 
 }

@@ -1,25 +1,27 @@
 #include <jni.h>
+
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <android/log.h>
-#include <android_key_code.h>
-
-#include "native_interface.h"
-
-#include <android/native_window.h> // requires ndk r5 or newer
-#include <EGL/egl.h> // requires ndk r5 or newer
-#include <GLES/gl.h>
-#include <GLES/glext.h>
-
-#include <libpng/png.h>
 #include <time.h>
+#include <vector>
+
+#include <android/log.h>
+#include <android/native_window.h> // requires ndk r5 or newer
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/features2d/features2d.hpp>
 #include <opencv2/highgui/highgui.hpp>
-#include <vector>
+
+
+#include <EGL/egl.h> // requires ndk r5 or newer
+#include <GLES/gl.h>
+#include <GLES/glext.h>
+#include <libpng/png.h>
+
+#include "android_key_code.h"
+#include "native_interface.h"
 #include "Main/commonCvFunctions.h"
 #include "ObjRecog/controlOR.h"
 #include "ObjRecog/imageDB.h"
@@ -211,11 +213,10 @@ Mat query_image;
 int findFeatures(Mat addrGray, Mat addrRgba)
 {
 
-	Mat& frame  = addrGray;
-
+	Mat& mGr  = addrGray;
 	int returnThis = 0;
 
-	cv::resize(frame, query_image, query_image.size());
+	cv::resize(mGr, query_image, query_image.size());
 
 	vector<cvar::orns::resultInfo> recog_result = ctrlOR.queryImage(query_image);
 	if(!recog_result.empty()){
@@ -227,38 +228,23 @@ int findFeatures(Mat addrGray, Mat addrRgba)
 		returnThis = recog_result[0].img_id;
 	}
 
-    // show feature circles
-	Mat& mGr  = addrGray;
-    Mat& mRgb = addrRgba;
-    vector<KeyPoint> v;
-
-    FastFeatureDetector detector(50);
-    detector.detect(mGr, v);
-
-    for( unsigned int i = 0; i < v.size(); i++ )
-    {
-        const KeyPoint& kp = v[i];
-        circle(mRgb, Point(kp.pt.x, kp.pt.y), 10, Scalar(255,0,0,255));
-    }
-
 	return returnThis;
 }
 
 
 void native_touch_event(JNIEnv *env,jclass clazz,jfloat x,jfloat y,jint status)
 {
+    //LOGI("touch_event: %d %d %d", x,y,status);
 }
 
 double featureFinished = 0;
 
-// from android samples
 /* return current time in milliseconds */
-static double now_ms(void) {
-
+static double now_ms(void)
+{
     struct timespec res;
     clock_gettime(CLOCK_REALTIME, &res);
     return 1000.0 * res.tv_sec + (double) res.tv_nsec / 1e6;
-
 }
 
 int native_displayFunction(JNIEnv *env,jclass clazz,jlong mRgbaAddr, jlong mGrayAddr) {
@@ -270,13 +256,30 @@ int native_displayFunction(JNIEnv *env,jclass clazz,jlong mRgbaAddr, jlong mGray
 
     double thisTime = 0;
     thisTime = now_ms();
-    double period = 1000;
-    double deltaTime = thisTime - featureFinished;
-    if (deltaTime >= period) {
-	    recognizedObjectId = findFeatures(mRgbaFrame, mGrayFrame);
-	    featureFinished = now_ms();
-	    double featureRuntime = featureFinished - thisTime;
-	    LOGI("FIND FEATURE RUNTIME: %d ms", featureRuntime);
+
+    if (isObjectDetection) {
+        double period = 1000;
+        double deltaTime = thisTime - featureFinished;
+        if (deltaTime >= period) {
+            recognizedObjectId = findFeatures(mRgbaFrame, mGrayFrame);
+            featureFinished = now_ms();
+            double featureRuntime = featureFinished - thisTime;
+            LOGI("FIND FEATURE RUNTIME: %d ms", featureRuntime);
+        }
+
+        // if opengl is off, show feature circles
+        if (!isOpenGL) {
+            vector<KeyPoint> v;
+
+            FastFeatureDetector detector(50);
+            detector.detect(mGrayFrame, v);
+
+            for( unsigned int i = 0; i < v.size(); i++ )
+            {
+                const KeyPoint& kp = v[i];
+                circle(mRgbaFrame, Point(kp.pt.x, kp.pt.y), 10, Scalar(255,0,0,255));
+            }
+        }
     }
 
 	return i;

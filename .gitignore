@@ -1,9 +1,7 @@
-/.gradle
-/build
-/app/build
-/openCVLibrary2411/build
 .gradle
-/.idea/workspace.xml
-/.idea/libraries
-.DS_Store
-/captures
+app/build
+openCVLibrary2411/build
+.idea/dictionaries
+build
+.idea/workspace.xml
+.idea/libraries

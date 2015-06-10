@@ -337,6 +337,18 @@ public class MainActivity extends Activity implements CvCameraViewListener2, Vie
             is.close();
         }
     }
+
+    public static boolean isViewModeObjectDetection() {
+        return VIEW_MODE_OBJECT_DETECTION;
+    }
+
+    public static boolean isViewModeTracking() {
+        return VIEW_MODE_TRACKING;
+    }
+
+    public static boolean isViewModeOpenGl() {
+        return VIEW_MODE_OPEN_GL;
+    }
 }
 
 
