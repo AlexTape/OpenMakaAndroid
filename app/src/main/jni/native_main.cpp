@@ -252,8 +252,11 @@ cv::Mat query_image;
 int findFeatures(cv::Mat addrGray, cv::Mat addrRgba)
 {
 
-	cv::Mat& mGray  = addrGray;
-    cv::Mat& mRgba  = addrRgba;
+	cv::Mat& mg = addrGray;
+    cv::Mat& mr = addrRgba;
+
+    cv::Mat mGray = mg.clone();
+    cv::Mat mRgba = mr.clone();
 
 	int returnThis = 0;
 
@@ -276,21 +279,24 @@ int findFeatures(cv::Mat addrGray, cv::Mat addrRgba)
 	    // Convert homography for reduced image for the camera image
 	    // CV_8UC1 to CV_32FC1
 	    LOGI("QUERY_SCALE: %d",query_scale);
-//                    cv::Mat pose_mat_scale = recog_result[0].pose_mat;
-//                    recog_result[0].pose_mat.row(0) *= query_scale;
-//                    recog_result[0].pose_mat.row(1) *= query_scale;
+//	    cv::Mat myMat = recog_result[0].pose_mat;
+//                    cv::Mat pose_mat_scale = myMat.clone();
+//                    pose_mat_scale.row(0) *= query_scale;
+//                    pose_mat_scale.row(1) *= query_scale;
 //
-//                    const cv::Mat& test = mGray;
-
-//        std::vector<cv::Point2f> objPos = recog_result[0].object_position;
+//                    cv::Mat& test = mGray;
 //
-//        std::vector<cv::Point2f> test1 = cvar::scalePoints(
-//                objPos,
-//                (double) query_scale);
+//std::vector<cv::Point2f> argh = recog_result[0].object_position;
+//double testds= (double) query_scale;
+//
+//                    vector<cv::Point2f> test1 = cvar::scalePoints(
+//                            argh,
+//                            testds);
 
-        //trckOBJ->startTracking(test, test1);
-        //track_f = viewMDL->setRecogId(recog_result[0].img_id,
-        //        pose_mat_scale);
+                    //trckOBJ->startTracking(test, test1);
+                    //track_f = viewMDL->setRecogId(recog_result[0].img_id,
+                     //       pose_mat_scale);
+
 
         seq_id = 0;
         wait_seq_id = 0;

@@ -1,0 +1,3 @@
+set solib-search-path build/obj/local/armeabi-v7a
+source /home/thinker/Android/Ndk/prebuilt/common/gdb/common.setup
+directory /home/thinker/Android/Ndk/platforms/android-16/arch-arm/usr/include src/main/jni /home/thinker/Android/Ndk/sources/cxx-stl/gnu-libstdc++ /home/thinker/Android/OpenCV-2-4-10/sdk/native/jni/include/opencv /home/thinker/Android/OpenCV-2-4-10/sdk/native/jni/include /home/thinker/Android/Ndk/sources/cxx-stl/gnu-libstdc++/4.8/include /home/thinker/Android/Ndk/sources/cxx-stl/gnu-libstdc++/4.8/libs/armeabi-v7a/include /home/thinker/Android/Ndk/sources/cxx-stl/gnu-libstdc++/4.8/include/backward libpng/config.h libpng/pngconf.h libpng/pngdebug.h libpng/png.h libpng/pnginfo.h libpng/pnglibconf.h libpng/pngprefix.h libpng/pngpriv.h libpng/pngstruct.h
