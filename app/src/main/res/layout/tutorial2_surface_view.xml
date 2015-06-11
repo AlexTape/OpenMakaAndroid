@@ -9,10 +9,12 @@
         android:layout_height="fill_parent"
         android:orientation="horizontal">
 
+        <!--
         <de.alextape.openmaka.GlBufferView
             android:id="@+id/glbuffer_view"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"/>
+            -->
 
         <org.opencv.android.JavaCameraView
             android:id="@+id/tutorial2_activity_surface_view"
