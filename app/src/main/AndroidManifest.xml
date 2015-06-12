@@ -14,7 +14,7 @@
         >
         <!-- TODO remove debuggable later -->
 
-        <activity android:name="Tutorial2Activity"
+        <activity android:name=".CameraActivity"
                   android:label="@string/app_name"
                   android:screenOrientation="landscape"
                   android:configChanges="keyboardHidden|orientation"
