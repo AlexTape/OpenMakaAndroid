@@ -1,17 +1,41 @@
-#include <jni.h>
-
-#ifndef LOGGER_H
-#define LOGGER_H
-
-#include <strings.h>
+#ifndef __dbg_h__
+#define __dbg_h__
+ 
+#include <stdio.h>
+#include <errno.h>
+#include <string.h>
+ 
+// Debug tag
+#define DTAG "DBG"
+ 
+#ifdef __ANDROID__
 #include <android/log.h>
-
-#define TAG "OpenMaka::Native"
-
-#define LOGV(TAG,...) __android_log_print(ANDROID_LOG_VERBOSE, TAG, "VERBOSE: " ,__VA_ARGS__)
-#define LOGD(TAG,...) __android_log_print(ANDROID_LOG_DEBUG  , TAG, "DEBUG: "   ,__VA_ARGS__)
-#define LOGI(TAG,...) __android_log_print(ANDROID_LOG_INFO   , TAG, "INFO: "    ,__VA_ARGS__)
-#define LOGW(TAG,...) __android_log_print(ANDROID_LOG_WARN   , TAG, "WARN: "    ,__VA_ARGS__)
-#define LOGE(TAG,...) __android_log_print(ANDROID_LOG_ERROR  , TAG, "ERROR: "   , __VA_ARGS__)
-
+#ifdef NDEBUG
+#define debug(D, M, ...)
+#else
+#define debug(D, M, ...) __android_log_print(ANDROID_LOG_ERROR, D, "DEBUG %s:%d: " M "", __FILE__, __LINE__, ##__VA_ARGS__)
 #endif
+ 
+#define clean_errno() (errno == 0 ? "None" : strerror(errno))
+ 
+#define log_err(D, M, ...) __android_log_print(ANDROID_LOG_ERROR, D, "[ERROR] (%s:%d: errno: %s) " M "", __FILE__, __LINE__, clean_errno(), ##__VA_ARGS__)
+ 
+#define log_warn(D, M, ...) __android_log_print(ANDROID_LOG_WARN, D, "[WARN] (%s:%d: errno: %s) " M "", __FILE__, __LINE__, clean_errno(), ##__VA_ARGS__)
+ 
+#define log_info(D, M, ...) __android_log_print(ANDROID_LOG_INFO, D, "[INFO] " M "", ##__VA_ARGS__)
+ 
+#define log_debug(D, M, ...) __android_log_print(ANDROID_LOG_DEBUG, D, "[DEBUG] (%s:%d) " M "", __FILE__, __LINE__, ##__VA_ARGS__)
+ 
+#define check(A, D, M, ...) errno=0; if(!(A)) { log_err(D, M, ##__VA_ARGS__); errno=0; goto error; }
+ 
+#define check_zero(A, D, M, ...) check(A==0, D, M, ##__VA_ARGS__)
+ 
+#define sentinel(D, M, ...)  { log_err(D, M, ##__VA_ARGS__); errno=0; goto error; }
+ 
+#define check_mem(A, D) check((A), D, "Out of memory.")
+ 
+#define check_debug(A, D, M, ...) if(!(A)) { debug(D, M, ##__VA_ARGS__); errno=0; goto error; }
+ 
+#endif // __ANDROID__
+
+#endif // _dbg_h_

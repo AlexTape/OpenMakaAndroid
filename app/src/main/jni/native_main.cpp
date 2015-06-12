@@ -64,16 +64,25 @@ int findFeatures(cv::Mat mRgbaFrame, cv::Mat mGrayFrame)
 
     vector<cv::KeyPoint> v;
 
-    cv::Ptr<cv::FeatureDetector> detector = cv::FeatureDetector::create("SURF");
-    detector->detect(mGrayFrame, v);
+    cv::FastFeatureDetector detector(50);
+    //cv::ORB detector(50);
+    detector.detect(mGrayFrame, v);
+    for( unsigned int i = 0; i < v.size(); i++ )
+    {
+        const cv::KeyPoint& kp = v[i];
+        cv::circle(mRgbaFrame, cv::Point(kp.pt.x, kp.pt.y), 10, cv::Scalar(255,0,0,255));
+    }
+
+//    cv::Ptr<cv::FeatureDetector> detector = cv::FeatureDetector::create("SURF");
+//    detector->detect(mGrayFrame, v);
 
     // if opengl is off, show feature circles
 //    if (!isOpenGL) {
-        for( unsigned int i = 0; i < v.size(); i++ )
-        {
-            const cv::KeyPoint& kp = v[i];
-            cv::circle(mRgbaFrame, cv::Point(kp.pt.x, kp.pt.y), 10, cv::Scalar(255,0,0,255));
-        }
+//        for( unsigned int i = 0; i < v.size(); i++ )
+//        {
+//            const cv::KeyPoint& kp = v[i];
+//            cv::circle(mRgbaFrame, cv::Point(kp.pt.x, kp.pt.y), 10, cv::Scalar(255,0,0,255));
+//        }
 //    }
 
 //    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -93,7 +102,7 @@ static double now_ms(void)
 JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeFunctions_native_1start
   (JNIEnv *, jclass clazz)
 {
-	LOGD("native_Start","");
+	log_info("","","native_Start","");
 
     // acquisition of viewModel
     //viewMDL = cvar::overlay::viewModel::getInstance();
@@ -135,7 +144,7 @@ JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeFunctions_native_1start
 JNIEXPORT jboolean JNICALL Java_de_alextape_openmaka_NativeFunctions_native_1initialize
   (JNIEnv *env, jclass clazz, jlong mAddrGray, jstring configPath)
 {
-    LOGI("NATIVE INITIALIZATION..","");
+    log_info("","","NATIVE INITIALIZATION..");
     bool isInitialized = false;
 
     const char *strMsgPtr = env->GetStringUTFChars( configPath , 0);
@@ -147,7 +156,7 @@ JNIEXPORT jboolean JNICALL Java_de_alextape_openmaka_NativeFunctions_native_1ini
     env->ReleaseStringChars(configPath, (jchar *)strMsgPtr);
     isInitialized = true;
 
-    LOGI("NATIVE INITIALIZATION.. DONE!","");
+    log_info("","","NATIVE INITIALIZATION.. DONE!","");
     return isInitialized;
 
 }
@@ -165,19 +174,12 @@ JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeFunctions_native_1display
 	cv::Mat& mRgbaFrame  = *(cv::Mat*)mRgbaAddr;
 	cv::Mat& mGrayFrame  = *(cv::Mat*)mGrayAddr;
 
-    double thisTime = 0;
-    thisTime = now_ms();
-
     if (isObjectDetection) {
-        double period = 500;
-//        double deltaTime = thisTime - featureFinished;
-//        if (deltaTime >= period) {
-            int recognizedObjectId = findFeatures(mRgbaFrame, mGrayFrame);
-            featureFinished = now_ms();
-            double featureRuntime = featureFinished - thisTime;
-            LOGI("FIND FEATURE RUNTIME: %d ms | Detected Feature: %d", featureRuntime, recognizedObjectId);
-//        }
-
+        int thisTime = now_ms();
+        int recognizedObjectId = findFeatures(mRgbaFrame, mGrayFrame);
+        featureFinished = now_ms();
+        int featureRuntime = featureFinished - thisTime;
+        log_info("","","FIND FEATURE RUNTIME: %d ms | Detected Feature: %d", featureRuntime, recognizedObjectId);
     }
 
 	return i;
@@ -246,7 +248,7 @@ JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeFunctions_native_1glRende
 JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeFunctions_native_1glResize
   (JNIEnv *env, jclass clazz, jint width, jint height)
 {
-	LOGI("native_resize ","");
+	log_info("","","native_resize ");
 	if (height==0)										// Prevent A Divide By Zero By
 	{
 		height=1;										// Making Height Equal One
