@@ -43,10 +43,10 @@ LOCAL_SRC_FILES := $(FILE_LIST:$(LOCAL_PATH)/%=%)
 
 LOCAL_CFLAGS    := -Werror -O3 -ffast-math -DNDEBUG -DANDROID_NDK -DDISABLE_IMPORTGL -DOPEL_ES_1 -ffast-math
 LOCAL_CXXFLAGS  += -fno-exceptions
-LOCAL_LDLIBS    += -L$(LOCAL_PATH)/lib -llog -landroid  -ldl -lEGL -lGLESv1_CM -lOpenSLES -lGLESv2 -lgnustl_shared
+LOCAL_LDLIBS    += -L$(LOCAL_PATH)/lib -llog -landroid  -ldl -lEGL -lGLESv1_CM -lOpenSLES -lGLESv2 
 LOCAL_DISABLE_FORMAT_STRING_CHECKS := true
 
-LOCAL_STATIC_LIBRARIES := libpng
-LOCAL_SHARED_LIBRARIES := lgnustl_shared 
+#LOCAL_STATIC_LIBRARIES := libpng
+#LOCAL_SHARED_LIBRARIES := lgnustl_shared 
 
 include $(BUILD_SHARED_LIBRARY)
