@@ -1,19 +1,8 @@
 #include <jni.h>
-
 #include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <time.h>
-#include <vector>
-
-#include <android/native_window.h> // requires ndk r5 or newer
-
 #include <opencv2/core/core.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/features2d/features2d.hpp>
-#include <opencv2/highgui/highgui.hpp>
 
-#include "de_alextape_openmaka_NativeFunctions.h"
+#include "native_main.h"
 #include "native_logger.h"
 
 #include "Application/Controller.hpp"
