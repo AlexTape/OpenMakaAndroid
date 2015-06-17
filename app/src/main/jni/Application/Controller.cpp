@@ -1,12 +1,4 @@
-#include <jni.h>
-
 #include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <time.h>
-#include <vector>
-
-#include <android/native_window.h> // requires ndk r5 or newer
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
@@ -18,7 +10,7 @@
 #include <GLES/glext.h>
 
 #include "native_logger.h"
-
+#include "Helper.hpp"
 #include "Controller.hpp"
 
 using namespace std;
@@ -34,35 +26,9 @@ Controller* Controller::getInstance() {
     return inst_;
 }
 
-/* return current time in milliseconds */
-double Controller::now_ms(void)
-{
-    struct timespec res;
-    clock_gettime(CLOCK_REALTIME, &res);
-    return 1000.0 * res.tv_sec + (double) res.tv_nsec / 1e6;
-}
-
-string Controller::type2str(int type) {
-  string r;
-  uchar depth = type & CV_MAT_DEPTH_MASK;
-  uchar chans = 1 + (type >> CV_CN_SHIFT);
-  switch ( depth ) {
-    case CV_8U:  r = "8U"; break;
-    case CV_8S:  r = "8S"; break;
-    case CV_16U: r = "16U"; break;
-    case CV_16S: r = "16S"; break;
-    case CV_32S: r = "32S"; break;
-    case CV_32F: r = "32F"; break;
-    case CV_64F: r = "64F"; break;
-    default:     r = "User"; break;
-  }
-  r += "C";
-  r += (chans+'0');
-  return r;
-}
-
 int Controller::findFeatures(cv::Mat mRgbaFrame, cv::Mat mGrayFrame)
 {
+    log_info(ControllerTAG, "findFeatures..");
     int returnThis = 0;
 
     vector<cv::KeyPoint> v;
@@ -76,13 +42,14 @@ int Controller::findFeatures(cv::Mat mRgbaFrame, cv::Mat mGrayFrame)
         cv::circle(mRgbaFrame, cv::Point(kp.pt.x, kp.pt.y), 10, cv::Scalar(255,0,0,255));
     }
 
+    log_info(ControllerTAG, "findFeatures.. done");
 	return returnThis;
 }
 
 
 
 void Controller::start() {
-	log_info("","","native_Start","");
+    log_info(ControllerTAG, "start..");
 
     // acquisition of viewModel
     //viewMDL = cvar::overlay::viewModel::getInstance();
@@ -114,39 +81,42 @@ void Controller::start() {
 	}
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SIZE, SIZE,
 		0, GL_RGBA, GL_UNSIGNED_BYTE, ImagePtr);
+
+    log_info(ControllerTAG, "start.. done");
 }
 
 bool Controller::initialize(cv::Mat& mGrayFrame, const char& configPath)
 {
-    log_info("","","NATIVE INITIALIZATION..");
+    log_info(ControllerTAG, "initializing..");
     bool isInitialized = false;
 
 
     isInitialized = true;
 
-    log_info("","","NATIVE INITIALIZATION.. DONE!","");
+    log_info(ControllerTAG, "initializing.. done");
     return isInitialized;
 
 }
 
 int Controller::displayFunction(cv::Mat& mRgbaFrame, cv::Mat& mGrayFrame)
 {
+	log_info(ControllerTAG, "display..");
     int i =0;
 
     if (isObjectDetection) {
-        int thisTime = now_ms();
+        int thisTime = Helper::now_ms();
         int recognizedObjectId = findFeatures(mRgbaFrame, mGrayFrame);
-        featureFinished = now_ms();
+        featureFinished = Helper::now_ms();
         int featureRuntime = featureFinished - thisTime;
-        log_info("","","FIND FEATURE RUNTIME: %d ms | Detected Feature: %d", featureRuntime, recognizedObjectId);
+        log_info(DTAG, "FIND FEATURE RUNTIME: %d ms | Detected Feature: %d", featureRuntime, recognizedObjectId);
     }
-
+	log_info(ControllerTAG, "display.. done");
 	return i;
-
 }
 
 void Controller::glRender()
 {
+	log_info(ControllerTAG, "rendering..");
     if (isOpenGL) {
        int recognizedObjectId = 1;
        if (recognizedObjectId > 0) {
@@ -200,11 +170,11 @@ void Controller::glRender()
            glClearColor(0,0,0,0);
        }
    }
-
+   log_info(ControllerTAG, "rendering.. done");
 }
 
 void Controller::glResize(int height, int width) {
-	log_info("","","native_resize ");
+	log_info(ControllerTAG, "resizing..");
 	if (height==0)										// Prevent A Divide By Zero By
 	{
 		height=1;										// Making Height Equal One
@@ -220,17 +190,20 @@ void Controller::glResize(int height, int width) {
 
 	glMatrixMode(GL_MODELVIEW);							// Select The Modelview cv::Matrix
 	glLoadIdentity();									// Reset The Modelview cv::Matrix
-
+    log_info(ControllerTAG, "resizing.. done");
 }
 
 void Controller::setObjectDetection(bool isActive) {
+    log_info(ControllerTAG, "setObjectDetection: %b", isActive);
     isObjectDetection = isActive;
 }
 
 void Controller::setTracking(bool isActive) {
+    log_info(ControllerTAG, "setTracking: %b", isActive);
     isTracking = isActive;
 }
 
 void Controller::setOpenGL(bool isActive) {
+    log_info(ControllerTAG, "setOpenGL: %b", isActive);
     isOpenGL = isActive;
 }

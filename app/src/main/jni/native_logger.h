@@ -6,7 +6,7 @@
 #include <string.h>
  
 // Debug tag
-#define DTAG "DBG"
+#define DTAG "OpenMaka::Native"
  
 #ifdef __ANDROID__
 #include <android/log.h>
