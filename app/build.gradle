@@ -21,7 +21,8 @@ android {
                 'NDK_PROJECT_PATH=build/intermediates/ndk',
                 'NDK_LIBS_OUT=src/main/jniLibs',
                 'APP_BUILD_SCRIPT=src/main/jni/Android.mk',
-                'NDK_APPLICATION_MK=src/main/jni/Application.mk'
+                'NDK_APPLICATION_MK=src/main/jni/Application.mk',
+                'V=1'
     }
 
     tasks.withType(JavaCompile) {

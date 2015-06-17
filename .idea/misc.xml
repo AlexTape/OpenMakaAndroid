@@ -3,7 +3,11 @@
   <component name="CppTools.Loader" reportImplicitCastToBool="false" reportNameReferencedOnce="false" version="3" compilerSelect="AUTO">
     <ignored-file path="$PROJECT_DIR$/app/src/main/jni/Application/Controller.cpp" />
     <ignored-file path="$PROJECT_DIR$/app/src/main/jni/Application/Controller.hpp" />
+    <ignored-file path="$PROJECT_DIR$/app/src/main/jni/Application/Detector/Detectors.cpp" />
     <ignored-file path="$PROJECT_DIR$/app/src/main/jni/Application/Helper.cpp" />
+  </component>
+  <component name="EntryPointsManager">
+    <entry_points version="2.0" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />

@@ -13,11 +13,19 @@
 #include "Helper.hpp"
 #include "Controller.hpp"
 
+#include "Features/Analyzer.cpp"
+
 using namespace std;
 
 #define SIZE 1024
 
 Controller* Controller::inst_ = NULL;
+
+Controller::Controller(void) {
+}
+
+Controller::~Controller(void) {
+}
 
 Controller* Controller::getInstance() {
     if (inst_ == NULL) {
@@ -33,14 +41,17 @@ int Controller::findFeatures(cv::Mat mRgbaFrame, cv::Mat mGrayFrame)
 
     vector<cv::KeyPoint> v;
 
-    cv::FastFeatureDetector detector(50);
-    //cv::ORB detector(50);
-    detector.detect(mGrayFrame, v);
+    Analyzer* analyzer = Analyzer::getInstance();
+
+    cv::Ptr<cv::FeatureDetector> detector = analyzer->getDetector("");
+
+    detector->detect(mGrayFrame, v);
     for( unsigned int i = 0; i < v.size(); i++ )
     {
         const cv::KeyPoint& kp = v[i];
         cv::circle(mRgbaFrame, cv::Point(kp.pt.x, kp.pt.y), 10, cv::Scalar(255,0,0,255));
     }
+
 
     log_info(ControllerTAG, "findFeatures.. done");
 	return returnThis;

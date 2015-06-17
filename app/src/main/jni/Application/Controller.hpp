@@ -15,6 +15,9 @@ class Controller {
 
         static Controller*  inst_;
 
+        Controller(void);
+        ~Controller(void);
+
         bool                isObjectDetection;
         bool                isTracking;
         bool                isOpenGL;
