@@ -16,7 +16,7 @@ import java.io.OutputStream;
  */
 public class FileManager {
 
-    private static final String TAG = "OpenMaka::AssetManager";
+    private static final String TAG = "OpenMaka::FileManager";
 
     private Context context;
 
@@ -35,12 +35,12 @@ public class FileManager {
             InputStream inputStream = context.getAssets().open("config/config.xml");
             configFile = IOUtils.toString(inputStream, "UTF-8");
 
-            String[] dataFiles = new String[]{"config/config.xml", "config/camera_matrix_qcam.txt", "config/db.txt", "config/visualWord.bin", "config/vw_index.txt", "slides/slide.xml", "miku/miku.xml"};
+            String[] dataFiles = new String[]{"config/config.xml", "objects/keyboard.jpg"};
 
             File storage = context.getExternalFilesDir(null);
             storage.mkdirs();
 
-            String[] folders = new String[]{"config", "slides", "miku"};
+            String[] folders = new String[]{"config", "objects"};
 
             for (String folder : folders) {
                 File f = new File(storage.getPath() + "/" + folder);

@@ -4,6 +4,7 @@
     <ignored-file path="$PROJECT_DIR$/app/src/main/jni/Application/Controller.cpp" />
     <ignored-file path="$PROJECT_DIR$/app/src/main/jni/Application/Controller.hpp" />
     <ignored-file path="$PROJECT_DIR$/app/src/main/jni/Application/Detector/Detectors.cpp" />
+    <ignored-file path="$PROJECT_DIR$/app/src/main/jni/Application/Features/Analyzer.cpp" />
     <ignored-file path="$PROJECT_DIR$/app/src/main/jni/Application/Helper.cpp" />
   </component>
   <component name="EntryPointsManager">

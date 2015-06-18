@@ -36,6 +36,7 @@ public class CameraActivity extends GuiAcitivity implements CvCameraViewListener
 
                     // Load native library after(!) OpenCV initialization
                     System.loadLibrary("native_openmaka");
+                    // System.loadLibrary("opencv_nonfree");
 
                     mOpenCvCameraView.enableView();
                 }

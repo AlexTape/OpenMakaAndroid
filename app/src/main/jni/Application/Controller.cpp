@@ -39,21 +39,18 @@ int Controller::findFeatures(cv::Mat mRgbaFrame, cv::Mat mGrayFrame)
     log_info(ControllerTAG, "findFeatures..");
     int returnThis = 0;
 
-    vector<cv::KeyPoint> v;
-
     Analyzer* analyzer = Analyzer::getInstance();
 
-    cv::Ptr<cv::FeatureDetector> detector = analyzer->getDetector("");
+    analyzer->setDetector("");
+    analyzer->setExtractor("");
 
-    detector->detect(mGrayFrame, v);
-    for( unsigned int i = 0; i < v.size(); i++ )
-    {
-        const cv::KeyPoint& kp = v[i];
-        cv::circle(mRgbaFrame, cv::Point(kp.pt.x, kp.pt.y), 10, cv::Scalar(255,0,0,255));
+    if (analyzer->initialized(mGrayFrame)) {
+
+        analyzer->compute(mRgbaFrame, mGrayFrame);
     }
 
-
     log_info(ControllerTAG, "findFeatures.. done");
+
 	return returnThis;
 }
 
@@ -96,13 +93,39 @@ void Controller::start() {
     log_info(ControllerTAG, "start.. done");
 }
 
-bool Controller::initialize(cv::Mat& mGrayFrame, const char& configPath)
+//void *worker_thread(void *arg)
+//{
+//        log_info(ControllerTAG, "THREADA running");
+//        pthread_exit(NULL);
+//}
+
+bool Controller::initialize(cv::Mat& mGrayFrame, std::string configPath)
 {
     log_info(ControllerTAG, "initializing..");
     bool isInitialized = false;
 
-
     isInitialized = true;
+
+    cv::FileStorage cvfs(configPath, cv::FileStorage::READ);
+    cv::FileNode fn;
+
+    std::string markerPath;
+    fn = cvfs["markerPathes"];
+    fn["keyboardMarker"] >> markerPath;
+
+    log_parameter("Marker: %s", markerPath.c_str());
+
+//            pthread_t my_thread;
+//            int ret;
+//
+//            log_info(ControllerTAG, "THREADA CREATE");
+//            ret =  pthread_create(&my_thread, NULL, &worker_thread, NULL);
+//            if(ret != 0) {
+//                    printf("Error: pthread_create() failed\n");
+//                    exit(EXIT_FAILURE);
+//            }
+            //pthread_exit(NULL);
+//            log_info(ControllerTAG, "THREADA DETACHED");
 
     log_info(ControllerTAG, "initializing.. done");
     return isInitialized;

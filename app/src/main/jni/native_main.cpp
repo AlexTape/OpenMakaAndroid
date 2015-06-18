@@ -17,7 +17,12 @@ JNIEXPORT jboolean JNICALL Java_de_alextape_openmaka_NativeFunctions_native_1ini
   (JNIEnv *env, jclass clazz, jlong mAddrGray, jstring configPath)
 {
     const char *strMsgPtr = env->GetStringUTFChars( configPath , 0);
-    Controller::getInstance()->initialize(*(cv::Mat*)mAddrGray, *strMsgPtr);
+    if (strMsgPtr != NULL) {
+        std::string pathString(strMsgPtr);
+        Controller::getInstance()->initialize(*(cv::Mat*)mAddrGray, pathString);
+    } else {
+        Controller::getInstance()->initialize(*(cv::Mat*)mAddrGray, NULL);
+    }
     env->ReleaseStringChars(configPath, (jchar *)strMsgPtr);
 }
 

@@ -23,6 +23,8 @@
 #define log_warn(D, M, ...) __android_log_print(ANDROID_LOG_WARN, D, "[WARN] (%s:%d: errno: %s) " M "", __FILE__, __LINE__, clean_errno(), ##__VA_ARGS__)
  
 #define log_info(D, M, ...) __android_log_print(ANDROID_LOG_INFO, D, "[INFO] " M "", ##__VA_ARGS__)
+
+#define log_parameter(...)  __android_log_print(ANDROID_LOG_INFO, DTAG, __VA_ARGS__)
  
 #define log_debug(D, M, ...) __android_log_print(ANDROID_LOG_DEBUG, D, "[DEBUG] (%s:%d) " M "", __FILE__, __LINE__, ##__VA_ARGS__)
  

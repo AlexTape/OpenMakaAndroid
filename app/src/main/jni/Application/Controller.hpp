@@ -1,6 +1,12 @@
+#ifndef CONTROLLER_H_
+#define CONTROLLER_H_
+
 #include <string>
 
 #include <opencv2/core/core.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/features2d/features2d.hpp>
+#include <opencv2/highgui/highgui.hpp>
 
 #include <EGL/egl.h> // requires ndk r5 or newer
 #include <GLES/gl.h>
@@ -33,7 +39,7 @@ class Controller {
         static Controller*  getInstance();
 
         void                start();
-        bool                initialize(cv::Mat& mGrayFrame, const char& configPath);
+        bool                initialize(cv::Mat& mGrayFrame, std::string configPath);
         int                 displayFunction(cv::Mat& mRgbaFrame, cv::Mat& mGrayFrame);
         void                glRender();
         void                glResize(int height, int width);
@@ -43,3 +49,4 @@ class Controller {
         void                setOpenGL(bool isActive);
 
 };
+#endif // CONTROLLER_H_

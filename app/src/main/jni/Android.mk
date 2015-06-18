@@ -1,5 +1,11 @@
 LOCAL_PATH := $(call my-dir)
 
+include $(CLEAR_VARS)
+
+#LOCAL_MODULE    := opencv_nonfree
+#LOCAL_SRC_FILES := libs/libnonfree.so
+#include $(PREBUILT_SHARED_LIBRARY)
+
 #include $(CLEAR_VARS) 
 #LOCAL_MODULE := lgnustl_shared 
 #LOCAL_SRC_FILES := lib/libgnustl_shared.so
@@ -47,7 +53,16 @@ LOCAL_CXXFLAGS  += -fno-exceptions
 LOCAL_LDLIBS    += -L$(LOCAL_PATH)/lib -llog -landroid  -ldl -lEGL -lGLESv1_CM -lGLESv2
 LOCAL_DISABLE_FORMAT_STRING_CHECKS := true
 
+# C++11 and threading enabling features.
+LOCAL_CPPFLAGS := -std=c++11 -pthread
+
+# rtti and exceptions features
+LOCAL_CPP_FEATURES := rtti exceptions
+
 #LOCAL_STATIC_LIBRARIES := libpng
-#LOCAL_SHARED_LIBRARIES := lgnustl_shared 
+#LOCAL_SHARED_LIBRARIES := lgnustl_shared
+#LOCAL_SHARED_LIBRARIES := opencv_nonfree
 
 include $(BUILD_SHARED_LIBRARY)
+
+include $(LOCAL_PATH)/nonfree/Android.mk

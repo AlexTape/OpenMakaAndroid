@@ -1,5 +1,8 @@
 <?xml version="1.0"?>
 <opencv_storage>
+<markerPathes>
+    <keyboardMarker>/storage/emulated/0/Android/data/de.alextape.openmaka/files/objects/keyboard.jpg</keyboardMarker>
+</markerPathes>
 <VisualWord>
   <visualWord>/storage/emulated/0/Android/data/de.alextape.openmaka/files/config/visualWord.bin</visualWord>
   <index>/storage/emulated/0/Android/data/de.alextape.openmaka/files/config/vw_index.txt</index>
