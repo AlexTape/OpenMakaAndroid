@@ -15,6 +15,10 @@
 #define SIZE 1024
 #define ControllerTAG "OpenMaka::Controller"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 class Controller {
 
     private:
@@ -39,7 +43,7 @@ class Controller {
         static Controller*  getInstance();
 
         void                start();
-        bool                initialize(cv::Mat& mGrayFrame, std::string configPath);
+        int                 initialize(cv::Mat& mGrayFrame, std::string configPath);
         int                 displayFunction(cv::Mat& mRgbaFrame, cv::Mat& mGrayFrame);
         void                glRender();
         void                glResize(int height, int width);
@@ -49,4 +53,9 @@ class Controller {
         void                setOpenGL(bool isActive);
 
 };
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif // CONTROLLER_H_

@@ -19,12 +19,17 @@ public class NativeFunctions {
     }
 
     public static boolean initialize(long matAddrRgba, String configPath) {
-        return native_initialize(matAddrRgba, configPath);
+        boolean returnThis = false;
+        int i = native_initialize(matAddrRgba, configPath);
+        if (i == 1) {
+            returnThis = true;
+        }
+        return returnThis;
     }
 
     private static native void native_start();
 
-    private static native boolean native_initialize(long matAddrRgba, String configPath);
+    private static native int native_initialize(long matAddrRgba, String configPath);
 
     /**
      * Display functions.

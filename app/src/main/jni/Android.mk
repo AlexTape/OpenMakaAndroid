@@ -44,7 +44,7 @@ LOCAL_MODULE := native_openmaka
 
 # add source files
 FILE_LIST := $(wildcard $(LOCAL_PATH)/**/**/*.cpp)
-FILE_LIST := $(wildcard $(LOCAL_PATH)/**/*.cpp)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/**/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/*.cpp)
 LOCAL_SRC_FILES := $(FILE_LIST:$(LOCAL_PATH)/%=%)
 

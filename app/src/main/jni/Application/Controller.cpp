@@ -13,7 +13,7 @@
 #include "Helper.hpp"
 #include "Controller.hpp"
 
-#include "Features/Analyzer.cpp"
+#include "Application/Features/Analyzer.hpp"
 
 using namespace std;
 
@@ -22,6 +22,10 @@ using namespace std;
 Controller* Controller::inst_ = NULL;
 
 Controller::Controller(void) {
+    isObjectDetection = false;
+    isTracking = false;
+    isOpenGL = false;
+    featureFinished = 1.0;
 }
 
 Controller::~Controller(void) {
@@ -99,12 +103,10 @@ void Controller::start() {
 //        pthread_exit(NULL);
 //}
 
-bool Controller::initialize(cv::Mat& mGrayFrame, std::string configPath)
+int Controller::initialize(cv::Mat& mGrayFrame, std::string configPath)
 {
     log_info(ControllerTAG, "initializing..");
-    bool isInitialized = false;
-
-    isInitialized = true;
+    int isInitialized = 0;
 
     cv::FileStorage cvfs(configPath, cv::FileStorage::READ);
     cv::FileNode fn;
@@ -113,7 +115,7 @@ bool Controller::initialize(cv::Mat& mGrayFrame, std::string configPath)
     fn = cvfs["markerPathes"];
     fn["keyboardMarker"] >> markerPath;
 
-    log_parameter("Marker: %s", markerPath.c_str());
+    log("Marker: %s", markerPath.c_str());
 
 //            pthread_t my_thread;
 //            int ret;
@@ -127,6 +129,8 @@ bool Controller::initialize(cv::Mat& mGrayFrame, std::string configPath)
             //pthread_exit(NULL);
 //            log_info(ControllerTAG, "THREADA DETACHED");
 
+    isInitialized = 1;
+
     log_info(ControllerTAG, "initializing.. done");
     return isInitialized;
 
@@ -138,11 +142,11 @@ int Controller::displayFunction(cv::Mat& mRgbaFrame, cv::Mat& mGrayFrame)
     int i =0;
 
     if (isObjectDetection) {
-        int thisTime = Helper::now_ms();
+        //int thisTime = Helper::now_ms();
         int recognizedObjectId = findFeatures(mRgbaFrame, mGrayFrame);
-        featureFinished = Helper::now_ms();
-        int featureRuntime = featureFinished - thisTime;
-        log_info(DTAG, "FIND FEATURE RUNTIME: %d ms | Detected Feature: %d", featureRuntime, recognizedObjectId);
+        //featureFinished = Helper::now_ms();
+        //int featureRuntime = featureFinished - thisTime;
+        //log_info(DTAG, "FIND FEATURE RUNTIME: %d ms Detected Feature: %d", featureRuntime, recognizedObjectId);
     }
 	log_info(ControllerTAG, "display.. done");
 	return i;

@@ -5,6 +5,10 @@
 
 #include "Helper.hpp"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 namespace OpenMaka
 {
 
@@ -23,12 +27,12 @@ namespace OpenMaka
 
         void start()
         {
-            startTime = Helper::now_ms();
+            startTime = 0; //Helper::now_ms();
         }
 
         void stop()
         {
-            int stopTime = Helper::now_ms();
+            int stopTime = 0; //Helper::now_ms();
             value += (stopTime - startTime);
         }
 
@@ -47,5 +51,9 @@ namespace OpenMaka
     };
 
 }
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // TIMER_H_

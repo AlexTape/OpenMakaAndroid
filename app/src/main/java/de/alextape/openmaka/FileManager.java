@@ -35,12 +35,12 @@ public class FileManager {
             InputStream inputStream = context.getAssets().open("config/config.xml");
             configFile = IOUtils.toString(inputStream, "UTF-8");
 
-            String[] dataFiles = new String[]{"config/config.xml", "objects/keyboard.jpg"};
+            String[] dataFiles = new String[]{"marker/miku.jpg","config/config.xml"};
 
             File storage = context.getExternalFilesDir(null);
             storage.mkdirs();
 
-            String[] folders = new String[]{"config", "objects"};
+            String[] folders = new String[]{"config", "marker"};
 
             for (String folder : folders) {
                 File f = new File(storage.getPath() + "/" + folder);

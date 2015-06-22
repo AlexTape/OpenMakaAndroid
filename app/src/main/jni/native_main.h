@@ -18,9 +18,9 @@ JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeFunctions_native_1start
 /*
  * Class:     de_alextape_openmaka_NativeFunctions
  * Method:    native_initialize
- * Signature: (JLjava/lang/String;)Z
+ * Signature: (JLjava/lang/String;)I
  */
-JNIEXPORT jboolean JNICALL Java_de_alextape_openmaka_NativeFunctions_native_1initialize
+JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeFunctions_native_1initialize
   (JNIEnv *, jclass, jlong, jstring);
 
 /*

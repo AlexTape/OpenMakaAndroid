@@ -1,19 +1,23 @@
+#define ANALYZER_CPP_
 #include <string>
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/features2d/features2d.hpp>
 #include <opencv2/nonfree/nonfree.hpp>
-#include <opencv2/calib3d/calib3d.hpp> // for homography
+#include <opencv2/calib3d/calib3d.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
 #include "native_logger.h"
-#include "Analyzer.hpp"
-#include "../Timer.hpp"
+#include "Application/Features/Analyzer.hpp"
+#include "Application/Timer.hpp"
 
 Analyzer* Analyzer::inst_ = NULL;
 
 Analyzer::Analyzer(void)
 {
+    isComputed = false;
+    isInitialized = false;
 }
 
 Analyzer::~Analyzer(void)
@@ -61,13 +65,15 @@ bool Analyzer::initialize(cv::Mat mGrayFrame)
     cv::Mat subject;
 
     // TODO make dynamic linking
-    subject = cv::imread("/storage/emulated/0/Android/data/de.alextape.openmaka/files/objects/keyboard.jpg", 0);
+    subject = cv::imread("/storage/emulated/0/Android/data/de.alextape.openmaka/files/marker/miku.jpg", 0);
 
-    cv::Mat resizedSubject;
-    cv::resize(subject, resizedSubject, graySize);
+//    cv::Mat resizedSubject;
+//    cv::resize(subject, resizedSubject, graySize);
 
-    inst_->detector->detect(resizedSubject, inst_->objectKeypoints);
+    inst_->detector->detect(subject, inst_->objectKeypoints);
     inst_->extractor->compute(mGrayFrame, inst_->objectKeypoints, inst_->objectDescriptors);
+
+    return true;
 }
 
 bool Analyzer::initialized(cv::Mat mGrayFrame)
@@ -103,7 +109,7 @@ void Analyzer::match() {
         {
             // Create Flann LSH index
             cv::flann::Index flannIndex(sceneDescriptors, cv::flann::LshIndexParams(12, 20, 2), cvflann::FLANN_DIST_HAMMING);
-            log_parameter("Time creating FLANN LSH index = %d ms\n", time.restart());
+            log("Time creating FLANN LSH index = %d ms\n", time.restart());
 
             // search (nearest neighbor)
             flannIndex.knnSearch(objectDescriptors, results, dists, k, cv::flann::SearchParams() );
@@ -122,13 +128,13 @@ void Analyzer::match() {
         {
             // Create Flann KDTree index
             cv::flann::Index flannIndex(sceneDescriptors, cv::flann::KDTreeIndexParams(), cvflann::FLANN_DIST_EUCLIDEAN);
-            log_parameter("Time creating FLANN KDTree index = %d ms\n", time.restart());
+            log("Time creating FLANN KDTree index = %d ms\n", time.restart());
 
             // search (nearest neighbor)
             flannIndex.knnSearch(objectDescriptors, results, dists, k, cv::flann::SearchParams() );
         }
     }
-    log_parameter("Time nearest neighbor search = %d ms\n", time.restart());
+    log("Time nearest neighbor search = %d ms\n", time.restart());
 
     // Conversion to CV_32F if needed
     if(dists.type() == CV_32S)
@@ -140,6 +146,8 @@ void Analyzer::match() {
 }
 
 int Analyzer::compute(cv::Mat mRgbaFrame, cv::Mat mGrayFrame) {
+
+    int returnThis = 0;
 
     if (!inst_->isComputed) {
 
@@ -158,4 +166,5 @@ int Analyzer::compute(cv::Mat mRgbaFrame, cv::Mat mGrayFrame) {
         cv::circle(mRgbaFrame, cv::Point(kp.pt.x, kp.pt.y), 10, cv::Scalar(255,0,0,255));
     }
 
+    return returnThis;
 }

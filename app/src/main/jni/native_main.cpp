@@ -13,17 +13,17 @@ JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeFunctions_native_1start
     Controller::getInstance()->start();
 }
 
-JNIEXPORT jboolean JNICALL Java_de_alextape_openmaka_NativeFunctions_native_1initialize
+JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeFunctions_native_1initialize
   (JNIEnv *env, jclass clazz, jlong mAddrGray, jstring configPath)
 {
+    int i_ = 0;
     const char *strMsgPtr = env->GetStringUTFChars( configPath , 0);
     if (strMsgPtr != NULL) {
         std::string pathString(strMsgPtr);
-        Controller::getInstance()->initialize(*(cv::Mat*)mAddrGray, pathString);
-    } else {
-        Controller::getInstance()->initialize(*(cv::Mat*)mAddrGray, NULL);
+        i_ = Controller::getInstance()->initialize(*(cv::Mat*)mAddrGray, pathString);
     }
     env->ReleaseStringChars(configPath, (jchar *)strMsgPtr);
+    return i_;
 }
 
 JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeFunctions_native_1displayFunction
