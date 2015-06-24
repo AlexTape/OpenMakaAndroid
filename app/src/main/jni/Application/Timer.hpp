@@ -2,6 +2,8 @@
 #define TIMER_H_
 
 #include <time.h>
+#include "opencv2/core.hpp"
+#include "opencv2/core/utility.hpp"
 
 #include "Helper.hpp"
 
@@ -18,7 +20,7 @@ namespace OpenMaka
 
     public:
 
-        int value;
+        double value;
 
         Timer()
         {
@@ -27,20 +29,13 @@ namespace OpenMaka
 
         void start()
         {
-            startTime = 0; //Helper::now_ms();
+            startTime = cv::getTickCount();
         }
 
         void stop()
         {
-            int stopTime = 0; //Helper::now_ms();
-            value += (stopTime - startTime);
-        }
-
-        int restart() {
-            stop();
-            int diff = value;
-            start();
-            return diff;
+            int64 stopTime = cv::getTickCount();
+            value += ( (double)stopTime - startTime) / cv::getTickFrequency();
         }
 
         void reset()

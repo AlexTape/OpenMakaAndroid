@@ -113,9 +113,6 @@ abstract class GuiAcitivity extends Activity implements View.OnClickListener, Ad
         }
     }
 
-
-
-
 }
 
 
