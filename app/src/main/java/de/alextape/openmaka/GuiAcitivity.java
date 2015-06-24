@@ -74,22 +74,23 @@ abstract class GuiAcitivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         item.setChecked(item.isChecked());
 
-//        switch (position) {
-//            case 0:
-//                boolean isDetection = NativeFunctions.isViewModeObjectDetection();
-//                NativeFunctions.setViewModeObjectDetection(!isDetection);
-//                break;
-//            case 1:
-//                boolean isTracking = NativeFunctions.isViewModeTracking();
-//                NativeFunctions.setViewModeTracking(!isTracking);
-//                break;
-//            case 2:
-//                boolean isOpenGL = NativeFunctions.isViewModeOpenGl();
-//                NativeFunctions.setViewModeOpenGl(!isOpenGL);
-//                break;
-//        }
+        Log.d(TAG, "ItemClick: " + item.getTitle());
 
-        Log.d(TAG, "ItemClick: " + item.getItemId());
+        switch (item.getItemId()) {
+            case R.id.featureDetector_FAST:
+                boolean isDetection = NativeFunctions.isViewModeObjectDetection();
+                NativeFunctions.setViewModeObjectDetection(!isDetection);
+                break;
+            case 1:
+                boolean isTracking = NativeFunctions.isViewModeTracking();
+                NativeFunctions.setViewModeTracking(!isTracking);
+                break;
+            case 2:
+                boolean isOpenGL = NativeFunctions.isViewModeOpenGl();
+                NativeFunctions.setViewModeOpenGl(!isOpenGL);
+                break;
+        }
+
         return true;
     }
 
