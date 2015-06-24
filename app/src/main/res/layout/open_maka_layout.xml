@@ -22,21 +22,24 @@
             opencv:show_fps="true"/>
     </FrameLayout>
 
-    <RelativeLayout
-        android:layout_width="48dp"
-        android:layout_height="fill_parent"
-        android:background="@android:color/transparent">
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:background="@android:color/transparent"
+        android:layout_height="wrap_content"
+        android:padding="10dp" >
 
-        <ImageButton
-            android:layout_marginTop="10dp"
-            android:id="@+id/menuButton"
-            android:background="@android:color/transparent"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/ic_action_overflow"
-            android:rotation="270"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
-    </RelativeLayout>
+        <TextView
+            android:id="@+id/infoLine"
+            android:text="Configuration: FAST - FREAK - NONE"
+            android:textColor="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"/>
+
+    </LinearLayout>
+
+
+
 
 </RelativeLayout>

@@ -10,7 +10,7 @@
 
 #include "native_logger.h"
 #include "Application/Features/Analyzer.hpp"
-#include "Application/Timer.hpp"
+//#include "Application/Timer.hpp"
 
 Analyzer* Analyzer::inst_ = NULL;
 
@@ -88,61 +88,61 @@ bool Analyzer::initialized(cv::Mat mGrayFrame)
 
 void Analyzer::match() {
 
-    OpenMaka::Timer time;
-    time.start();
-
-    cv::Mat results;
-    cv::Mat dists;
-    std::vector<std::vector<cv::DMatch> > matches;
-    int k=2; // find the 2 nearest neighbors
-    bool useBFMatcher = false; // SET TO TRUE TO USE BRUTE FORCE MATCHER
-    if(objectDescriptors.type()==CV_8U)
-    {
-        // Binary descriptors detected (from ORB, Brief, BRISK, FREAK)
-        log_info(AnalyzerTAG,"Binary descriptors detected...");
-        if(useBFMatcher)
-        {
-            cv::BFMatcher matcher(cv::NORM_HAMMING); // use cv::NORM_HAMMING2 for ORB descriptor with WTA_K == 3 or 4 (see ORB constructor)
-            matcher.knnMatch(objectDescriptors, sceneDescriptors, matches, k);
-        }
-        else
-        {
-            // Create Flann LSH index
-            cv::flann::Index flannIndex(sceneDescriptors, cv::flann::LshIndexParams(12, 20, 2), cvflann::FLANN_DIST_HAMMING);
-            log("Time creating FLANN LSH index = %d ms\n", time.restart());
-
-            // search (nearest neighbor)
-            flannIndex.knnSearch(objectDescriptors, results, dists, k, cv::flann::SearchParams() );
-        }
-    }
-    else
-    {
-        // assume it is CV_32F
-        log_info(AnalyzerTAG,"Float descriptors detected...");
-        if(useBFMatcher)
-        {
-            cv::BFMatcher matcher(cv::NORM_L2);
-            matcher.knnMatch(objectDescriptors, sceneDescriptors, matches, k);
-        }
-        else
-        {
-            // Create Flann KDTree index
-            cv::flann::Index flannIndex(sceneDescriptors, cv::flann::KDTreeIndexParams(), cvflann::FLANN_DIST_EUCLIDEAN);
-            log("Time creating FLANN KDTree index = %d ms\n", time.restart());
-
-            // search (nearest neighbor)
-            flannIndex.knnSearch(objectDescriptors, results, dists, k, cv::flann::SearchParams() );
-        }
-    }
-    log("Time nearest neighbor search = %d ms\n", time.restart());
-
-    // Conversion to CV_32F if needed
-    if(dists.type() == CV_32S)
-    {
-        cv::Mat temp;
-        dists.convertTo(temp, CV_32F);
-        dists = temp;
-    }
+//    OpenMaka::Timer time;
+//    time.start();
+//
+//    cv::Mat results;
+//    cv::Mat dists;
+//    std::vector<std::vector<cv::DMatch> > matches;
+//    int k=2; // find the 2 nearest neighbors
+//    bool useBFMatcher = false; // SET TO TRUE TO USE BRUTE FORCE MATCHER
+//    if(objectDescriptors.type()==CV_8U)
+//    {
+//        // Binary descriptors detected (from ORB, Brief, BRISK, FREAK)
+//        log_info(AnalyzerTAG,"Binary descriptors detected...");
+//        if(useBFMatcher)
+//        {
+//            cv::BFMatcher matcher(cv::NORM_HAMMING); // use cv::NORM_HAMMING2 for ORB descriptor with WTA_K == 3 or 4 (see ORB constructor)
+//            matcher.knnMatch(objectDescriptors, sceneDescriptors, matches, k);
+//        }
+//        else
+//        {
+//            // Create Flann LSH index
+//            cv::flann::Index flannIndex(sceneDescriptors, cv::flann::LshIndexParams(12, 20, 2), cvflann::FLANN_DIST_HAMMING);
+//            log("Time creating FLANN LSH index = %d ms\n", time.restart());
+//
+//            // search (nearest neighbor)
+//            flannIndex.knnSearch(objectDescriptors, results, dists, k, cv::flann::SearchParams() );
+//        }
+//    }
+//    else
+//    {
+//        // assume it is CV_32F
+//        log_info(AnalyzerTAG,"Float descriptors detected...");
+//        if(useBFMatcher)
+//        {
+//            cv::BFMatcher matcher(cv::NORM_L2);
+//            matcher.knnMatch(objectDescriptors, sceneDescriptors, matches, k);
+//        }
+//        else
+//        {
+//            // Create Flann KDTree index
+//            cv::flann::Index flannIndex(sceneDescriptors, cv::flann::KDTreeIndexParams(), cvflann::FLANN_DIST_EUCLIDEAN);
+//            log("Time creating FLANN KDTree index = %d ms\n", time.restart());
+//
+//            // search (nearest neighbor)
+//            flannIndex.knnSearch(objectDescriptors, results, dists, k, cv::flann::SearchParams() );
+//        }
+//    }
+//    log("Time nearest neighbor search = %d ms\n", time.restart());
+//
+//    // Conversion to CV_32F if needed
+//    if(dists.type() == CV_32S)
+//    {
+//        cv::Mat temp;
+//        dists.convertTo(temp, CV_32F);
+//        dists = temp;
+//    }
 }
 
 int Analyzer::compute(cv::Mat mRgbaFrame, cv::Mat mGrayFrame) {

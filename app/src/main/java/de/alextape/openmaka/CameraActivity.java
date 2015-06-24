@@ -3,6 +3,8 @@ package de.alextape.openmaka;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
@@ -17,7 +19,7 @@ import org.opencv.core.Mat;
  */
 public class CameraActivity extends GuiAcitivity implements CvCameraViewListener2 {
 
-    private static final String TAG = "OpenMaka::CameraActivity";
+    private static final String TAG = "OpenMaka::CamActivity";
 
     private static boolean initialized = false;
 
