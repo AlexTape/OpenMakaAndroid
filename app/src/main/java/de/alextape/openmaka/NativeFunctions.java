@@ -12,7 +12,7 @@ public class NativeFunctions {
     private static boolean VIEW_MODE_OPEN_GL = false;
 
     /**
-     * Basic functions.
+     * Application functions.
      */
     public static void start() {
         native_start();
@@ -56,6 +56,21 @@ public class NativeFunctions {
     private static native void native_glResize(int w, int h);
 
     /**
+     * Input functions.
+     */
+    public static void touchEvent(float x, float y, int action) {
+        native_touchEvent(x, y, action);
+    }
+
+    private static native void native_touchEvent(float x, float y, int action);
+
+    public static void keyEvent(int keyCode, int action) {
+        native_keyEvent(keyCode, action);
+    }
+
+    private static native void native_keyEvent(int keyCode, int action);
+
+    /**
      * Options getter/setter.
      */
     public static boolean isViewModeObjectDetection() {
@@ -90,5 +105,4 @@ public class NativeFunctions {
     private static native void native_setTracking(boolean isActive);
 
     private static native void native_setOpenGL(boolean isActive);
-
 }

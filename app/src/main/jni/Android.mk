@@ -30,7 +30,7 @@ include $(CLEAR_VARS)
 
 #opencv
 OPENCVROOT := /home/thinker/Android/OpenCV-2-4-11
-OPENCV_CAMERA_MODULES:=on
+OPENCV_CAMERA_MODULES:=off
 OPENCV_INSTALL_MODULES:=on
 OPENCV_LIB_TYPE:=SHARED
 include ${OPENCVROOT}/sdk/native/jni/OpenCV.mk

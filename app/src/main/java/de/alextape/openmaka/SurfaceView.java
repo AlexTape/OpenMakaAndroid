@@ -33,12 +33,13 @@ class SurfaceView extends GLSurfaceView {
 		setFocusableInTouchMode(true);
 		*/
     }
+/*
     @Override
     public boolean onTouchEvent(final MotionEvent event)
     {
         queueEvent(new Runnable() {
             public void run() {
-                //NativeFunctions.touchEvent(event.getX(), event.getY(), event.getAction());
+                NativeFunctions.touchEvent(event.getX(), event.getY(), event.getAction());
             }
         });
 
@@ -50,7 +51,7 @@ class SurfaceView extends GLSurfaceView {
     {
         queueEvent(new Runnable() {
             public void run() {
-                //NativeFunctions.keyEvent(keyCode, event.getAction());
+                NativeFunctions.keyEvent(keyCode, event.getAction());
             }
         });
         return false;
@@ -61,12 +62,12 @@ class SurfaceView extends GLSurfaceView {
     {
         queueEvent(new Runnable() {
             public void run() {
-                //NativeFunctions.keyEvent(keyCode, event.getAction());
+                NativeFunctions.keyEvent(keyCode, event.getAction());
             }
         });
 
         return false;
     }
-
+*/
 
 }

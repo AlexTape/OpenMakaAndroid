@@ -231,6 +231,16 @@ void Controller::glResize(int height, int width) {
     log_info(ControllerTAG, "resizing.. done");
 }
 
+void Controller::touchEvent(float x, float y, int action)
+{
+    log("touchEvent - X: %d, Y: %d, Action: %d",x,y,action);
+}
+
+void Controller::keyEvent(int keyCode, int event)
+{
+    log("keyEvent - code: %d, event: %d",keyCode, event);
+}
+
 void Controller::setObjectDetection(bool isActive) {
     log_info(ControllerTAG, "setObjectDetection: %b", isActive);
     isObjectDetection = isActive;

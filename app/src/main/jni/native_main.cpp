@@ -44,6 +44,18 @@ JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeFunctions_native_1glResiz
     Controller::getInstance()->glResize(width, height);
 }
 
+JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeFunctions_native_1touchEvent
+  (JNIEnv *, jclass, jfloat x, jfloat y, jint action)
+{
+    Controller::getInstance()->touchEvent(x, y, action);
+}
+
+JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeFunctions_native_1keyEvent
+  (JNIEnv *, jclass, jint keyCode, jint event)
+{
+    Controller::getInstance()->keyEvent(keyCode, event);
+}
+
 JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeFunctions_native_1setObjectDetection
   (JNIEnv *env, jclass clazz, jboolean isActive)
 {

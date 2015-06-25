@@ -49,6 +49,22 @@ JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeFunctions_native_1glResiz
 
 /*
  * Class:     de_alextape_openmaka_NativeFunctions
+ * Method:    native_touchEvent
+ * Signature: (FFI)V
+ */
+JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeFunctions_native_1touchEvent
+  (JNIEnv *, jclass, jfloat, jfloat, jint);
+
+/*
+ * Class:     de_alextape_openmaka_NativeFunctions
+ * Method:    native_keyEvent
+ * Signature: (II)V
+ */
+JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeFunctions_native_1keyEvent
+  (JNIEnv *, jclass, jint, jint);
+
+/*
+ * Class:     de_alextape_openmaka_NativeFunctions
  * Method:    native_setObjectDetection
  * Signature: (Z)V
  */

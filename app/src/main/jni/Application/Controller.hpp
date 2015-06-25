@@ -28,29 +28,32 @@ class Controller {
         Controller(void);
         ~Controller(void);
 
-        bool                isObjectDetection;
-        bool                isTracking;
-        bool                isOpenGL;
+        bool     isObjectDetection;
+        bool     isTracking;
+        bool     isOpenGL;
 
-        GLuint              Name;
-        GLubyte*            ImagePtr;
-        double              featureFinished;
+        GLuint   Name;
+        GLubyte* ImagePtr;
+        double   featureFinished;
 
-        int                 findFeatures(cv::Mat mRgbaFrame, cv::Mat mGrayFrame);
+        int      findFeatures(cv::Mat mRgbaFrame, cv::Mat mGrayFrame);
 
     public:
 
         static Controller*  getInstance();
 
-        void                start();
-        int                 initialize(cv::Mat& mGrayFrame, std::string configPath);
-        int                 displayFunction(cv::Mat& mRgbaFrame, cv::Mat& mGrayFrame);
-        void                glRender();
-        void                glResize(int height, int width);
+        void start();
+        int  initialize(cv::Mat& mGrayFrame, std::string configPath);
+        int  displayFunction(cv::Mat& mRgbaFrame, cv::Mat& mGrayFrame);
+        void glRender();
+        void glResize(int height, int width);
 
-        void                setObjectDetection(bool isActive);
-        void                setTracking(bool isActive);
-        void                setOpenGL(bool isActive);
+        void touchEvent(float x, float y, int action);
+        void keyEvent(int keyCode, int event);
+
+        void setObjectDetection(bool isActive);
+        void setTracking(bool isActive);
+        void setOpenGL(bool isActive);
 
 };
 
