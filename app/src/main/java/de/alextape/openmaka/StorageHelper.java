@@ -6,10 +6,13 @@ import android.content.SharedPreferences;
 /**
  * Created by thinker on 11.05.15.
  */
+@Deprecated
 public class StorageHelper {
 
-    Context context;
-    final String STORAGE = "alex.ist.kacke";
+    private static final String TAG = "OpenMaka::StorageHelper";
+
+    private Context context;
+    private final String STORAGE = "de.alextape.openmaka";
 
     public StorageHelper (Context context) {
         this.context = context;
