@@ -1,7 +1,6 @@
 <RelativeLayout
-    android:id="@+id/relativeLayoutContainer"
+    android:id="@+id/layoutContainer"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:opencv="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
@@ -15,32 +14,34 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"/>
 
-        <org.opencv.android.JavaCameraView
-            android:id="@+id/javaCameraView"
+        <SurfaceView
+            android:id="@+id/cameraSurface"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            opencv:camera_id="0"
-            opencv:show_fps="true"/>
+            android:layout_height="fill_parent"/>
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"/>
+
     </FrameLayout>
 
     <LinearLayout
-        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:background="@android:color/transparent"
         android:layout_height="wrap_content"
-        android:padding="10dp" >
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/transparent"
+        android:orientation="vertical"
+        android:padding="10dp">
 
         <TextView
             android:id="@+id/infoLine"
-            android:text="Configuration: FAST - FREAK - NONE"
-            android:textColor="@android:color/white"
             android:layout_width="match_parent"
-            android:layout_height="20dp"/>
+            android:layout_height="20dp"
+            android:text="Configuration: FAST - FREAK - NONE"
+            android:textColor="@android:color/white"/>
 
     </LinearLayout>
-
-
 
 
 </RelativeLayout>

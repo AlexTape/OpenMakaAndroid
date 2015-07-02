@@ -2,7 +2,6 @@ package de.alextape.openmaka;
 
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -13,14 +12,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
-abstract class GuiAcitivity extends Activity implements View.OnTouchListener {
+import de.alextape.androidcamera.camera.HardwareCamera;
+
+public class GuiAcitivity extends HardwareCamera implements View.OnTouchListener {
 
     private static final String TAG = "OpenMaka::GuiActivity";
 
@@ -38,13 +37,10 @@ abstract class GuiAcitivity extends Activity implements View.OnTouchListener {
         Log.i(TAG, "called onCreate");
         super.onCreate(savedInstanceState);
 
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
+        FileManager fileManager = new FileManager(getApplicationContext());
+        fileManager.copyAssets();
 
-        setContentView(R.layout.open_maka_layout);
-
-        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.relativeLayoutContainer);
+        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.layoutContainer);
         relativeLayout.setOnTouchListener(this);
 
         ActionBar actionBar = getActionBar();
@@ -55,6 +51,44 @@ abstract class GuiAcitivity extends Activity implements View.OnTouchListener {
             actionBar.setTitle("");
             actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0000ffff")));
         }
+
+        System.loadLibrary("native_openmaka");
+    }
+
+
+    @Override
+    public void onCameraInitialized() {
+
+//        if (!initialized) {
+//            String configFile = "/storage/emulated/0/Android/data/de.alextape.openmaka/files/config/config.xml";
+//            initialized = NativeFunctions.initialize(mRgbaAddr, configFile);
+//        }
+
+        Log.d(TAG, "onReleaseCamera");
+
+        Integer mode = null;
+        String result = null;
+
+        // Return a list of Available Flash modes
+        String[] flashOptions = getFlashOptions();
+        // pass index of option to setFlashMode(int)
+        result = setFlashMode(1);
+        if (result == null) {
+            Log.d(TAG, "Success");
+        } else {
+            Log.d(TAG, "Fail: " + result);
+        }
+
+        // Returns a list of available Focus modes
+        String[] focusOptions = getFlashOptions();
+        // pass index of option to setFocusMode(int)
+        result = setFocusMode(1);
+        if (result == null) {
+            Log.d(TAG, "Success");
+        } else {
+            Log.d(TAG, "Fail: " + result);
+        }
+
     }
 
     @Override
@@ -108,7 +142,7 @@ abstract class GuiAcitivity extends Activity implements View.OnTouchListener {
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         switch (view.getId()) {
-            case R.id.relativeLayoutContainer:
+            case R.id.layoutContainer:
                 //motionEvent.getAction() == MotionEvent.ACTION_UP
                 Log.e("touch", "x: " + motionEvent.getX() + "  y: " + motionEvent.getY());
                 break;
