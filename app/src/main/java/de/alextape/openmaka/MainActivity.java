@@ -18,15 +18,16 @@ import android.widget.RelativeLayout;
 import java.util.ArrayList;
 
 import de.alextape.androidcamera.camera.HardwareCamera;
+import de.alextape.openmaka.storage.FileManager;
 
-public class GuiAcitivity extends HardwareCamera implements View.OnTouchListener {
+public class MainActivity extends HardwareCamera implements View.OnTouchListener {
 
     private static final String TAG = "OpenMaka::GuiActivity";
 
     private ArrayList<String> menuItems;
     private Dialog menuDialog;
 
-    public GuiAcitivity() {
+    public MainActivity() {
         Log.i(TAG, "Instantiated new " + this.getClass());
     }
 
@@ -108,16 +109,16 @@ public class GuiAcitivity extends HardwareCamera implements View.OnTouchListener
 
         switch (item.getItemId()) {
             case R.id.featureDetector_FAST:
-                boolean isDetection = NativeFunctions.isViewModeObjectDetection();
-                NativeFunctions.setViewModeObjectDetection(!isDetection);
+                boolean isDetection = NativeController.isViewModeObjectDetection();
+                NativeController.setViewModeObjectDetection(!isDetection);
                 break;
             case 1:
-                boolean isTracking = NativeFunctions.isViewModeTracking();
-                NativeFunctions.setViewModeTracking(!isTracking);
+                boolean isTracking = NativeController.isViewModeTracking();
+                NativeController.setViewModeTracking(!isTracking);
                 break;
             case 2:
-                boolean isOpenGL = NativeFunctions.isViewModeOpenGl();
-                NativeFunctions.setViewModeOpenGl(!isOpenGL);
+                boolean isOpenGL = NativeController.isViewModeOpenGl();
+                NativeController.setViewModeOpenGl(!isOpenGL);
                 break;
         }
 

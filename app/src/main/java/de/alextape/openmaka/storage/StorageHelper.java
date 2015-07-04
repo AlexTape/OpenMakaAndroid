@@ -1,4 +1,4 @@
-package de.alextape.openmaka;
+package de.alextape.openmaka.storage;
 
 import android.content.Context;
 import android.content.SharedPreferences;
