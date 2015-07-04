@@ -3,7 +3,7 @@ package de.alextape.openmaka;
 /**
  * Created by thinker on 11.06.15.
  */
-public class NativeFunctions {
+public class NativeController {
 
     private static final String TAG = "OpenMaka::NativeFunctions";
 

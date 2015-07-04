@@ -7,13 +7,13 @@
 
 #include "Application/Controller.hpp"
 
-JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeFunctions_native_1start
+JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeController_native_1start
   (JNIEnv *, jclass clazz)
 {
     Controller::getInstance()->start();
 }
 
-JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeFunctions_native_1initialize
+JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeController_native_1initialize
   (JNIEnv *env, jclass clazz, jlong mAddrGray, jstring configPath)
 {
     int i_ = 0;
@@ -26,49 +26,49 @@ JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeFunctions_native_1initial
     return i_;
 }
 
-JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeFunctions_native_1displayFunction
+JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeController_native_1displayFunction
   (JNIEnv *env, jclass clazz, jlong mRgbaAddr, jlong mGrayAddr)
 {
 	return Controller::getInstance()->displayFunction(*(cv::Mat*)mRgbaAddr, *(cv::Mat*)mGrayAddr);
 }
 
-JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeFunctions_native_1glRender
+JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeController_native_1glRender
   (JNIEnv *env, jclass clazz)
 {
     Controller::getInstance()->glRender();
 }
 
-JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeFunctions_native_1glResize
+JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeController_native_1glResize
   (JNIEnv *env, jclass clazz, jint width, jint height)
 {
     Controller::getInstance()->glResize(width, height);
 }
 
-JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeFunctions_native_1touchEvent
+JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeController_native_1touchEvent
   (JNIEnv *, jclass, jfloat x, jfloat y, jint action)
 {
     Controller::getInstance()->touchEvent(x, y, action);
 }
 
-JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeFunctions_native_1keyEvent
+JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeController_native_1keyEvent
   (JNIEnv *, jclass, jint keyCode, jint event)
 {
     Controller::getInstance()->keyEvent(keyCode, event);
 }
 
-JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeFunctions_native_1setObjectDetection
+JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeController_native_1setObjectDetection
   (JNIEnv *env, jclass clazz, jboolean isActive)
 {
     Controller::getInstance()->setObjectDetection(isActive);
 }
 
-JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeFunctions_native_1setTracking
+JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeController_native_1setTracking
   (JNIEnv *env, jclass clazz, jboolean isActive)
 {
     Controller::getInstance()->setTracking(isActive);
 }
 
-JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeFunctions_native_1setOpenGL
+JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeController_native_1setOpenGL
   (JNIEnv *env, jclass clazz, jboolean isActive)
 {
     Controller::getInstance()->setOpenGL(isActive);
