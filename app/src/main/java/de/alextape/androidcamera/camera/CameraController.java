@@ -15,8 +15,6 @@ import java.io.IOException;
 import java.util.List;
 
 import de.alextape.openmaka.R;
-import de.alextape.androidcamera.camera.callbacks.AsyncCameraCallback;
-import de.alextape.androidcamera.camera.callbacks.CameraCallback;
 import de.alextape.androidcamera.camera.interfaces.CameraCallbackInterface;
 import de.alextape.androidcamera.camera.interfaces.CameraInitializedCallback;
 
@@ -51,7 +49,7 @@ public class CameraController {
     private String mFlashMode;
     private String mFocusMode;
 
-    private CameraController(Context context, View layoutView, CameraCallback mCameraCallback) {
+    private CameraController(Context context, View layoutView, CameraCallbackInterface mCameraCallback) {
 
         Log.d(TAG, "CameraController");
 
@@ -109,7 +107,7 @@ public class CameraController {
         return _instance;
     }
 
-    public static CameraController create(Context context, View layoutView, CameraCallback cameraCallback) {
+    public static CameraController create(Context context, View layoutView, CameraCallbackInterface cameraCallback) {
         Log.d(TAG, "create");
         _instance = new CameraController(context, layoutView, cameraCallback);
         return _instance;
@@ -215,8 +213,9 @@ public class CameraController {
             try {
                 mCamera.setPreviewDisplay(mSurfaceHolder);
                 if (CameraConfig.ASYNC_CAMERA) {
-                    mCamera.setPreviewCallback((AsyncCameraCallback) mCameraCallback);
+                    mCamera.setPreviewCallback(mCameraCallback);
                 }
+                mSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -479,6 +478,10 @@ public class CameraController {
         }
 
         return returnThis;
+    }
+
+    public void setPreviewCallback(CameraCallbackInterface callback) {
+        this.mCameraCallback = callback;
     }
 
     public enum CameraType {

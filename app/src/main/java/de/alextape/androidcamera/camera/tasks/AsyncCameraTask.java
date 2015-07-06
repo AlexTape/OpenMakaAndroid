@@ -1,6 +1,7 @@
 package de.alextape.androidcamera.camera.tasks;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ImageView;
@@ -26,22 +27,25 @@ public class AsyncCameraTask extends AsyncTask<byte[], Void, Boolean> {
     private int imageWidth;
     private int imageHeight;
 
+    private Bitmap mBitmap;
+    private byte[] data;
+
     @Override
     protected Boolean doInBackground(byte[]... datas) {
         // TODO Auto-generated method stub
         Log.i(TAG, "background process started");
 
-        byte[] data = datas[0];
+        data = datas[0];
 
         imageWidth = CameraController.getInstance().parameterWidth;
         imageHeight = CameraController.getInstance().parameterHeight;
+
         pixels = new int[imageWidth * imageHeight];
 
         long t1 = System.currentTimeMillis();
 
         // process data function
         NativeController.displayFunction(imageWidth, imageHeight, data, pixels);
-
 
         long t2 = System.currentTimeMillis();
         mTiming[mTimingSlot++] = t2 - t1;
@@ -81,9 +85,21 @@ public class AsyncCameraTask extends AsyncTask<byte[], Void, Boolean> {
         imageView.invalidate();
         imageView.destroyDrawingCache();
 
-        Bitmap mBitmap = Bitmap.createBitmap(width, height,
-                Bitmap.Config.ARGB_8888);
         imageView.setImageBitmap(mBitmap);
+
+        mBitmap = Bitmap.createBitmap(imageWidth, imageHeight,
+                Bitmap.Config.ARGB_8888);
+
+        mBitmap.setPixels(pixels, 0, imageWidth,
+                0, 0, imageWidth, imageHeight);
+
+        Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+
+        int isNUll = 1;
+
+        if (bitmap == null) {
+            isNUll = 2;
+        }
 
 //        java.lang.ArrayIndexOutOfBoundsException
 //        at android.graphics.Bitmap.checkPixelsAccess(Bitmap.java:1573)
@@ -92,8 +108,8 @@ public class AsyncCameraTask extends AsyncTask<byte[], Void, Boolean> {
 //        at de.alextape.androidcamera.camera.tasks.AsyncCameraTask.onPostExecute(AsyncCameraTask.java:15)
 //        at android.os.AsyncTask.finish(AsyncTask.java:632)
 
-        mBitmap.setPixels(pixels, 0, width,
-                0, 0, width, height);
+        mBitmap.setPixels(pixels, 0, imageWidth,
+                0, 0, imageWidth, imageHeight);
         imageView.setImageBitmap(mBitmap);
         //Log.i(TAG, "bitmap set in imageview");
 

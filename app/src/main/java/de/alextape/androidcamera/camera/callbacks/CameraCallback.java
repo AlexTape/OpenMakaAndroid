@@ -23,6 +23,7 @@ public class CameraCallback implements CameraCallbackInterface {
     public void surfaceCreated(SurfaceHolder holder) {
         Log.d(TAG, "surfaceCreated");
         CameraController.getInstance().setPreviewDisplay(holder);
+        CameraController.getInstance().setPreviewCallback(this);
     }
 
     @Override

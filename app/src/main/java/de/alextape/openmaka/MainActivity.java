@@ -71,15 +71,15 @@ public class MainActivity extends AndroidCamera implements View.OnTouchListener 
 
         Log.d(TAG, "onReleaseCamera");
 
-        // Returns a list of available Focus modes
-        String[] focusOptions = CameraController.getInstance().getFlashOptions();
-        // pass index of option to setFocusMode(int)
-        String result = CameraController.getInstance().setFocusMode(1);
-        if (result == null) {
-            Log.d(TAG, "Success");
-        } else {
-            Log.d(TAG, "Fail: " + result);
-        }
+//        // Returns a list of available Focus modes
+//        String[] focusOptions = CameraController.getInstance().getFlashOptions();
+//        // pass index of option to setFocusMode(int)
+//        String result = CameraController.getInstance().setFocusMode(1);
+//        if (result == null) {
+//            Log.d(TAG, "Success");
+//        } else {
+//            Log.d(TAG, "Fail: " + result);
+//        }
 
     }
 

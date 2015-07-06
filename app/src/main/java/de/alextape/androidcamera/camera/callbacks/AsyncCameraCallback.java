@@ -1,5 +1,7 @@
 package de.alextape.androidcamera.camera.callbacks;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
 import android.hardware.Camera;
 import android.util.Log;
@@ -28,10 +30,11 @@ public class AsyncCameraCallback extends CameraCallback implements CameraCallbac
             if (data != null) {
 
                 float tempFocalLength = camera.getParameters().getFocalLength();
-                boolean isStabilization = camera.getParameters().getVideoStabilization();
+                //boolean isStabilization = camera.getParameters().getVideoStabilization();
                 float verticalViewAngle = camera.getParameters().getVerticalViewAngle();
 
-                Log.d(TAG, "FocalLength=" + tempFocalLength + " Stabilized=" + isStabilization + " VerticalViewAngle=" + verticalViewAngle);
+                //Log.d(TAG, "FocalLength=" + tempFocalLength + " Stabilized=" + isStabilization + " VerticalViewAngle=" + verticalViewAngle);
+                Log.d(TAG, "FocalLength=" + tempFocalLength + " VerticalViewAngle=" + verticalViewAngle);
 
                 camera.addCallbackBuffer(data);
                 new AsyncCameraTask().execute(data);
