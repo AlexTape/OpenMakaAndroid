@@ -1,6 +1,5 @@
 package de.alextape.openmaka;
 
-
 import android.app.ActionBar;
 import android.app.Dialog;
 import android.graphics.Color;
@@ -17,10 +16,11 @@ import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
-import de.alextape.androidcamera.camera.HardwareCamera;
+import de.alextape.androidcamera.camera.AndroidCamera;
+import de.alextape.androidcamera.camera.CameraController;
 import de.alextape.openmaka.storage.FileManager;
 
-public class MainActivity extends HardwareCamera implements View.OnTouchListener {
+public class MainActivity extends AndroidCamera implements View.OnTouchListener {
 
     private static final String TAG = "OpenMaka::GuiActivity";
 
@@ -47,6 +47,7 @@ public class MainActivity extends HardwareCamera implements View.OnTouchListener
         ActionBar actionBar = getActionBar();
 
         if (actionBar != null) {
+            Log.d(TAG, "ARGHARGHARGH");
             actionBar.setDisplayShowHomeEnabled(false);
             actionBar.setDisplayHomeAsUpEnabled(false);
             actionBar.setTitle("");
@@ -56,7 +57,10 @@ public class MainActivity extends HardwareCamera implements View.OnTouchListener
         System.loadLibrary("native_openmaka");
     }
 
-
+    /**
+     * This method is used to gather options passed by a user interactions.
+     * e.g. Focus mode, Flash mode.. directly AFTER camera is initialized.
+     */
     @Override
     public void onCameraInitialized() {
 
@@ -67,23 +71,10 @@ public class MainActivity extends HardwareCamera implements View.OnTouchListener
 
         Log.d(TAG, "onReleaseCamera");
 
-        Integer mode = null;
-        String result = null;
-
-        // Return a list of Available Flash modes
-        String[] flashOptions = getFlashOptions();
-        // pass index of option to setFlashMode(int)
-        result = setFlashMode(1);
-        if (result == null) {
-            Log.d(TAG, "Success");
-        } else {
-            Log.d(TAG, "Fail: " + result);
-        }
-
         // Returns a list of available Focus modes
-        String[] focusOptions = getFlashOptions();
+        String[] focusOptions = CameraController.getInstance().getFlashOptions();
         // pass index of option to setFocusMode(int)
-        result = setFocusMode(1);
+        String result = CameraController.getInstance().setFocusMode(1);
         if (result == null) {
             Log.d(TAG, "Success");
         } else {

@@ -27,9 +27,22 @@ JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeController_native_1initia
 }
 
 JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeController_native_1displayFunction
-  (JNIEnv *env, jclass clazz, jlong mRgbaAddr, jlong mGrayAddr)
+  (JNIEnv *env, jclass clazz, jint width, jint height, jbyteArray data, jintArray pixels)
 {
-	return Controller::getInstance()->displayFunction(*(cv::Mat*)mRgbaAddr, *(cv::Mat*)mGrayAddr);
+    int returnThis = 0;
+    jbyte * pData = env->GetByteArrayElements(data, 0);
+    jint * pPixels = env->GetIntArrayElements(pixels, 0);
+
+    cv::Mat input(height, width, CV_8UC1, (unsigned char*) pData);
+    cv::Mat output(height, width, CV_8UC4, (unsigned char*) pPixels);
+
+    cvtColor(input, output, CV_GRAY2RGBA);
+    returnThis = Controller::getInstance()->displayFunction(input, output);
+
+    env->ReleaseByteArrayElements(data, pData, 0);
+    env->ReleaseIntArrayElements(pixels, pPixels, 0);
+
+	return returnThis;
 }
 
 JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeController_native_1glRender

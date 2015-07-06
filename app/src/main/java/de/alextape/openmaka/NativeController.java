@@ -34,9 +34,9 @@ public class NativeController {
     /**
      * Display functions.
      */
-    public static Integer displayFunction(long matAddrRgba, long matAddrGray) {
+    public static Integer displayFunction(int width, int height, byte[] data, int[] pixels) {
         if (VIEW_MODE_OBJECT_DETECTION || VIEW_MODE_TRACKING || VIEW_MODE_OPEN_GL) {
-            return native_displayFunction(matAddrRgba, matAddrGray);
+            return native_displayFunction(width, height, data, pixels);
         }
         return null;
     }
@@ -49,7 +49,7 @@ public class NativeController {
         native_glResize(w, h);
     }
 
-    private static native int native_displayFunction(long matAddrRgba, long matAddrGray);
+    private static native int native_displayFunction(int width, int height, byte[] data, int[] pixels);
 
     private static native void native_glRender();
 

@@ -9,7 +9,7 @@
         android:targetSdkVersion="16"/>
 
     <application
-        android:name="de.alextape.androidcamera.camera.activities.CameraApplication"
+        android:name="de.alextape.androidcamera.camera.CameraApplication"
         android:label="@string/app_name"
         android:icon="@drawable/icon"
         >

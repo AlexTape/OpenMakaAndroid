@@ -1,74 +1,81 @@
-package de.alextape.androidcamera.camera.activities;
+package de.alextape.androidcamera;
 
 import android.os.Bundle;
 import android.util.Log;
 
 import de.alextape.androidcamera.camera.CameraConfig;
 import de.alextape.androidcamera.camera.CameraController;
+import de.alextape.androidcamera.camera.AndroidCamera;
 import de.alextape.androidcamera.camera.callbacks.AsyncCameraCallback;
 import de.alextape.androidcamera.camera.callbacks.CameraCallback;
 
 /**
- * This class implements the camera lifecycle.
+ * This is a demo how to implement the camera easily.
  */
-public abstract class CameraActivity extends CameraLayoutActivity {
+public class MainActivity extends AndroidCamera {
 
-    private static final String TAG = CameraActivity.class.getSimpleName();
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // The activity is being created.
         Log.d(TAG, "onCreate");
-
-        // init CameraController
-        if (CameraConfig.ASYNC_CAMERA) {
-            CameraController.create(this, layoutView, new AsyncCameraCallback());
-        } else {
-            CameraController.create(this, layoutView, new CameraCallback());
-        }
     }
 
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
         // The activity is about to become visible.
         Log.d(TAG, "onStart");
-        CameraController.getInstance().startCamera();
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         // The activity has become visible (it is now "resumed").
         Log.d(TAG, "onResume");
-        //cameraController.startCamera();
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         super.onPause();
         // Another activity is taking focus (this activity is about to be "paused").
         Log.d(TAG, "onPause");
-        //cameraController.stopCamera();
     }
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         super.onStop();
         // The activity is no longer visible (it is now "stopped")
         Log.d(TAG, "onStop");
-        //cameraController.stopCamera();
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         // The activity is about to be destroyed.
         Log.d(TAG, "onDestroy");
-        CameraController cameraController = CameraController.getInstance();
-        cameraController.stopAndReleaseCamera();
-        cameraController.releaseView();
+    }
+
+    /**
+     * This method is used to gather options passed by a user interactions.
+     * e.g. Focus mode, Flash mode.. directly AFTER camera is initialized.
+     */
+    @Override
+    public void onCameraInitialized() {
+        Log.d(TAG, "onReleaseCamera");
+
+        // Returns a list of available Focus modes
+        String[] focusOptions = CameraController.getInstance().getFlashOptions();
+        // pass index of option to setFocusMode(int)
+        String result = CameraController.getInstance().setFocusMode(0);
+        if (result == null) {
+            Log.d(TAG, "Success");
+        } else {
+            Log.d(TAG, "Fail: " + result);
+        }
+
     }
 
 }

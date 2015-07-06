@@ -7,6 +7,7 @@ import android.widget.ImageView;
 
 import de.alextape.androidcamera.camera.CameraConfig;
 import de.alextape.androidcamera.camera.CameraController;
+import de.alextape.openmaka.NativeController;
 
 /**
  * This async task is resonsible for async frame processing (against e.g. ndk).
@@ -39,7 +40,7 @@ public class AsyncCameraTask extends AsyncTask<byte[], Void, Boolean> {
         long t1 = System.currentTimeMillis();
 
         // process data function
-        //convertGray(previewSizeWidth, previewSizeHeight, data, pixels);
+        NativeController.displayFunction(imageWidth, imageHeight, data, pixels);
 
 
         long t2 = System.currentTimeMillis();
@@ -60,7 +61,7 @@ public class AsyncCameraTask extends AsyncTask<byte[], Void, Boolean> {
             Log.i(TAG, "processing time = " + String.valueOf(t2 - t1));
         }
 
-        CameraController.getInstance().setCameraCallbackBuffer(data);
+        CameraController.getInstance().addCameraCallbackBuffer(data);
         mProcessInProgress = false;
 
         return true;
@@ -83,6 +84,13 @@ public class AsyncCameraTask extends AsyncTask<byte[], Void, Boolean> {
         Bitmap mBitmap = Bitmap.createBitmap(width, height,
                 Bitmap.Config.ARGB_8888);
         imageView.setImageBitmap(mBitmap);
+
+//        java.lang.ArrayIndexOutOfBoundsException
+//        at android.graphics.Bitmap.checkPixelsAccess(Bitmap.java:1573)
+//        at android.graphics.Bitmap.setPixels(Bitmap.java:1631)
+//        at de.alextape.androidcamera.camera.tasks.AsyncCameraTask.onPostExecute(AsyncCameraTask.java:88)
+//        at de.alextape.androidcamera.camera.tasks.AsyncCameraTask.onPostExecute(AsyncCameraTask.java:15)
+//        at android.os.AsyncTask.finish(AsyncTask.java:632)
 
         mBitmap.setPixels(pixels, 0, width,
                 0, 0, width, height);

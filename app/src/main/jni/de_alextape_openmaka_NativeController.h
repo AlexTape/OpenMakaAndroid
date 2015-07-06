@@ -23,13 +23,7 @@ JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeController_native_1start
 JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeController_native_1initialize
   (JNIEnv *, jclass, jlong, jstring);
 
-/*
- * Class:     de_alextape_openmaka_NativeController
- * Method:    native_displayFunction
- * Signature: (II[B[I)I
- */
-JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeController_native_1displayFunction
-  (JNIEnv *, jclass, jint, jint, jbyteArray, jintArray);
+
 
 /*
  * Class:     de_alextape_openmaka_NativeController

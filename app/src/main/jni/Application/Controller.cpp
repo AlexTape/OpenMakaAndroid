@@ -143,7 +143,7 @@ int Controller::displayFunction(cv::Mat& mRgbaFrame, cv::Mat& mGrayFrame)
 
     if (isObjectDetection) {
         //int thisTime = Helper::now_ms();
-        int recognizedObjectId = findFeatures(mRgbaFrame, mGrayFrame);
+        //int recognizedObjectId = findFeatures(mRgbaFrame, mGrayFrame);
         //featureFinished = Helper::now_ms();
         //int featureRuntime = featureFinished - thisTime;
         //log_info(DTAG, "FIND FEATURE RUNTIME: %d ms Detected Feature: %d", featureRuntime, recognizedObjectId);

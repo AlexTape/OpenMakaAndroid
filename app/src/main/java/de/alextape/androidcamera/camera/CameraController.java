@@ -15,9 +15,7 @@ import java.io.IOException;
 import java.util.List;
 
 import de.alextape.openmaka.R;
-import de.alextape.androidcamera.camera.activities.CameraOrientationActivity;
 import de.alextape.androidcamera.camera.callbacks.AsyncCameraCallback;
-import de.alextape.androidcamera.camera.callbacks.AutoFocusCallback;
 import de.alextape.androidcamera.camera.callbacks.CameraCallback;
 import de.alextape.androidcamera.camera.interfaces.CameraCallbackInterface;
 import de.alextape.androidcamera.camera.interfaces.CameraInitializedCallback;
@@ -30,7 +28,7 @@ public class CameraController {
 
     private static final String TAG = CameraController.class.getSimpleName();
     private static CameraController _instance = null;
-    private static CameraOrientationActivity.Orientation initialOrientation = null;
+    private static Orientation initialOrientation = null;
 
     public int parameterHeight;
     public int parameterWidth;
@@ -44,13 +42,14 @@ public class CameraController {
     private boolean mPreviewRunning;
     private Integer mWindowWidth;
     private Integer mWindowHeight;
-    private CameraOrientationActivity.Orientation mSurfaceOrientation;
+    private Orientation mSurfaceOrientation;
     private List<Camera.Size> mSupportedPreviewSizes;
-    private List<Camera.Size> mPreviewSizes;
     private Camera.Size mForcedPreviewSize;
     private Camera.Size mPreviewSize;
     private Integer mPreviewFormat;
     private CameraInitializedCallback mCameraInitializedCallback;
+    private String mFlashMode;
+    private String mFocusMode;
 
     private CameraController(Context context, View layoutView, CameraCallback mCameraCallback) {
 
@@ -73,7 +72,7 @@ public class CameraController {
             this.mSurfaceOrientation = initialOrientation;
         } else {
             // set orientation to portrait
-            this.mSurfaceOrientation = CameraOrientationActivity.Orientation.PORTRAIT;
+            this.mSurfaceOrientation = Orientation.PORTRAIT;
         }
 
 
@@ -99,9 +98,10 @@ public class CameraController {
 
         this.mPreviewFormat = null;
         this.mPreviewRunning = false;
+
     }
 
-    public static void setInitialOrientation(CameraOrientationActivity.Orientation initialOrientation) {
+    public static void setInitialOrientation(Orientation initialOrientation) {
         CameraController.initialOrientation = initialOrientation;
     }
 
@@ -115,21 +115,6 @@ public class CameraController {
         return _instance;
     }
 
-    public Camera.Parameters getCameraParameter() {
-        return mCameraParameter;
-    }
-
-    public void setCameraParameter(Camera.Parameters mCameraParameter) {
-        this.mCameraParameter = mCameraParameter;
-        if (mPreviewRunning) {
-            mCamera.stopPreview();
-            mCamera.setParameters(mCameraParameter);
-            mCamera.startPreview();
-        } else {
-            mCamera.setParameters(mCameraParameter);
-        }
-    }
-
     public void setOnCameraInitializedListener(CameraInitializedCallback releaseListener) {
         mCameraInitializedCallback = releaseListener;
     }
@@ -138,61 +123,54 @@ public class CameraController {
         return imageView;
     }
 
-    public void startCamera() {
-
-        Log.d(TAG, "startCamera");
-        stopAndReleaseCamera();
-
-        try {
-
+    private void openCamera() {
+        if (mCamera == null) {
             if (CameraConfig.CAMERA == CameraType.FRONT_CAMERA) {
                 mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT);
             } else {
                 mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK);
             }
-
-            configureCamera();
-
-            mCamera.setPreviewDisplay(mSurfaceHolder);
-
-            if (CameraConfig.ASYNC_CAMERA) {
-                mCamera.setPreviewCallback((AsyncCameraCallback) mCameraCallback);
+            if (mCameraParameter == null) {
+                mCameraParameter = mCamera.getParameters();
             }
-
-            mCamera.startPreview();
-            mPreviewRunning = true;
-
-            mSurfaceView.requestLayout();
-
-            if (mCameraInitializedCallback != null) {
-                mCameraInitializedCallback.onCameraIsInitialized();
-            }
-
-        } catch (IOException e) {
-            mCamera.release();
-            mCamera = null;
-            e.printStackTrace();
         }
     }
 
-    public void configureCamera(CameraOrientationActivity.Orientation orientation, int width, int height) {
-        Log.d(TAG, "configureCameraWithValues");
-        stopAndReleaseCamera();
-        mSurfaceOrientation = orientation;
-        mWindowWidth = width;
-        mWindowHeight = height;
-        startCamera();
+    public void initialize() {
+        Log.d(TAG, "start");
+        destroy();
+        openCamera();
+        if (mCameraInitializedCallback != null) {
+            mCameraInitializedCallback.onCameraIsInitialized();
+        }
+    }
+
+    public void start() {
+        if (mCameraCallback != null) {
+            mCamera.setPreviewCallback(mCameraCallback);
+        }
+        mCamera.setParameters(mCameraParameter);
+        mCamera.startPreview();
+
+        mSurfaceView.requestLayout();
+        mPreviewRunning = true;
     }
 
     public Integer getPreviewFormat() {
         return mPreviewFormat;
     }
 
-    public void configureCamera() {
-        Log.d(TAG, "configureCamera");
-        if (mCamera != null) {
+    public void reconfigure(Orientation orientation, int width, int height) {
+        Log.d(TAG, "configureCameraWithValues");
+        mSurfaceOrientation = orientation;
+        mWindowWidth = width;
+        mWindowHeight = height;
+        publish();
+    }
 
-            mCameraParameter = mCamera.getParameters();
+    private void configure() {
+        Log.d(TAG, "configure");
+        if (mCamera != null) {
 
             // TODO get optimal size
             mSupportedPreviewSizes = mCameraParameter.getSupportedPreviewSizes();
@@ -232,21 +210,31 @@ public class CameraController {
             parameterHeight = cs.height;
             Log.d(TAG, "setPreviewSize:cs x=" + parameterWidth + "; y=" + parameterHeight);
 
-            rotateOrientation();
+            rotate();
 
-            mCamera.setParameters(mCameraParameter);
+            try {
+                mCamera.setPreviewDisplay(mSurfaceHolder);
+                if (CameraConfig.ASYNC_CAMERA) {
+                    mCamera.setPreviewCallback((AsyncCameraCallback) mCameraCallback);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (mFlashMode != null) {
+                mCameraParameter.setFlashMode(mFlashMode);
+            }
+
+            if (mFocusMode != null) {
+                mCameraParameter.setFocusMode(mFocusMode);
+            }
+
         } else {
             Log.d(TAG, "Camera is NULL");
         }
     }
 
-    public void rotateOrientation(CameraOrientationActivity.Orientation orientation) {
-        Log.d(TAG, "configureCameraWithValues");
-        mSurfaceOrientation = orientation;
-        rotateOrientation();
-    }
-
-    private void rotateOrientation() {
+    private void rotate() {
         Log.d(TAG, "DO ROTATION");
         switch (mSurfaceOrientation) {
             case PORTRAIT:
@@ -292,8 +280,24 @@ public class CameraController {
         return optimalSize;
     }
 
-    public void stopAndReleaseCamera() {
-        Log.d(TAG, "stopAndReleaseCamera");
+    private void publish() {
+        Log.d(TAG, "publish");
+        stop();
+        configure();
+        start();
+    }
+
+    public void stop() {
+        if (mCamera != null) {
+            mCamera.setPreviewCallback(null);
+            mCamera.stopPreview();
+            mPreviewRunning = false;
+            mCameraParameter = mCamera.getParameters();
+        }
+    }
+
+    public void destroy() {
+        Log.d(TAG, "destroy");
         if (mCamera != null) {
             mCamera.setPreviewCallback(null);
             mCamera.stopPreview();
@@ -301,17 +305,10 @@ public class CameraController {
             mCamera = null;
             mPreviewRunning = false;
         }
-    }
-
-    public void releaseView() {
-        Log.d(TAG, "releaseView");
         if (mSurfaceView != null) {
             mSurfaceView.destroyDrawingCache();
+            mSurfaceView.invalidate();
         }
-    }
-
-    public CameraOrientationActivity.Orientation getOrientation() {
-        return mSurfaceOrientation;
     }
 
     public List<String> getSupportedFocusModes() {
@@ -320,10 +317,10 @@ public class CameraController {
 
     public void setFocusMode(String supportedFocusMode) {
         Log.d(TAG, "setFocusMode=" + supportedFocusMode);
-        mCamera.stopPreview();
-        mCameraParameter.setFocusMode(supportedFocusMode);
-        mCamera.setParameters(mCameraParameter);
-        mCamera.startPreview();
+        mFocusMode = supportedFocusMode;
+        if (mPreviewRunning) {
+            publish();
+        }
     }
 
     public List<String> getSupportedFlashModes() {
@@ -332,29 +329,18 @@ public class CameraController {
 
     public void setFlashMode(String supportedFlashMode) {
         Log.d(TAG, "setFlashMode=" + supportedFlashMode);
-        mCameraParameter.setFlashMode(supportedFlashMode);
+        mFlashMode = supportedFlashMode;
         if (mPreviewRunning) {
-            mCamera.stopPreview();
-            mCamera.setParameters(mCameraParameter);
-            mCamera.startPreview();
-        } else {
-            mCamera.setParameters(mCameraParameter);
+            publish();
         }
-    }
-
-    public void setAutoFocusCallback(AutoFocusCallback autoFocusCallback) {
-        mCamera.autoFocus(autoFocusCallback);
     }
 
     public void setPreviewDisplay(SurfaceHolder holder) {
-        try {
-            mCamera.setPreviewDisplay(holder);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        mSurfaceHolder = holder;
+        publish();
     }
 
-    public void setCameraCallbackBuffer(byte[] data) {
+    public void addCameraCallbackBuffer(byte[] data) {
         if (mCamera != null) {
             mCamera.addCallbackBuffer(data);
         } else {
@@ -362,8 +348,144 @@ public class CameraController {
         }
     }
 
+    public String[] getFocusOptions() {
+        Log.d(TAG, "getFocusOptions");
+        String[] options = new String[7];
+        options[0] = "Auto";
+        options[1] = "Continuous Video";
+        options[2] = "EDOF";
+        options[3] = "Fixed";
+        options[4] = "Infinity";
+        options[5] = "Makro";
+        options[6] = "Continuous Picture";
+        return options;
+    }
+
+    public String[] getFlashOptions() {
+        Log.d(TAG, "getFlashOptions");
+        String[] options = new String[5];
+        options[0] = "Auto";
+        options[0] = "Off";
+        options[2] = "On";
+        options[3] = "Red-Eye";
+        options[4] = "Torch";
+        return options;
+    }
+
+    public String setFocusMode(int type) {
+        Log.d(TAG, "setFocusMode");
+
+        String returnThis = null;
+        List<String> focusModes = mCameraParameter.getSupportedFocusModes();
+
+        switch (type) {
+            case 0:
+                if (focusModes.contains(Camera.Parameters.FOCUS_MODE_AUTO)) {
+                    setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+                } else {
+                    returnThis = "Auto Mode not supported";
+                }
+                break;
+            case 1:
+                if (focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)) {
+                    setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
+                } else {
+                    returnThis = "Continuous Video Mode not supported";
+                }
+                break;
+            case 2:
+                if (focusModes.contains(Camera.Parameters.FOCUS_MODE_EDOF)) {
+                    setFocusMode(Camera.Parameters.FOCUS_MODE_EDOF);
+                } else {
+                    returnThis = "EDOF Mode not supported";
+                }
+                break;
+            case 3:
+                if (focusModes.contains(Camera.Parameters.FOCUS_MODE_FIXED)) {
+                    setFocusMode(Camera.Parameters.FOCUS_MODE_FIXED);
+                } else {
+                    returnThis = "Fixed Mode not supported";
+                }
+                break;
+            case 4:
+                if (focusModes.contains(Camera.Parameters.FOCUS_MODE_INFINITY)) {
+                    setFocusMode(Camera.Parameters.FOCUS_MODE_INFINITY);
+                } else {
+                    returnThis = "Infinity Mode not supported";
+                }
+                break;
+            case 5:
+                if (focusModes.contains(Camera.Parameters.FOCUS_MODE_MACRO)) {
+                    setFocusMode(Camera.Parameters.FOCUS_MODE_MACRO);
+                } else {
+                    returnThis = "Macro Mode not supported";
+                }
+                break;
+            case 6:
+                if (focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
+                    setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+                } else {
+                    returnThis = "Continuous Picture Mode not supported";
+                }
+                break;
+        }
+
+        Log.d(TAG, "setFocusMode done..");
+        return returnThis;
+    }
+
+    public String setFlashMode(int type) {
+        Log.d(TAG, "setFlashMode");
+
+        String returnThis = null;
+        List<String> FlashModes = mCameraParameter.getSupportedFlashModes();
+
+        switch (type) {
+            case 0:
+                if (FlashModes.contains(Camera.Parameters.FLASH_MODE_AUTO)) {
+                    setFlashMode(Camera.Parameters.FLASH_MODE_AUTO);
+                } else {
+                    returnThis = "Auto Mode not supported";
+                }
+                break;
+            case 1:
+                if (FlashModes.contains(Camera.Parameters.FLASH_MODE_OFF)) {
+                    setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+                } else {
+                    returnThis = "Off Mode not supported";
+                }
+                break;
+            case 2:
+                if (FlashModes.contains(Camera.Parameters.FLASH_MODE_ON)) {
+                    setFlashMode(Camera.Parameters.FLASH_MODE_ON);
+                } else {
+                    returnThis = "On Mode not supported";
+                }
+                break;
+            case 3:
+                if (FlashModes.contains(Camera.Parameters.FLASH_MODE_RED_EYE)) {
+                    setFlashMode(Camera.Parameters.FLASH_MODE_RED_EYE);
+                } else {
+                    returnThis = "Red Eye Mode not supported";
+                }
+                break;
+            case 4:
+                if (FlashModes.contains(Camera.Parameters.FLASH_MODE_TORCH)) {
+                    setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+                } else {
+                    returnThis = "Torch Mode not supported";
+                }
+                break;
+        }
+
+        return returnThis;
+    }
+
     public enum CameraType {
         FRONT_CAMERA, BACK_CAMERA
     }
 
+    public enum Orientation {
+        PORTRAIT, LANDSCAPE, REVERSE_PORTRAIT, REVERSE_LANDSCAPE
+    }
 }

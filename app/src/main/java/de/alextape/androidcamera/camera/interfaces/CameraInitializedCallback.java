@@ -6,4 +6,5 @@ package de.alextape.androidcamera.camera.interfaces;
 public interface CameraInitializedCallback {
 
     void onCameraIsInitialized();
+
 }
