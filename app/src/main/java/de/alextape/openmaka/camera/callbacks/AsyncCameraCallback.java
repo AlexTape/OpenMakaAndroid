@@ -31,8 +31,9 @@ public class AsyncCameraCallback implements CameraCallbackInterface {
     public ImageView mImageView;
     private Camera mCamera;
 
-    public AsyncCameraCallback(ImageView imageView){
+    public AsyncCameraCallback(ImageView imageView) {
         mImageView = imageView;
+        initialized = false;
     }
 
     @Override
@@ -93,10 +94,10 @@ public class AsyncCameraCallback implements CameraCallbackInterface {
         mOutputWidth = width;
         mOutputHeight = height;
 
-        Log.d(TAG, String.format("Format=%d; width=%d; height=%d", format, mOutputWidth, mOutputHeight));
+        //Log.d(TAG, String.format("Format=%d; width=%d; height=%d", format, mOutputWidth, mOutputHeight));
         CameraController.getInstance().reconfigure(format, width, height);
 
-        Log.d(TAG, "ARGH SIZE x=" + mOutputWidth + "; y=" + mOutputHeight);
+        //Log.d(TAG, "ARGH SIZE x=" + mOutputWidth + "; y=" + mOutputHeight);
 
         pixels = new int[mOutputHeight * mOutputWidth];
 
@@ -114,6 +115,7 @@ public class AsyncCameraCallback implements CameraCallbackInterface {
     }
 
     private Long lastMillis;
+    private boolean initialized;
 
     /**
      * This async task is resonsible for async frame processing (against e.g. ndk).
@@ -142,7 +144,12 @@ public class AsyncCameraCallback implements CameraCallbackInterface {
             lastMillis = t1;
 
             // process data function
-            NativeController.displayFunction(mOutputWidth, mOutputHeight, data, pixels);
+            if (!initialized) {
+                String configFile = "/storage/emulated/0/Android/data/de.alextape.openmaka/files/config/config.xml";
+                initialized = NativeController.initialize(mOutputWidth, mOutputHeight, data, pixels, configFile);
+            } else {
+                NativeController.displayFunction(mOutputWidth, mOutputHeight, data, pixels);
+            }
 
             long t2 = System.currentTimeMillis();
             mTiming[mTimingSlot++] = t2 - t1;
@@ -186,14 +193,10 @@ public class AsyncCameraCallback implements CameraCallbackInterface {
                 return;
             }
 
-            Log.d(TAG, "ARGH SIZE x=" + mOutputWidth + "; y=" + mOutputHeight);
-
             mImageView.invalidate();
-//            mImageView.destroyDrawingCache();
-
             mBitmap.setPixels(pixels, 0, mOutputWidth,
                     0, 0, mOutputWidth, mOutputHeight);
-            mImageView.setImageBitmap(mBitmap);
+//            mImageView.setImageBitmap(mBitmap);
 
         }
     }

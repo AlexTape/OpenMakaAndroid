@@ -67,11 +67,6 @@ public class MainActivity extends AndroidCamera implements View.OnTouchListener 
     @Override
     public void onCameraInitialized() {
 
-//        if (!initialized) {
-//            String configFile = "/storage/emulated/0/Android/data/de.alextape.openmaka/files/config/config.xml";
-//            initialized = NativeFunctions.initialize(mRgbaAddr, configFile);
-//        }
-
         Log.d(TAG, "onReleaseCamera");
 
 //        // Returns a list of available Focus modes

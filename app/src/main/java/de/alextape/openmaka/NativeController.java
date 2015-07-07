@@ -22,9 +22,9 @@ public class NativeController {
         native_start();
     }
 
-    public static boolean initialize(long matAddrRgba, String configPath) {
+    public static boolean initialize(int width, int height, byte[] data, int[] pixels, String configPath) {
         boolean returnThis = false;
-        int i = native_initialize(matAddrRgba, configPath);
+        int i = native_initialize(width, height, data, pixels, configPath);
         if (i == 1) {
             returnThis = true;
         }
@@ -33,7 +33,7 @@ public class NativeController {
 
     private static native void native_start();
 
-    private static native int native_initialize(long matAddrRgba, String configPath);
+    private static native int native_initialize(int width, int height, byte[] data, int[] pixels, String configPath);
 
     /**
      * Display functions.

@@ -14,35 +14,49 @@ JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeController_native_1start
 }
 
 JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeController_native_1initialize
-  (JNIEnv *env, jclass clazz, jlong mAddrGray, jstring configPath)
+  (JNIEnv *env, jclass clazz, jint width, jint height, jbyteArray data, jintArray pixels, jstring configPath)
 {
     int i_ = 0;
+
     const char *strMsgPtr = env->GetStringUTFChars( configPath , 0);
+    jbyte * pData = env->GetByteArrayElements(data, 0);
+    jint * pPixels = env->GetIntArrayElements(pixels, 0);
+
+    cv::Mat mRgba(height, width, CV_8UC1, (unsigned char*) pData);
+    cv::Mat mGray(height, width, CV_8UC4, (unsigned char*) pPixels);
+
+    cvtColor(mRgba, mGray, CV_GRAY2RGBA);
+
     if (strMsgPtr != NULL) {
         std::string pathString(strMsgPtr);
-        i_ = Controller::getInstance()->initialize(*(cv::Mat*)mAddrGray, pathString);
+        i_ = Controller::getInstance()->initialize(mGray, pathString);
     }
+
     env->ReleaseStringChars(configPath, (jchar *)strMsgPtr);
+    env->ReleaseByteArrayElements(data, pData, 0);
+    env->ReleaseIntArrayElements(pixels, pPixels, 0);
     return i_;
 }
 
 JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeController_native_1displayFunction
   (JNIEnv *env, jclass clazz, jint width, jint height, jbyteArray data, jintArray pixels)
 {
-    int returnThis = 0;
+    int i_ = 0;
+
     jbyte * pData = env->GetByteArrayElements(data, 0);
     jint * pPixels = env->GetIntArrayElements(pixels, 0);
 
-    cv::Mat input(height, width, CV_8UC1, (unsigned char*) pData);
-    cv::Mat output(height, width, CV_8UC4, (unsigned char*) pPixels);
+    cv::Mat mRgba(height, width, CV_8UC1, (unsigned char*) pData);
+    cv::Mat mGray(height, width, CV_8UC4, (unsigned char*) pPixels);
 
-    cvtColor(input, output, CV_GRAY2RGBA);
-    //returnThis = Controller::getInstance()->displayFunction(input, output);
+    cvtColor(mRgba, mGray, CV_GRAY2RGBA);
+
+    i_ = Controller::getInstance()->displayFunction(mRgba, mGray);
 
     env->ReleaseByteArrayElements(data, pData, 0);
     env->ReleaseIntArrayElements(pixels, pPixels, 0);
 
-	return returnThis;
+	return i_;
 }
 
 JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeController_native_1glRender

@@ -18,10 +18,10 @@ JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeController_native_1start
 /*
  * Class:     de_alextape_openmaka_NativeController
  * Method:    native_initialize
- * Signature: (JLjava/lang/String;)I
+ * Signature: (II[B[ILjava/lang/String;)I
  */
 JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeController_native_1initialize
-  (JNIEnv *, jclass, jlong, jstring);
+  (JNIEnv *, jclass, jint, jint, jbyteArray, jintArray, jstring);
 
 /*
  * Class:     de_alextape_openmaka_NativeController

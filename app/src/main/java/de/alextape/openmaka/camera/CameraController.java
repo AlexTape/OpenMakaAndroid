@@ -58,10 +58,6 @@ public class CameraController {
         this.mSurfaceHolder.addCallback(mCameraCallback);
         this.mSurfaceHolder.setKeepScreenOn(true);
 
-        // TODO TYPE GPU???
-        this.mSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-
-        // TODO get initial orientation
         if (initialOrientation != null) {
             Log.d(TAG, "Trigger initial orientation");
 
@@ -70,7 +66,6 @@ public class CameraController {
             // set orientation to portrait
             this.mSurfaceOrientation = Orientation.PORTRAIT;
         }
-
 
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();
@@ -188,11 +183,12 @@ public class CameraController {
         Log.d(TAG, "configure");
         if (mCamera != null) {
 
-            // TODO get optimal size
             mSupportedPreviewSizes = mCameraParameter.getSupportedPreviewSizes();
 
             if (mSupportedPreviewSizes != null) {
-                mPreviewSize = getOptimalPreviewSize();
+                 mPreviewSize = getOptimalPreviewSize();
+                // todo set resolution
+                //mPreviewSize = mSupportedPreviewSizes.get(8);
                 mCameraParameter.setPreviewSize(mPreviewSize.width, mPreviewSize.height);
             }
             Log.d(TAG, "setPreviewSize mPreviewSize: x=" + mPreviewSize.width + "; y=" + mPreviewSize.height);

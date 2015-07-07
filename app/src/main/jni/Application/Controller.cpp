@@ -136,18 +136,18 @@ int Controller::initialize(cv::Mat& mGrayFrame, std::string configPath)
 
 }
 
-int Controller::displayFunction(cv::Mat& mRgbaFrame, cv::Mat& mGrayFrame)
+int Controller::displayFunction(cv::Mat& mRgba, cv::Mat& mGray)
 {
 	log_info(ControllerTAG, "display..");
     int i =0;
 
-    if (isObjectDetection) {
+//    if (isObjectDetection) {
         //int thisTime = Helper::now_ms();
-        //int recognizedObjectId = findFeatures(mRgbaFrame, mGrayFrame);
+        int recognizedObjectId = findFeatures(mRgba, mGray);
         //featureFinished = Helper::now_ms();
         //int featureRuntime = featureFinished - thisTime;
         //log_info(DTAG, "FIND FEATURE RUNTIME: %d ms Detected Feature: %d", featureRuntime, recognizedObjectId);
-    }
+//    }
 	log_info(ControllerTAG, "display.. done");
 	return i;
 }
@@ -155,7 +155,7 @@ int Controller::displayFunction(cv::Mat& mRgbaFrame, cv::Mat& mGrayFrame)
 void Controller::glRender()
 {
 	log_info(ControllerTAG, "rendering..");
-    if (isOpenGL) {
+//    if (isOpenGL) {
        int recognizedObjectId = 1;
        if (recognizedObjectId > 0) {
 
@@ -207,7 +207,7 @@ void Controller::glRender()
            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffe
            glClearColor(0,0,0,0);
        }
-   }
+//   }
    log_info(ControllerTAG, "rendering.. done");
 }
 
