@@ -1,6 +1,5 @@
 package de.alextape.openmaka;
 
-
 import android.app.ActionBar;
 import android.app.Dialog;
 import android.graphics.Color;
@@ -12,30 +11,36 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
-import de.alextape.androidcamera.camera.HardwareCamera;
+import de.alextape.openmaka.camera.AndroidCamera;
+import de.alextape.openmaka.camera.CameraController;
+import de.alextape.openmaka.storage.FileManager;
 
-public class GuiAcitivity extends HardwareCamera implements View.OnTouchListener {
+public class MainActivity extends AndroidCamera implements View.OnTouchListener {
 
-    private static final String TAG = "OpenMaka::GuiActivity";
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     private ArrayList<String> menuItems;
     private Dialog menuDialog;
+    private LinearLayout mContainer;
 
-    public GuiAcitivity() {
+    public MainActivity() {
         Log.i(TAG, "Instantiated new " + this.getClass());
     }
 
-    private LinearLayout mContainer;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.i(TAG, "called onCreate");
         super.onCreate(savedInstanceState);
+        // The activity is being created.
+        Log.d(TAG, "onCreate");
+
+
 
         FileManager fileManager = new FileManager(getApplicationContext());
         fileManager.copyAssets();
@@ -46,43 +51,28 @@ public class GuiAcitivity extends HardwareCamera implements View.OnTouchListener
         ActionBar actionBar = getActionBar();
 
         if (actionBar != null) {
+            Log.d(TAG, "ARGHARGHARGH");
             actionBar.setDisplayShowHomeEnabled(false);
             actionBar.setDisplayHomeAsUpEnabled(false);
             actionBar.setTitle("");
             actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0000ffff")));
         }
 
-        System.loadLibrary("native_openmaka");
     }
 
-
+    /**
+     * This method is used to gather options passed by a user interactions.
+     * e.g. Focus mode, Flash mode.. directly AFTER camera is initialized.
+     */
     @Override
     public void onCameraInitialized() {
 
-//        if (!initialized) {
-//            String configFile = "/storage/emulated/0/Android/data/de.alextape.openmaka/files/config/config.xml";
-//            initialized = NativeFunctions.initialize(mRgbaAddr, configFile);
-//        }
-
         Log.d(TAG, "onReleaseCamera");
 
-        Integer mode = null;
-        String result = null;
-
-        // Return a list of Available Flash modes
-        String[] flashOptions = getFlashOptions();
-        // pass index of option to setFlashMode(int)
-        result = setFlashMode(1);
-        if (result == null) {
-            Log.d(TAG, "Success");
-        } else {
-            Log.d(TAG, "Fail: " + result);
-        }
-
-        // Returns a list of available Focus modes
-        String[] focusOptions = getFlashOptions();
-        // pass index of option to setFocusMode(int)
-        result = setFocusMode(1);
+//        // Returns a list of available Focus modes
+        String[] focusOptions = CameraController.getInstance().getFocusOptions();
+//        // pass index of option to setFocusMode(int)
+        String result = CameraController.getInstance().setFocusMode(1);
         if (result == null) {
             Log.d(TAG, "Success");
         } else {
@@ -108,16 +98,16 @@ public class GuiAcitivity extends HardwareCamera implements View.OnTouchListener
 
         switch (item.getItemId()) {
             case R.id.featureDetector_FAST:
-                boolean isDetection = NativeFunctions.isViewModeObjectDetection();
-                NativeFunctions.setViewModeObjectDetection(!isDetection);
+                boolean isDetection = NativeController.isViewModeObjectDetection();
+                NativeController.setViewModeObjectDetection(!isDetection);
                 break;
             case 1:
-                boolean isTracking = NativeFunctions.isViewModeTracking();
-                NativeFunctions.setViewModeTracking(!isTracking);
+                boolean isTracking = NativeController.isViewModeTracking();
+                NativeController.setViewModeTracking(!isTracking);
                 break;
             case 2:
-                boolean isOpenGL = NativeFunctions.isViewModeOpenGl();
-                NativeFunctions.setViewModeOpenGl(!isOpenGL);
+                boolean isOpenGL = NativeController.isViewModeOpenGl();
+                NativeController.setViewModeOpenGl(!isOpenGL);
                 break;
         }
 
@@ -132,12 +122,32 @@ public class GuiAcitivity extends HardwareCamera implements View.OnTouchListener
     @Override
     public void onResume() {
         super.onResume();
+        // The activity has become visible (it is now "resumed").
+        Log.d(TAG, "onResume");
+    }
+
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        // The activity is no longer visible (it is now "stopped")
+        Log.d(TAG, "onStop");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        // The activity is about to be destroyed.
+        Log.d(TAG, "onDestroy");
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // The activity is about to become visible.
+        Log.d(TAG, "onStart");
+    }
+
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {

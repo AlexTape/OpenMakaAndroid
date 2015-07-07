@@ -3,13 +3,17 @@ package de.alextape.openmaka;
 /**
  * Created by thinker on 11.06.15.
  */
-public class NativeFunctions {
+public class NativeController {
 
     private static final String TAG = "OpenMaka::NativeFunctions";
 
     private static boolean VIEW_MODE_OBJECT_DETECTION = false;
     private static boolean VIEW_MODE_TRACKING = false;
     private static boolean VIEW_MODE_OPEN_GL = false;
+
+    static {
+        System.loadLibrary("native_openmaka");
+    }
 
     /**
      * Application functions.
@@ -18,9 +22,9 @@ public class NativeFunctions {
         native_start();
     }
 
-    public static boolean initialize(long matAddrRgba, String configPath) {
+    public static boolean initialize(int width, int height, byte[] data, int[] pixels, String configPath) {
         boolean returnThis = false;
-        int i = native_initialize(matAddrRgba, configPath);
+        int i = native_initialize(width, height, data, pixels, configPath);
         if (i == 1) {
             returnThis = true;
         }
@@ -29,16 +33,16 @@ public class NativeFunctions {
 
     private static native void native_start();
 
-    private static native int native_initialize(long matAddrRgba, String configPath);
+    private static native int native_initialize(int width, int height, byte[] data, int[] pixels, String configPath);
 
     /**
      * Display functions.
      */
-    public static Integer displayFunction(long matAddrRgba, long matAddrGray) {
-        if (VIEW_MODE_OBJECT_DETECTION || VIEW_MODE_TRACKING || VIEW_MODE_OPEN_GL) {
-            return native_displayFunction(matAddrRgba, matAddrGray);
-        }
-        return null;
+    public static Integer displayFunction(int width, int height, byte[] data, int[] pixels) {
+//        if (VIEW_MODE_OBJECT_DETECTION || VIEW_MODE_TRACKING || VIEW_MODE_OPEN_GL) {
+            return native_displayFunction(width, height, data, pixels);
+//        }
+//        return null;
     }
 
     public static void glRender() {
@@ -49,7 +53,7 @@ public class NativeFunctions {
         native_glResize(w, h);
     }
 
-    private static native int native_displayFunction(long matAddrRgba, long matAddrGray);
+    private static native int native_displayFunction(int width, int height, byte[] data, int[] pixels);
 
     private static native void native_glRender();
 

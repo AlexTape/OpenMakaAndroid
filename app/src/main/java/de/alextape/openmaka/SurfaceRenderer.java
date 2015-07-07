@@ -13,23 +13,22 @@ class SurfaceRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceCreated(GL10 gl, javax.microedition.khronos.egl.EGLConfig arg1) {
-        NativeFunctions.start();
+        NativeController.start();
     }
 
     public void onSurfaceChanged(GL10 gl, int w, int h) {
-        NativeFunctions.glResize(w, h);
+        NativeController.glResize(w, h);
     }
 
     public void onDrawFrame(GL10 gl) {
 
-        if (NativeFunctions.isViewModeOpenGl()) {
-            NativeFunctions.glRender();
-        } else {
-            // clear screen
-            gl.glClearColor(0, 0, 0, 0);
-            gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
-        }
-
+//        if (NativeController.isViewModeOpenGl()) {
+            NativeController.glRender();
+//        } else {
+//             clear screen
+//            gl.glClearColor(0, 0, 0, 0);
+//            gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
+//        }
 
     }
 

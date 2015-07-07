@@ -149,7 +149,7 @@ int Analyzer::compute(cv::Mat mRgbaFrame, cv::Mat mGrayFrame) {
 
     int returnThis = 0;
 
-    if (!inst_->isComputed) {
+    //if (!inst_->isComputed) {
 
         inst_->detector->detect(mGrayFrame, inst_->sceneKeypoints);
         inst_->extractor->compute(mGrayFrame, inst_->sceneKeypoints, inst_->sceneDescriptors);
@@ -158,12 +158,12 @@ int Analyzer::compute(cv::Mat mRgbaFrame, cv::Mat mGrayFrame) {
 
         inst_->isComputed = true;
 
-    }
+    //}
 
     for( unsigned int i = 0; i < inst_->sceneKeypoints.size(); i++ )
     {
         const cv::KeyPoint& kp = inst_->sceneKeypoints[i];
-        cv::circle(mRgbaFrame, cv::Point(kp.pt.x, kp.pt.y), 10, cv::Scalar(255,0,0,255));
+        cv::circle(mGrayFrame, cv::Point(kp.pt.x, kp.pt.y), 10, cv::Scalar(255,0,0,255));
     }
 
     return returnThis;

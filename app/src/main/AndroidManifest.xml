@@ -9,14 +9,15 @@
         android:targetSdkVersion="16"/>
 
     <application
-        android:name="de.alextape.androidcamera.camera.activities.CameraApplication"
+        android:name=".camera.CameraApplication"
         android:label="@string/app_name"
         android:icon="@drawable/icon"
         >
         <!-- TODO remove debuggable later -->
 
-        <activity android:name=".GuiAcitivity"
+        <activity android:name=".MainActivity"
                   android:label="@string/app_name"
+                  android:screenOrientation="portrait"
                   android:configChanges="keyboardHidden|orientation|screenSize"
                   android:theme="@android:style/Theme.Holo.Light.DarkActionBar">
             <intent-filter>

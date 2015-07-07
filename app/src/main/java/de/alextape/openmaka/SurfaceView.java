@@ -4,8 +4,6 @@ import android.content.Context;
 import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
 
 /**
  * Created by thinker on 11.05.15.
@@ -28,7 +26,7 @@ class SurfaceView extends GLSurfaceView {
 
         //setZOrderOnTop(true);
         setRenderer(new SurfaceRenderer());
-		/*
+        /*
 		requestFocus();
 		setFocusableInTouchMode(true);
 		*/

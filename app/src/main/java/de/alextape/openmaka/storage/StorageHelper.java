@@ -1,4 +1,4 @@
-package de.alextape.openmaka;
+package de.alextape.openmaka.storage;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -10,11 +10,10 @@ import android.content.SharedPreferences;
 public class StorageHelper {
 
     private static final String TAG = "OpenMaka::StorageHelper";
-
-    private Context context;
     private final String STORAGE = "de.alextape.openmaka";
+    private Context context;
 
-    public StorageHelper (Context context) {
+    public StorageHelper(Context context) {
         this.context = context;
     }
 
