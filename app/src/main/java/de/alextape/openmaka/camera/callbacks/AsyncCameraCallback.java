@@ -1,11 +1,9 @@
 package de.alextape.openmaka.camera.callbacks;
 
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.ImageFormat;
 import android.hardware.Camera;
 import android.os.AsyncTask;
-import android.os.Looper;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.widget.ImageView;
@@ -23,32 +21,28 @@ public class AsyncCameraCallback implements CameraCallbackInterface {
 
     private static final String TAG = AsyncCameraCallback.class.getSimpleName();
 
-    private static final int STATE_OFF = 0;
-    private static final int STATE_PREVIEW = 1;
-    private static final int STATE_NO_CALLBACKS = 2;
-    private int mState = STATE_OFF;
     private boolean mProcessInProgress = false;
-    private boolean mProcessingFirstFrame = false;
 
     private int[] pixels;
 
-    private int imageWidth;
-    private int imageHeight;
+    private int mOutputWidth;
+    private int mOutputHeight;
     public Bitmap mBitmap;
-    public ImageView imageView;
+    public ImageView mImageView;
+    private Camera mCamera;
+
+    public AsyncCameraCallback(ImageView imageView){
+        mImageView = imageView;
+    }
 
     @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
-        Camera mCamera = CameraController.getInstance().getCamera();
+
         if (mProcessInProgress) {
             mCamera.addCallbackBuffer(data);
             return;
         }
-        if (data == null) {
-            return;
-        }
 
-        //Log.d(TAG, "onPreviewFrame");
         if (CameraController.getInstance().getPreviewFormat() != ImageFormat.NV21) {
 
             Log.d(TAG, "wrong format");
@@ -56,31 +50,28 @@ public class AsyncCameraCallback implements CameraCallbackInterface {
 
             if (data != null) {
 
-                imageView = CameraController.getInstance().getImageView();
-                imageHeight = imageView.getHeight();
-                imageWidth = imageView.getWidth();
+                mProcessInProgress = true;
 
-                Camera.Size test = CameraController.getInstance().getPreviewSize();
+                if (mBitmap == null) {
+                    mBitmap = Bitmap.createBitmap(mOutputWidth, mOutputHeight,
+                            Bitmap.Config.ARGB_8888);
+                    mImageView.setImageBitmap(mBitmap);
+                }
 
-                Log.d(TAG, "ARGH imageView x=" + imageWidth + "; y=" + imageHeight);
-                Log.d(TAG, "ARGH CameraController x=" + test.width + "; y=" + test.height);
+                Camera.Size previewSize = CameraController.getInstance().getPreviewSize();
+                mOutputWidth = previewSize.width;
+                mOutputHeight = previewSize.height;
 
-//                int expectedBytes = mPreviewSize.width * mPreviewSize.height *
-//                        ImageFormat.getBitsPerPixel(ImageFormat.NV21) / 8;
-//
-//                if (expectedBytes != data.length) {
-//                    Log.e(TAG, "Mismatched size of buffer! Expected ");
-//
-//                    mState = STATE_NO_CALLBACKS;
-//                    mCamera.setPreviewCallbackWithBuffer(null);
-//                    return;
-//                }
-//
-                mCamera.setPreviewCallbackWithBuffer(this);
-                mCamera.addCallbackBuffer(data);
+                double expectedBytes = CameraController.getInstance().getExpectedByteBufferSize();
 
+                if (expectedBytes != data.length) {
+                    Log.e(TAG, "Mismatched size of buffer! Expected " + expectedBytes + "; Got " + data.length + ";");
+                    return;
+                } else {
 
-                new AsyncCameraTask().execute(data);
+                    new AsyncCameraTask().execute(data);
+                }
+
             }
 
         }
@@ -92,31 +83,28 @@ public class AsyncCameraCallback implements CameraCallbackInterface {
         CameraController.getInstance().setPreviewDisplay(holder);
         CameraController.getInstance().setPreviewCallback(this);
         CameraController.getInstance().publish();
+        mCamera = CameraController.getInstance().getCamera();
     }
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         Log.d(TAG, "surfaceChanged");
 
-        // width and height unused!
+        mOutputWidth = width;
+        mOutputHeight = height;
 
-        imageView = CameraController.getInstance().getImageView();
-        imageWidth = imageView.getWidth();
-        imageHeight = imageView.getHeight();
-
-
-        Log.d(TAG, String.format("Format=%d; width=%d; height=%d", format, imageWidth, imageHeight));
+        Log.d(TAG, String.format("Format=%d; width=%d; height=%d", format, mOutputWidth, mOutputHeight));
         CameraController.getInstance().reconfigure(format, width, height);
 
-        Log.d(TAG, "ARGH surfaceChanged x=" + imageWidth + "; y=" + imageHeight);
-        pixels = new int[imageWidth * imageHeight];
+        Log.d(TAG, "ARGH SIZE x=" + mOutputWidth + "; y=" + mOutputHeight);
 
-        mBitmap = Bitmap.createBitmap(imageWidth, imageHeight,
+        pixels = new int[mOutputHeight * mOutputWidth];
+
+        mBitmap = Bitmap.createBitmap(mOutputHeight, mOutputWidth,
                 Bitmap.Config.ARGB_8888);
 
-        mBitmap.eraseColor(android.graphics.Color.GREEN);
-
-        imageView.setImageBitmap(mBitmap);
+        mImageView.setImageBitmap(mBitmap);
+        mImageView.setRotation(90);
     }
 
     @Override
@@ -124,6 +112,8 @@ public class AsyncCameraCallback implements CameraCallbackInterface {
         Log.d(TAG, "surfaceDestroyed");
         CameraController.getInstance().destroy();
     }
+
+    private Long lastMillis;
 
     /**
      * This async task is resonsible for async frame processing (against e.g. ndk).
@@ -139,15 +129,20 @@ public class AsyncCameraCallback implements CameraCallbackInterface {
 
         @Override
         protected Boolean doInBackground(byte[]... datas) {
-            // TODO Auto-generated method stub
-            Log.i(TAG, "background process started");
 
             data = datas[0];
 
             long t1 = System.currentTimeMillis();
+            if (lastMillis != null) {
+                if (lastMillis + CameraConfig.doInBackgroundTimer > t1) {
+                    return false;
+                }
+            }
+
+            lastMillis = t1;
 
             // process data function
-            NativeController.displayFunction(imageWidth, imageHeight, data, pixels);
+            NativeController.displayFunction(mOutputWidth, mOutputHeight, data, pixels);
 
             long t2 = System.currentTimeMillis();
             mTiming[mTimingSlot++] = t2 - t1;
@@ -167,8 +162,9 @@ public class AsyncCameraCallback implements CameraCallbackInterface {
                 Log.i(TAG, "processing time = " + String.valueOf(t2 - t1));
             }
 
-            Camera camer = CameraController.getInstance().getCamera();
-            camer.addCallbackBuffer(data);
+            if (mCamera != null) {
+                mCamera.addCallbackBuffer(data);
+            }
             mProcessInProgress = false;
 
             return true;
@@ -178,36 +174,27 @@ public class AsyncCameraCallback implements CameraCallbackInterface {
         protected void onPostExecute(Boolean result) {
             //Log.i(TAG, "running onPostExecute");
 
-            if (imageView == null) {
-                Log.d(TAG, "ARGH1");
+            if (mImageView == null) {
                 return;
             }
 
             if (mBitmap == null) {
-                Log.d(TAG, "ARGH2");
                 return;
             }
 
             if (pixels == null) {
-                Log.d(TAG, "ARGH3");
                 return;
             }
 
+            Log.d(TAG, "ARGH SIZE x=" + mOutputWidth + "; y=" + mOutputHeight);
 
-            Log.d(TAG, "ARGH onPostExecute x=" + imageWidth + "; y=" + imageHeight);
+            mImageView.invalidate();
+//            mImageView.destroyDrawingCache();
 
-            imageView.invalidate();
-            imageView.destroyDrawingCache();
+            mBitmap.setPixels(pixels, 0, mOutputWidth,
+                    0, 0, mOutputWidth, mOutputHeight);
+            mImageView.setImageBitmap(mBitmap);
 
-            mBitmap.setPixels(pixels, 0, imageWidth,
-                    0, 0, imageWidth, imageHeight);
-            imageView.setImageBitmap(mBitmap);
-
-//            imageView.invalidate();
-
-
-
-            Log.i(TAG, "bitmap set in imageview result=" + result);
         }
     }
 

@@ -8,7 +8,9 @@ import android.view.Display;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 import de.alextape.openmaka.R;
 import de.alextape.openmaka.camera.callbacks.AsyncCameraCallback;
@@ -28,12 +30,18 @@ public abstract class AndroidCamera extends Activity implements CameraInitialize
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
+
         setContentView(R.layout.open_maka_layout);
         this.layoutView = this.findViewById(R.id.layoutContainer);
 
+        ImageView imageView = (ImageView) layoutView.findViewById(R.id.imageView);
+
         // init CameraController
         if (CameraConfig.ASYNC_CAMERA) {
-            CameraController.create(this, layoutView, new AsyncCameraCallback());
+            CameraController.create(this, layoutView, new AsyncCameraCallback(imageView));
         } else {
             CameraController.create(this, layoutView, new CameraCallback());
         }

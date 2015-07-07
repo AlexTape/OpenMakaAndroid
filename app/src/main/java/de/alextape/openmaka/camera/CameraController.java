@@ -1,6 +1,7 @@
 package de.alextape.openmaka.camera;
 
 import android.content.Context;
+import android.graphics.ImageFormat;
 import android.graphics.Point;
 import android.hardware.Camera;
 import android.util.Log;
@@ -467,6 +468,11 @@ public class CameraController {
 
     public void setPreviewCallback(CameraCallbackInterface callback) {
         this.mCameraCallback = callback;
+    }
+
+    public double getExpectedByteBufferSize() {
+        return mPreviewSize.width * mPreviewSize.height *
+                ImageFormat.getBitsPerPixel(ImageFormat.NV21) / 8;
     }
 
     public enum CameraType {

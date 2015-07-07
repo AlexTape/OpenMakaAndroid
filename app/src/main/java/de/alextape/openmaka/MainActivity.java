@@ -11,6 +11,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -37,6 +39,8 @@ public class MainActivity extends AndroidCamera implements View.OnTouchListener 
         super.onCreate(savedInstanceState);
         // The activity is being created.
         Log.d(TAG, "onCreate");
+
+
 
         FileManager fileManager = new FileManager(getApplicationContext());
         fileManager.copyAssets();
