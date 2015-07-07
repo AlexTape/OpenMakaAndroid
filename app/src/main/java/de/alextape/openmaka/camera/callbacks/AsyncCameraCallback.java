@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.ImageFormat;
 import android.hardware.Camera;
 import android.os.AsyncTask;
+import android.os.Looper;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.widget.ImageView;
@@ -195,14 +196,16 @@ public class AsyncCameraCallback implements CameraCallbackInterface {
 
             Log.d(TAG, "ARGH onPostExecute x=" + imageWidth + "; y=" + imageHeight);
 
-//            imageView.invalidate();
-//            imageView.destroyDrawingCache();
+            imageView.invalidate();
+            imageView.destroyDrawingCache();
 
             mBitmap.setPixels(pixels, 0, imageWidth,
                     0, 0, imageWidth, imageHeight);
             imageView.setImageBitmap(mBitmap);
 
 //            imageView.invalidate();
+
+
 
             Log.i(TAG, "bitmap set in imageview result=" + result);
         }

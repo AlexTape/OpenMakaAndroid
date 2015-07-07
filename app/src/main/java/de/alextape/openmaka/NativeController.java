@@ -39,10 +39,10 @@ public class NativeController {
      * Display functions.
      */
     public static Integer displayFunction(int width, int height, byte[] data, int[] pixels) {
-        if (VIEW_MODE_OBJECT_DETECTION || VIEW_MODE_TRACKING || VIEW_MODE_OPEN_GL) {
+//        if (VIEW_MODE_OBJECT_DETECTION || VIEW_MODE_TRACKING || VIEW_MODE_OPEN_GL) {
             return native_displayFunction(width, height, data, pixels);
-        }
-        return null;
+//        }
+//        return null;
     }
 
     public static void glRender() {
