@@ -37,7 +37,7 @@ JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeController_native_1displa
     cv::Mat output(height, width, CV_8UC4, (unsigned char*) pPixels);
 
     cvtColor(input, output, CV_GRAY2RGBA);
-    returnThis = Controller::getInstance()->displayFunction(input, output);
+    //returnThis = Controller::getInstance()->displayFunction(input, output);
 
     env->ReleaseByteArrayElements(data, pData, 0);
     env->ReleaseIntArrayElements(pixels, pPixels, 0);

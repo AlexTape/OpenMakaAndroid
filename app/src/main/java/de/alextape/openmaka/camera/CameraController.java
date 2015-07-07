@@ -1,4 +1,4 @@
-package de.alextape.androidcamera.camera;
+package de.alextape.openmaka.camera;
 
 import android.content.Context;
 import android.graphics.Point;
@@ -15,8 +15,8 @@ import java.io.IOException;
 import java.util.List;
 
 import de.alextape.openmaka.R;
-import de.alextape.androidcamera.camera.interfaces.CameraCallbackInterface;
-import de.alextape.androidcamera.camera.interfaces.CameraInitializedCallback;
+import de.alextape.openmaka.camera.interfaces.CameraCallbackInterface;
+import de.alextape.openmaka.camera.interfaces.CameraInitializedCallback;
 
 /**
  * This class represents the camera implementation as a singleton to be accessible from
@@ -27,9 +27,6 @@ public class CameraController {
     private static final String TAG = CameraController.class.getSimpleName();
     private static CameraController _instance = null;
     private static Orientation initialOrientation = null;
-
-    public int parameterHeight;
-    public int parameterWidth;
 
     private ImageView imageView;
     private Camera mCamera;
@@ -107,10 +104,22 @@ public class CameraController {
         return _instance;
     }
 
+    public float getFocalLength() {
+        return mCameraParameter.getFocalLength();
+    }
+
+    public Camera.Size getPreviewSize() {
+        return mPreviewSize;
+    }
+
     public static CameraController create(Context context, View layoutView, CameraCallbackInterface cameraCallback) {
         Log.d(TAG, "create");
         _instance = new CameraController(context, layoutView, cameraCallback);
         return _instance;
+    }
+
+    public Camera getCamera() {
+        return mCamera;
     }
 
     public void setOnCameraInitializedListener(CameraInitializedCallback releaseListener) {
@@ -166,6 +175,14 @@ public class CameraController {
         publish();
     }
 
+    public void reconfigure(int format, int width, int height) {
+        Log.d(TAG, "configureCameraWithValues");
+        mPreviewFormat = format;
+        mWindowWidth = width;
+        mWindowHeight = height;
+        publish();
+    }
+
     private void configure() {
         Log.d(TAG, "configure");
         if (mCamera != null) {
@@ -173,40 +190,13 @@ public class CameraController {
             // TODO get optimal size
             mSupportedPreviewSizes = mCameraParameter.getSupportedPreviewSizes();
 
-//            if (mSupportedPreviewSizes != null) {
-//                mPreviewSize = getOptimalPreviewSize(mSupportedPreviewSizes, mWindowWidth, mWindowHeight);
-//                mCameraParameter.setPreviewSize(mWindowWidth, mWindowHeight);
-//            }
+            if (mSupportedPreviewSizes != null) {
+                mPreviewSize = getOptimalPreviewSize();
+                mCameraParameter.setPreviewSize(mPreviewSize.width, mPreviewSize.height);
+            }
+            Log.d(TAG, "setPreviewSize mPreviewSize: x=" + mPreviewSize.width + "; y=" + mPreviewSize.height);
 
             mPreviewFormat = mCameraParameter.getPreviewFormat();
-
-            // TODO FIX PREVIEW SIZES and make the available via options menu
-            // configure preview size
-            mPreviewSize = null;
-            if (mForcedPreviewSize == null) {
-                mPreviewSize = getOptimalPreviewSize(mSupportedPreviewSizes, mWindowWidth, mWindowHeight);
-            } else {
-                mPreviewSize = mForcedPreviewSize;
-            }
-
-//            for (Camera.Size size : mSupportedPreviewSizes) {
-//                double ratio = (double) size.height / size.width;
-//                Log.d(TAG, "mSupportedPreviewSize: x=" + size.width + "; y=" + size.height + "; ratio=" + ratio);
-//                if (opt != null) {
-//                    Log.d(TAG, "mOptimalPreviewSize: x=" + opt.width + "; y=" + opt.height + ";");
-//                } else {
-//                    Log.d(TAG, "mOptimalPreviewSize: null;");
-//                }
-//            }
-
-            // TODO trigger resolution
-            Camera.Size cs = mSupportedPreviewSizes.get(2);
-            mCameraParameter.setPreviewSize(cs.width, cs.height);
-            Log.d(TAG, "setPreviewSize mWindow: x=" + mWindowWidth + "; y=" + mWindowHeight);
-
-            parameterWidth = cs.width;
-            parameterHeight = cs.height;
-            Log.d(TAG, "setPreviewSize:cs x=" + parameterWidth + "; y=" + parameterHeight);
 
             rotate();
 
@@ -259,27 +249,39 @@ public class CameraController {
         }
     }
 
-    private Camera.Size getOptimalPreviewSize(List<Camera.Size> sizes, int width, int height) {
-
-        Log.i(TAG, "getOptimalPreviewSize()");
-        Camera.Size optimalSize = null;
-
+    private Camera.Size getOptimalPreviewSize() {
         final double ASPECT_TOLERANCE = 0.1;
-        double targetRatio = (double) height / width;
+        double targetRatio = (double) mWindowHeight / mWindowWidth;
 
-        for (Camera.Size size : sizes) {
+        if (mSupportedPreviewSizes == null) return null;
 
-            double ratio = (double) size.height / size.width;
-            Log.d(TAG, "getOptimalPreviewSize " + String.format("x=%s; y=%s; ratio=%s; targetRatio=%s", size.width, size.height, ratio, targetRatio));
+        Camera.Size optimalSize = null;
+        double minDiff = Double.MAX_VALUE;
 
-            if (ratio <= targetRatio + ASPECT_TOLERANCE && ratio >= targetRatio - ASPECT_TOLERANCE) {
+        int targetHeight = mWindowHeight;
+
+        for (Camera.Size size : mSupportedPreviewSizes) {
+            double ratio = (double) size.width / size.height;
+            if (Math.abs(ratio - targetRatio) > ASPECT_TOLERANCE) continue;
+            if (Math.abs(size.height - targetHeight) < minDiff) {
                 optimalSize = size;
+                minDiff = Math.abs(size.height - targetHeight);
+            }
+        }
+
+        if (optimalSize == null) {
+            minDiff = Double.MAX_VALUE;
+            for (Camera.Size size : mSupportedPreviewSizes) {
+                if (Math.abs(size.height - targetHeight) < minDiff) {
+                    optimalSize = size;
+                    minDiff = Math.abs(size.height - targetHeight);
+                }
             }
         }
         return optimalSize;
     }
 
-    private void publish() {
+    public void publish() {
         Log.d(TAG, "publish");
         stop();
         configure();
@@ -310,20 +312,12 @@ public class CameraController {
         }
     }
 
-    public List<String> getSupportedFocusModes() {
-        return mCameraParameter.getSupportedFocusModes();
-    }
-
     public void setFocusMode(String supportedFocusMode) {
         Log.d(TAG, "setFocusMode=" + supportedFocusMode);
         mFocusMode = supportedFocusMode;
         if (mPreviewRunning) {
             publish();
         }
-    }
-
-    public List<String> getSupportedFlashModes() {
-        return mCameraParameter.getSupportedFlashModes();
     }
 
     public void setFlashMode(String supportedFlashMode) {
@@ -336,15 +330,6 @@ public class CameraController {
 
     public void setPreviewDisplay(SurfaceHolder holder) {
         mSurfaceHolder = holder;
-        publish();
-    }
-
-    public void addCameraCallbackBuffer(byte[] data) {
-        if (mCamera != null) {
-            mCamera.addCallbackBuffer(data);
-        } else {
-            Log.d(TAG, "skipped addCallbackBuffer (mCamera==null)");
-        }
     }
 
     public String[] getFocusOptions() {

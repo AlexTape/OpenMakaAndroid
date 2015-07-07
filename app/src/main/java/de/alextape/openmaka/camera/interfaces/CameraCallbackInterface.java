@@ -1,4 +1,4 @@
-package de.alextape.androidcamera.camera.interfaces;
+package de.alextape.openmaka.camera.interfaces;
 
 import android.hardware.Camera;
 import android.view.SurfaceHolder;

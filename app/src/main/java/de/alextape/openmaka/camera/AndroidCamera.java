@@ -1,4 +1,4 @@
-package de.alextape.androidcamera.camera;
+package de.alextape.openmaka.camera;
 
 import android.app.Activity;
 import android.content.res.Configuration;
@@ -11,9 +11,9 @@ import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 
 import de.alextape.openmaka.R;
-import de.alextape.androidcamera.camera.callbacks.AsyncCameraCallback;
-import de.alextape.androidcamera.camera.callbacks.CameraCallback;
-import de.alextape.androidcamera.camera.interfaces.CameraInitializedCallback;
+import de.alextape.openmaka.camera.callbacks.AsyncCameraCallback;
+import de.alextape.openmaka.camera.callbacks.CameraCallback;
+import de.alextape.openmaka.camera.interfaces.CameraInitializedCallback;
 
 /**
  * Extend this class to get a full initialized camera.

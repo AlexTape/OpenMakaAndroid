@@ -1,4 +1,4 @@
-package de.alextape.androidcamera.camera;
+package de.alextape.openmaka.camera;
 
 import android.app.Application;
 import android.content.Context;

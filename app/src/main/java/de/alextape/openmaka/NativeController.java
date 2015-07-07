@@ -11,6 +11,10 @@ public class NativeController {
     private static boolean VIEW_MODE_TRACKING = false;
     private static boolean VIEW_MODE_OPEN_GL = false;
 
+    static {
+        System.loadLibrary("native_openmaka");
+    }
+
     /**
      * Application functions.
      */

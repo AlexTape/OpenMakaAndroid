@@ -1,11 +1,11 @@
-package de.alextape.androidcamera.camera.callbacks;
+package de.alextape.openmaka.camera.callbacks;
 
 import android.hardware.Camera;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
-import de.alextape.androidcamera.camera.CameraController;
-import de.alextape.androidcamera.camera.interfaces.CameraCallbackInterface;
+import de.alextape.openmaka.camera.CameraController;
+import de.alextape.openmaka.camera.interfaces.CameraCallbackInterface;
 
 /**
  * This callback is responsible for the camera surface view.

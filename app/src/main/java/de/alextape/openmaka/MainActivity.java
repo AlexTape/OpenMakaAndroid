@@ -16,27 +16,27 @@ import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
-import de.alextape.androidcamera.camera.AndroidCamera;
-import de.alextape.androidcamera.camera.CameraController;
+import de.alextape.openmaka.camera.AndroidCamera;
+import de.alextape.openmaka.camera.CameraController;
 import de.alextape.openmaka.storage.FileManager;
 
 public class MainActivity extends AndroidCamera implements View.OnTouchListener {
 
-    private static final String TAG = "OpenMaka::GuiActivity";
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     private ArrayList<String> menuItems;
     private Dialog menuDialog;
+    private LinearLayout mContainer;
 
     public MainActivity() {
         Log.i(TAG, "Instantiated new " + this.getClass());
     }
 
-    private LinearLayout mContainer;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.i(TAG, "called onCreate");
         super.onCreate(savedInstanceState);
+        // The activity is being created.
+        Log.d(TAG, "onCreate");
 
         FileManager fileManager = new FileManager(getApplicationContext());
         fileManager.copyAssets();
@@ -54,7 +54,6 @@ public class MainActivity extends AndroidCamera implements View.OnTouchListener 
             actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0000ffff")));
         }
 
-        System.loadLibrary("native_openmaka");
     }
 
     /**
@@ -72,14 +71,14 @@ public class MainActivity extends AndroidCamera implements View.OnTouchListener 
         Log.d(TAG, "onReleaseCamera");
 
 //        // Returns a list of available Focus modes
-//        String[] focusOptions = CameraController.getInstance().getFlashOptions();
+        String[] focusOptions = CameraController.getInstance().getFocusOptions();
 //        // pass index of option to setFocusMode(int)
-//        String result = CameraController.getInstance().setFocusMode(1);
-//        if (result == null) {
-//            Log.d(TAG, "Success");
-//        } else {
-//            Log.d(TAG, "Fail: " + result);
-//        }
+        String result = CameraController.getInstance().setFocusMode(1);
+        if (result == null) {
+            Log.d(TAG, "Success");
+        } else {
+            Log.d(TAG, "Fail: " + result);
+        }
 
     }
 
@@ -124,12 +123,32 @@ public class MainActivity extends AndroidCamera implements View.OnTouchListener 
     @Override
     public void onResume() {
         super.onResume();
+        // The activity has become visible (it is now "resumed").
+        Log.d(TAG, "onResume");
+    }
+
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        // The activity is no longer visible (it is now "stopped")
+        Log.d(TAG, "onStop");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        // The activity is about to be destroyed.
+        Log.d(TAG, "onDestroy");
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // The activity is about to become visible.
+        Log.d(TAG, "onStart");
+    }
+
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {

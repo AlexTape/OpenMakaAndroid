@@ -1,4 +1,4 @@
-package de.alextape.androidcamera.camera;
+package de.alextape.openmaka.camera;
 
 /**
  * Just a wrapper class to store configuration parameters.
