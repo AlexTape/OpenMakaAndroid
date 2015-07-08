@@ -1,0 +1,297 @@
+AGGREGATED OVER LAST 24 HOURS:
+System memory usage:
+  SOff/Norm: 10 samples:
+    Cached: 410MB min, 508MB avg, 592MB max
+    Free: 42MB min, 95MB avg, 163MB max
+    ZRam: 0,00 min, 0,00 avg, 0,00 max
+    Kernel: 64MB min, 72MB avg, 83MB max
+    Native: 106MB min, 145MB avg, 172MB max
+  SOn /Norm: 16 samples:
+    Cached: 581MB min, 617MB avg, 648MB max
+    Free: 42MB min, 55MB avg, 63MB max
+    ZRam: 0,00 min, 0,00 avg, 0,00 max
+    Kernel: 65MB min, 67MB avg, 68MB max
+    Native: 123MB min, 133MB avg, 139MB max
+       Mod : 1 samples:
+    Cached: 481MB min, 481MB avg, 481MB max
+    Free: 97MB min, 97MB avg, 97MB max
+    ZRam: 0,00 min, 0,00 avg, 0,00 max
+    Kernel: 82MB min, 82MB avg, 82MB max
+    Native: 86MB min, 86MB avg, 86MB max
+
+Per-Package Stats:
+  * de.alextape.openmaka / u0a214 / v1:
+      * de.alextape.openmaka / u0a214 / v1:
+               TOTAL: 31% (36MB-101MB-216MB/34MB-99MB-214MB over 240)
+                 Top: 31% (36MB-101MB-216MB/34MB-99MB-214MB over 240)
+          (Last Act): 4,5% (34MB-48MB-59MB/33MB-46MB-56MB over 9)
+            (Cached): 0,79% (3,4MB-36MB-100MB/2,8MB-35MB-98MB over 3)
+  * de.alextape.openmaka / u0a234 / v1:
+      * de.alextape.openmaka / u0a234 / v1:
+               TOTAL: 0,08% (37MB-37MB-37MB/35MB-35MB-35MB over 1)
+                 Top: 0,08% (37MB-37MB-37MB/35MB-35MB-35MB over 1)
+          (Last Act): 0,00%
+            (Cached): 0,00%
+  * de.alextape.openmaka / u0a235 / v1:
+      * de.alextape.openmaka / u0a235 / v1:
+               TOTAL: 0,04% (104MB-104MB-104MB/101MB-101MB-101MB over 1)
+                 Top: 0,04% (104MB-104MB-104MB/101MB-101MB-101MB over 1)
+          (Last Act): 0,65% (39MB-39MB-39MB/37MB-37MB-37MB over 1)
+            (Cached): 0,08%
+  * de.alextape.openmaka / u0a236 / v1:
+      * de.alextape.openmaka / u0a236 / v1:
+               TOTAL: 0,21% (98MB-127MB-170MB/95MB-124MB-167MB over 5)
+                 Top: 0,21% (98MB-127MB-170MB/95MB-124MB-167MB over 5)
+          (Last Act): 4,9% (48MB-49MB-50MB/45MB-46MB-47MB over 4)
+            (Cached): 0,00%
+  * de.alextape.openmaka / u0a237 / v1:
+      * de.alextape.openmaka / u0a237 / v1:
+               TOTAL: 3,1% (80MB-114MB-158MB/79MB-112MB-154MB over 24)
+                 Top: 3,1% (80MB-114MB-158MB/79MB-112MB-154MB over 24)
+          (Last Act): 0,46% (35MB-35MB-35MB/33MB-33MB-33MB over 1)
+            (Cached): 0,01%
+
+Summary:
+  * de.alextape.openmaka / u0a214 / v1:
+           TOTAL: 31% (36MB-101MB-216MB/34MB-99MB-214MB over 240)
+             Top: 31% (36MB-101MB-216MB/34MB-99MB-214MB over 240)
+      (Last Act): 4,5% (34MB-48MB-59MB/33MB-46MB-56MB over 9)
+        (Cached): 0,79% (3,4MB-36MB-100MB/2,8MB-35MB-98MB over 3)
+  * de.alextape.openmaka / u0a237 / v1:
+           TOTAL: 3,1% (80MB-114MB-158MB/79MB-112MB-154MB over 24)
+             Top: 3,1% (80MB-114MB-158MB/79MB-112MB-154MB over 24)
+      (Last Act): 0,46% (35MB-35MB-35MB/33MB-33MB-33MB over 1)
+        (Cached): 0,01%
+  * de.alextape.openmaka / u0a236 / v1:
+           TOTAL: 0,21% (98MB-127MB-170MB/95MB-124MB-167MB over 5)
+             Top: 0,21% (98MB-127MB-170MB/95MB-124MB-167MB over 5)
+      (Last Act): 4,9% (48MB-49MB-50MB/45MB-46MB-47MB over 4)
+        (Cached): 0,00%
+  * de.alextape.openmaka / u0a234 / v1:
+           TOTAL: 0,08% (37MB-37MB-37MB/35MB-35MB-35MB over 1)
+             Top: 0,08% (37MB-37MB-37MB/35MB-35MB-35MB over 1)
+      (Last Act): 0,00%
+        (Cached): 0,00%
+  * de.alextape.openmaka / u0a235 / v1:
+           TOTAL: 0,04% (104MB-104MB-104MB/101MB-101MB-101MB over 1)
+             Top: 0,04% (104MB-104MB-104MB/101MB-101MB-101MB over 1)
+      (Last Act): 0,65% (39MB-39MB-39MB/37MB-37MB-37MB over 1)
+        (Cached): 0,08%
+
+Run time Stats:
+  SOff/Norm: +7m46s545ms
+  SOn /Norm: +20h35m19s970ms
+       Mod : +479ms
+      TOTAL: +20h43m6s994ms
+
+Memory usage:
+  Kernel : 67MB (188 samples)
+  Native : 133MB (188 samples)
+  Persist: 184MB (1140 samples)
+  Top    : 106MB (4015 samples)
+  ImpFg  : 98MB (5144 samples)
+  ImpBg  : 11MB (6662 samples)
+  Backup : 332 (62 samples)
+  Service: 103MB (14572 samples)
+  Receivr: 409KB (20339 samples)
+  Home   : 25MB (1523 samples)
+  LastAct: 15MB (582 samples)
+  CchAct : 3,9MB (120 samples)
+  CchEmty: 330MB (12868 samples)
+  Cached : 616MB (188 samples)
+  Free   : 55MB (188 samples)
+  TOTAL  : 1,7GB
+  ServRst: 12KB (1065 samples)
+
+          Start time: 2015-07-02 16:29:40
+  Total elapsed time: +21h37m43s915ms (partial) libart.so
+
+AGGREGATED OVER LAST 3 HOURS:
+System memory usage:
+  SOff/Norm: 4 samples:
+    Cached: 577MB min, 586MB avg, 592MB max
+    Free: 42MB min, 55MB avg, 62MB max
+    ZRam: 0,00 min, 0,00 avg, 0,00 max
+    Kernel: 64MB min, 65MB avg, 66MB max
+    Native: 171MB min, 172MB avg, 172MB max
+
+Per-Package Stats:
+  * de.alextape.openmaka / u0a214 / v1:
+      * de.alextape.openmaka / u0a214 / v1:
+               TOTAL: 6,9% (145MB-148MB-156MB/143MB-146MB-154MB over 5)
+                 Top: 6,9% (145MB-148MB-156MB/143MB-146MB-154MB over 5)
+          (Last Act): 8,4% (59MB-59MB-59MB/56MB-56MB-56MB over 1)
+            (Cached): 0,02%
+  * de.alextape.openmaka / u0a234 / v1:
+      * de.alextape.openmaka / u0a234 / v1:
+               TOTAL: 0,68% (37MB-37MB-37MB/35MB-35MB-35MB over 1)
+                 Top: 0,68% (37MB-37MB-37MB/35MB-35MB-35MB over 1)
+          (Last Act): 0,03%
+            (Cached): 0,00%
+  * de.alextape.openmaka / u0a235 / v1:
+      * de.alextape.openmaka / u0a235 / v1:
+               TOTAL: 0,33% (104MB-104MB-104MB/101MB-101MB-101MB over 1)
+                 Top: 0,33% (104MB-104MB-104MB/101MB-101MB-101MB over 1)
+          (Last Act): 5,3% (39MB-39MB-39MB/37MB-37MB-37MB over 1)
+            (Cached): 0,61%
+  * de.alextape.openmaka / u0a236 / v1:
+      * de.alextape.openmaka / u0a236 / v1:
+               TOTAL: 1,7% (98MB-127MB-170MB/95MB-124MB-167MB over 5)
+                 Top: 1,7% (98MB-127MB-170MB/95MB-124MB-167MB over 5)
+          (Last Act): 40% (48MB-49MB-50MB/45MB-46MB-47MB over 4)
+            (Cached): 0,03%
+  * de.alextape.openmaka / u0a237 / v1:
+      * de.alextape.openmaka / u0a237 / v1:
+               TOTAL: 25% (80MB-114MB-158MB/79MB-112MB-154MB over 24)
+                 Top: 25% (80MB-114MB-158MB/79MB-112MB-154MB over 24)
+          (Last Act): 3,7% (35MB-35MB-35MB/33MB-33MB-33MB over 1)
+            (Cached): 0,09%
+
+Summary:
+  * de.alextape.openmaka / u0a237 / v1:
+           TOTAL: 25% (80MB-114MB-158MB/79MB-112MB-154MB over 24)
+             Top: 25% (80MB-114MB-158MB/79MB-112MB-154MB over 24)
+      (Last Act): 3,7% (35MB-35MB-35MB/33MB-33MB-33MB over 1)
+        (Cached): 0,09%
+  * de.alextape.openmaka / u0a214 / v1:
+           TOTAL: 6,9% (145MB-148MB-156MB/143MB-146MB-154MB over 5)
+             Top: 6,9% (145MB-148MB-156MB/143MB-146MB-154MB over 5)
+      (Last Act): 8,4% (59MB-59MB-59MB/56MB-56MB-56MB over 1)
+        (Cached): 0,02%
+  * de.alextape.openmaka / u0a236 / v1:
+           TOTAL: 1,7% (98MB-127MB-170MB/95MB-124MB-167MB over 5)
+             Top: 1,7% (98MB-127MB-170MB/95MB-124MB-167MB over 5)
+      (Last Act): 40% (48MB-49MB-50MB/45MB-46MB-47MB over 4)
+        (Cached): 0,03%
+  * de.alextape.openmaka / u0a234 / v1:
+           TOTAL: 0,68% (37MB-37MB-37MB/35MB-35MB-35MB over 1)
+             Top: 0,68% (37MB-37MB-37MB/35MB-35MB-35MB over 1)
+      (Last Act): 0,03%
+        (Cached): 0,00%
+  * de.alextape.openmaka / u0a235 / v1:
+           TOTAL: 0,33% (104MB-104MB-104MB/101MB-101MB-101MB over 1)
+             Top: 0,33% (104MB-104MB-104MB/101MB-101MB-101MB over 1)
+      (Last Act): 5,3% (39MB-39MB-39MB/37MB-37MB-37MB over 1)
+        (Cached): 0,61%
+
+Run time Stats:
+  SOff/Norm: +1m34s265ms
+  SOn /Norm: +2h32m11s335ms
+      TOTAL: +2h33m45s600ms
+
+Memory usage:
+  Kernel : 65MB (32 samples)
+  Native : 172MB (32 samples)
+  Persist: 167MB (144 samples)
+  Top    : 87MB (450 samples)
+  ImpFg  : 91MB (736 samples)
+  ImpBg  : 7,2MB (547 samples)
+  Backup : 1,3KB (8 samples)
+  Service: 138MB (1480 samples)
+  Receivr: 400KB (2049 samples)
+  Home   : 19MB (165 samples)
+  LastAct: 28MB (16 samples)
+  CchAct : 7,4MB (25 samples)
+  CchEmty: 297MB (1698 samples)
+  Cached : 586MB (32 samples)
+  Free   : 55MB (32 samples)
+  TOTAL  : 1,7GB
+  ServRst: 101KB (91 samples)
+
+          Start time: 2015-07-08 09:39:49
+  Total elapsed time: +2h36m39s841ms (partial) libart.so
+
+CURRENT STATS:
+System memory usage:
+  SOff/Norm: 4 samples:
+    Cached: 577MB min, 586MB avg, 592MB max
+    Free: 42MB min, 55MB avg, 62MB max
+    ZRam: 0,00 min, 0,00 avg, 0,00 max
+    Kernel: 64MB min, 65MB avg, 66MB max
+    Native: 171MB min, 172MB avg, 172MB max
+
+Per-Package Stats:
+  * de.alextape.openmaka / u0a214 / v1:
+      * de.alextape.openmaka / u0a214 / v1:
+               TOTAL: 6,9% (145MB-148MB-156MB/143MB-146MB-154MB over 5)
+                 Top: 6,9% (145MB-148MB-156MB/143MB-146MB-154MB over 5)
+          (Last Act): 8,4% (59MB-59MB-59MB/56MB-56MB-56MB over 1)
+            (Cached): 0,02%
+  * de.alextape.openmaka / u0a234 / v1:
+      * de.alextape.openmaka / u0a234 / v1:
+               TOTAL: 0,68% (37MB-37MB-37MB/35MB-35MB-35MB over 1)
+                 Top: 0,68% (37MB-37MB-37MB/35MB-35MB-35MB over 1)
+          (Last Act): 0,03%
+            (Cached): 0,00%
+  * de.alextape.openmaka / u0a235 / v1:
+      * de.alextape.openmaka / u0a235 / v1:
+               TOTAL: 0,33% (104MB-104MB-104MB/101MB-101MB-101MB over 1)
+                 Top: 0,33% (104MB-104MB-104MB/101MB-101MB-101MB over 1)
+          (Last Act): 5,3% (39MB-39MB-39MB/37MB-37MB-37MB over 1)
+            (Cached): 0,61%
+  * de.alextape.openmaka / u0a236 / v1:
+      * de.alextape.openmaka / u0a236 / v1:
+               TOTAL: 1,7% (98MB-127MB-170MB/95MB-124MB-167MB over 5)
+                 Top: 1,7% (98MB-127MB-170MB/95MB-124MB-167MB over 5)
+          (Last Act): 40% (48MB-49MB-50MB/45MB-46MB-47MB over 4)
+            (Cached): 0,03%
+  * de.alextape.openmaka / u0a237 / v1:
+      * de.alextape.openmaka / u0a237 / v1:
+               TOTAL: 25% (80MB-114MB-158MB/79MB-112MB-154MB over 24)
+                 Top: 25% (80MB-114MB-158MB/79MB-112MB-154MB over 24)
+          (Last Act): 3,7% (35MB-35MB-35MB/33MB-33MB-33MB over 1)
+            (Cached): 0,09%
+
+Summary:
+  * de.alextape.openmaka / u0a237 / v1:
+           TOTAL: 25% (80MB-114MB-158MB/79MB-112MB-154MB over 24)
+             Top: 25% (80MB-114MB-158MB/79MB-112MB-154MB over 24)
+      (Last Act): 3,7% (35MB-35MB-35MB/33MB-33MB-33MB over 1)
+        (Cached): 0,09%
+  * de.alextape.openmaka / u0a214 / v1:
+           TOTAL: 6,9% (145MB-148MB-156MB/143MB-146MB-154MB over 5)
+             Top: 6,9% (145MB-148MB-156MB/143MB-146MB-154MB over 5)
+      (Last Act): 8,4% (59MB-59MB-59MB/56MB-56MB-56MB over 1)
+        (Cached): 0,02%
+  * de.alextape.openmaka / u0a236 / v1:
+           TOTAL: 1,7% (98MB-127MB-170MB/95MB-124MB-167MB over 5)
+             Top: 1,7% (98MB-127MB-170MB/95MB-124MB-167MB over 5)
+      (Last Act): 40% (48MB-49MB-50MB/45MB-46MB-47MB over 4)
+        (Cached): 0,03%
+  * de.alextape.openmaka / u0a234 / v1:
+           TOTAL: 0,68% (37MB-37MB-37MB/35MB-35MB-35MB over 1)
+             Top: 0,68% (37MB-37MB-37MB/35MB-35MB-35MB over 1)
+      (Last Act): 0,03%
+        (Cached): 0,00%
+  * de.alextape.openmaka / u0a235 / v1:
+           TOTAL: 0,33% (104MB-104MB-104MB/101MB-101MB-101MB over 1)
+             Top: 0,33% (104MB-104MB-104MB/101MB-101MB-101MB over 1)
+      (Last Act): 5,3% (39MB-39MB-39MB/37MB-37MB-37MB over 1)
+        (Cached): 0,61%
+
+Run time Stats:
+  SOff/Norm: +1m34s265ms
+  SOn /Norm: +2h32m10s361ms (running)
+      TOTAL: +2h33m44s626ms
+
+Memory usage:
+  Kernel : 65MB (32 samples)
+  Native : 172MB (32 samples)
+  Persist: 167MB (144 samples)
+  Top    : 87MB (450 samples)
+  ImpFg  : 91MB (736 samples)
+  ImpBg  : 7,2MB (547 samples)
+  Backup : 1,3KB (8 samples)
+  Service: 138MB (1480 samples)
+  Receivr: 400KB (2049 samples)
+  Home   : 19MB (165 samples)
+  LastAct: 28MB (16 samples)
+  CchAct : 7,4MB (25 samples)
+  CchEmty: 297MB (1698 samples)
+  Cached : 586MB (32 samples)
+  Free   : 55MB (32 samples)
+  TOTAL  : 1,7GB
+  ServRst: 101KB (91 samples)
+
+          Start time: 2015-07-08 09:39:49
+  Total elapsed time: +2h36m40s186ms (partial) libart.so

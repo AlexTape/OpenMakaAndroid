@@ -1,0 +1,92 @@
+Applications Graphics Acceleration Info:
+Uptime: 9218921 Realtime: 9389434
+
+** Graphics info for pid 11208 [de.alextape.openmaka] **
+
+Recent DisplayList operations
+            DrawRenderNode
+            Save
+            Translate
+            Save
+            DrawBitmap
+            RestoreToCount
+            Save
+            ClipRect
+            Translate
+            RestoreToCount
+          DrawRenderNode
+            DrawRenderNode
+            Save
+            Translate
+            Save
+            DrawBitmap
+            RestoreToCount
+            Save
+            ClipRect
+            Translate
+            RestoreToCount
+          DrawRenderNode
+            DrawRenderNode
+            Save
+            Translate
+            Save
+            DrawBitmap
+            RestoreToCount
+            Save
+            ClipRect
+            Translate
+            RestoreToCount
+          DrawRenderNode
+            DrawRenderNode
+            Save
+            Translate
+            ConcatMatrix
+            Save
+            DrawBitmap
+            RestoreToCount
+RestoreToCount
+DrawRect
+DrawColor
+DrawColor
+DrawText
+DrawBitmap
+DrawBitmap
+DrawBitmap
+DrawBitmap
+DrawBitmap
+
+Caches:
+Current memory usage / total memory usage (bytes):
+  TextureCache           119808 / 104857600
+  LayerCache                  0 / 73400320 (numLayers = 0)
+  Garbage layers              0
+  Active layers               0
+  RenderBufferCache           0 /  8388608
+  GradientCache               0 /  1048576
+  PathCache                   0 / 33554432
+  TessellationCache           0 /  1048576
+  TextDropShadowCache         0 /  6291456
+  PatchCache                  0 /   131072
+  AssetAtlas                  0 bytes ( 0.00 MB )
+ 
+  FontRenderer 0 A8     1048576 /  1048576
+  FontRenderer 0 RGBA         0 /        0
+  FontRenderer 0 total  1048576 /  1048576
+Other:
+  FboCache                    0 /        0
+Total memory usage:
+  1168384 bytes, 1.11 MB
+
+Profile data in ms:
+
+	de.alextape.openmaka/de.alextape.openmaka.CameraActivity/android.view.ViewRootImpl@1c350cea (visibility=0)
+View hierarchy:
+
+  de.alextape.openmaka/de.alextape.openmaka.CameraActivity/android.view.ViewRootImpl@1c350cea
+  26 views, 43,85 kB of display lists
+
+
+Total ViewRootImpl: 1
+Total Views:        26
+Total DisplayList:  43,85 kB
+

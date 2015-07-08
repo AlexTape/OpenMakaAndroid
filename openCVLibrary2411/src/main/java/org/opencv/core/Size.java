@@ -75,11 +75,6 @@ public class Size {
         this(0, 0);
     }
 
-    public Size(Point p) {
-        width = p.x;
-        height = p.y;
-    }
-
     public Size(double[] vals) {
         set(vals);
     }

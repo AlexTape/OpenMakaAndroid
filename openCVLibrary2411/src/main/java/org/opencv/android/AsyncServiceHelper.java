@@ -299,9 +299,9 @@ class AsyncServiceHelper
                         if (initOpenCVLibs(path, libs))
                         {
                             Log.d(TAG, "First attempt to load libs is OK");
-                            String eol = System.getProperty("line.separator");
-                            for (String str : Core.getBuildInformation().split(eol))
-                                Log.i(TAG, str);
+//                            String eol = System.getProperty("line.separator");
+//                            for (String str : Core.getBuildInformation().split(eol))
+//                                Log.i(TAG, str);
 
                             status = LoaderCallbackInterface.SUCCESS;
                         }

@@ -39,9 +39,9 @@ class StaticHelper {
         if (initOpenCVLibs(libs))
         {
             Log.d(TAG, "First attempt to load libs is OK");
-            String eol = System.getProperty("line.separator");
-            for (String str : Core.getBuildInformation().split(eol))
-                Log.i(TAG, str);
+//            String eol = System.getProperty("line.separator");
+//            for (String str : Core.getBuildInformation().split(eol))
+//                Log.i(TAG, str);
 
             result = true;
         }

@@ -16,7 +16,6 @@ import android.view.ViewGroup.LayoutParams;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Size;
-import org.opencv.imgproc.Imgproc;
 
 /**
  * This class is an implementation of the Bridge View between OpenCV and Java Camera.
@@ -285,7 +284,8 @@ public class JavaCameraView extends CameraBridgeViewBase implements PreviewCallb
 
     @Override
     public void onPreviewFrame(byte[] frame, Camera arg1) {
-        Log.d(TAG, "Preview Frame received. Frame size: " + frame.length);
+        // LOGGING frame size
+        //Log.d(TAG, "Preview Frame received. Frame size: " + frame.length);
         synchronized (this) {
             mFrameChain[mChainIdx].put(0, 0, frame);
             mCameraFrameReady = true;
@@ -303,8 +303,11 @@ public class JavaCameraView extends CameraBridgeViewBase implements PreviewCallb
 
         @Override
         public Mat rgba() {
-            Imgproc.cvtColor(mYuvFrameData, mRgba, Imgproc.COLOR_YUV2RGBA_NV21, 4);
-            return mRgba;
+
+            // TODO make this happen
+            //Imgproc.cvtColor(mYuvFrameData, mRgba, Imgproc.COLOR_YUV2RGBA_NV21, 4);
+            //return mRgba;
+            return mYuvFrameData.submat(0, mHeight, 0, mWidth);
         }
 
         public JavaCameraFrame(Mat Yuv420sp, int width, int height) {

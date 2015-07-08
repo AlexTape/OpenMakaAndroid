@@ -48,7 +48,8 @@ public class FpsMeter {
                     mStrfps = FPS_FORMAT.format(fps) + " FPS@" + Integer.valueOf(mWidth) + "x" + Integer.valueOf(mHeight);
                 else
                     mStrfps = FPS_FORMAT.format(fps) + " FPS";
-                Log.i(TAG, mStrfps);
+                // LOGGING fps
+                //Log.i(TAG, mStrfps);
             }
         }
     }
@@ -59,7 +60,8 @@ public class FpsMeter {
     }
 
     public void draw(Canvas canvas, float offsetx, float offsety) {
-        Log.d(TAG, mStrfps);
+        // LOGGING fps
+        //Log.d(TAG, mStrfps);
         canvas.drawText(mStrfps, offsetx, offsety, mPaint);
     }
 
