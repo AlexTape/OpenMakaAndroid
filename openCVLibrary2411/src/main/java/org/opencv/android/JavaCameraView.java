@@ -2,6 +2,7 @@ package org.opencv.android;
 
 import java.util.List;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.ImageFormat;
 import android.graphics.SurfaceTexture;
@@ -154,7 +155,7 @@ public class JavaCameraView extends CameraBridgeViewBase implements PreviewCallb
                     List<String> FocusModes = params.getSupportedFocusModes();
                     if (FocusModes != null && FocusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO))
                     {
-                        params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
+                        params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
                     }
 
                     mCamera.setParameters(params);
@@ -167,6 +168,7 @@ public class JavaCameraView extends CameraBridgeViewBase implements PreviewCallb
                         mScale = Math.min(((float)height)/mFrameHeight, ((float)width)/mFrameWidth);
                     else
                         mScale = 0;
+
 
                     if (mFpsMeter != null) {
                         mFpsMeter.setResolution(mFrameWidth, mFrameHeight);

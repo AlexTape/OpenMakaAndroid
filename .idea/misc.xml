@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="CppTools.Loader" reportImplicitCastToBool="false" reportNameReferencedOnce="false" version="3" compilerSelect="AUTO">
-    <ignored-file path="$PROJECT_DIR$/app/src/main/jni/Application/Controller.cpp" />
-    <ignored-file path="$PROJECT_DIR$/app/src/main/jni/Application/Controller.hpp" />
-    <ignored-file path="$PROJECT_DIR$/app/src/main/jni/Application/Detector/Detectors.cpp" />
-    <ignored-file path="$PROJECT_DIR$/app/src/main/jni/Application/Features/Analyzer.cpp" />
-    <ignored-file path="$PROJECT_DIR$/app/src/main/jni/Application/Helper.cpp" />
-  </component>
   <component name="EntryPointsManager">
     <entry_points version="2.0" />
   </component>
@@ -25,21 +18,5 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
-  </component>
-  <component name="masterDetails">
-    <states>
-      <state key="ProjectJDKs.UI">
-        <settings>
-          <last-edited>1.7</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-    </states>
   </component>
 </project>
