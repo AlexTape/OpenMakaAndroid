@@ -8,7 +8,7 @@ import android.util.AttributeSet;
 /**
  * Created by thinker on 11.05.15.
  */
-class SurfaceView extends GLSurfaceView {
+public class SurfaceView extends GLSurfaceView {
 
     private static String TAG = "OpenMaka::SurfaceView";
 
