@@ -37,10 +37,18 @@ android {
         }
     }
 
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_6
         targetCompatibility JavaVersion.VERSION_1_6
+    }
+
+    productFlavors {
+        local {
+            applicationId = 'de.alextape.openmaka'
+        }
+        tf {
+            applicationId = 'de.alextape.openmaka.tf'
+        }
     }
 }
 task wrapper(type: Wrapper) {
