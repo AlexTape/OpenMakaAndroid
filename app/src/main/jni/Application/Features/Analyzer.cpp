@@ -149,16 +149,16 @@ int Analyzer::compute(cv::Mat mRgbaFrame, cv::Mat mGrayFrame) {
 
     int returnThis = 0;
 
-    if (!inst_->isComputed) {
+//    if (!inst_->isComputed) {
 
         inst_->detector->detect(mGrayFrame, inst_->sceneKeypoints);
-        inst_->extractor->compute(mGrayFrame, inst_->sceneKeypoints, inst_->sceneDescriptors);
+//        inst_->extractor->compute(mGrayFrame, inst_->sceneKeypoints, inst_->sceneDescriptors);
 
-        inst_->match();
+//        inst_->match();
 
         inst_->isComputed = true;
 
-    }
+//    }
 
     for( unsigned int i = 0; i < inst_->sceneKeypoints.size(); i++ )
     {
