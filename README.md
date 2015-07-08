@@ -1,6 +1,6 @@
 # OpenMaka
 
-**OpenMaka is NOT released yet!**
+** THIS APPLICATION IS NOT RELEASED YET **
 
 This project contains two different repositories.
 
@@ -18,12 +18,8 @@ Both branches will be contain the same C++/JNI/NDK Code to process image frames.
 
 ## Setup
 
-1. Built with Android Studio.
-
-2. Make sure you update Android.mk with your paths to OpenCV.
-
-3. Also update your ndk path in local.properties
-
-4. Make sure you have libgnustl_shared.so in OpenCV native libs dir.
-
-
+- Built with Android Studio
+- Using OpenCV 2.4.11 (through JNI)
+- Make sure you update Android.mk with your paths to OpenCV
+- Also update your ndk path in local.properties
+- Make sure you have libgnustl_shared.so in OpenCV native libs dir
