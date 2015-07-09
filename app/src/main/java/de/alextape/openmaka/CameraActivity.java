@@ -127,6 +127,10 @@ public class CameraActivity extends GuiAcitivity implements CvCameraViewListener
         if (SystemClock.uptimeMillis() - time >= 5000) {
             NativeFunctions.displayFunction(mRgbaAddr, mGrayAddr);
         }
+
+        // manually call gc here
+        System.gc();
+
         return mRgba;
     }
 
