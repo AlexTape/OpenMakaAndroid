@@ -1,4 +1,5 @@
 #define ANALYZER_CPP_
+
 #include <string>
 
 #include <opencv2/core/core.hpp>
@@ -8,24 +9,19 @@
 #include <opencv2/calib3d/calib3d.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-#include "native_logger.h"
-#include "Application/Features/Analyzer.hpp"
-//#include "Application/Timer.hpp"
+#include "Analyzer.hpp"
 
-Analyzer* Analyzer::inst_ = NULL;
+Analyzer *Analyzer::inst_ = NULL;
 
-Analyzer::Analyzer(void)
-{
+Analyzer::Analyzer(void) {
     isComputed = false;
     isInitialized = false;
 }
 
-Analyzer::~Analyzer(void)
-{
+Analyzer::~Analyzer(void) {
 }
 
-Analyzer* Analyzer::getInstance()
-{
+Analyzer *Analyzer::getInstance() {
     if (inst_ == NULL) {
         cv::initModule_nonfree();
         inst_ = new Analyzer();
@@ -56,8 +52,7 @@ void Analyzer::setExtractor(std::string type) {
     inst_->extractor = cv::Ptr<cv::DescriptorExtractor>(new cv::FREAK());
 }
 
-bool Analyzer::initialize(cv::Mat mGrayFrame)
-{
+bool Analyzer::initialize(cv::Mat mGrayFrame) {
     cv::Size graySize = mGrayFrame.size();
     int rows = graySize.height;
     int cols = graySize.width;
@@ -76,8 +71,7 @@ bool Analyzer::initialize(cv::Mat mGrayFrame)
     return true;
 }
 
-bool Analyzer::initialized(cv::Mat mGrayFrame)
-{
+bool Analyzer::initialized(cv::Mat mGrayFrame) {
     if (!inst_->isInitialized) {
 
         Analyzer::initialize(mGrayFrame);
@@ -151,19 +145,18 @@ int Analyzer::compute(cv::Mat mRgbaFrame, cv::Mat mGrayFrame) {
 
 //    if (!inst_->isComputed) {
 
-        inst_->detector->detect(mGrayFrame, inst_->sceneKeypoints);
+    inst_->detector->detect(mGrayFrame, inst_->sceneKeypoints);
 //        inst_->extractor->compute(mGrayFrame, inst_->sceneKeypoints, inst_->sceneDescriptors);
 
 //        inst_->match();
 
-        inst_->isComputed = true;
+    inst_->isComputed = true;
 
 //    }
 
-    for( unsigned int i = 0; i < inst_->sceneKeypoints.size(); i++ )
-    {
-        const cv::KeyPoint& kp = inst_->sceneKeypoints[i];
-        cv::circle(mRgbaFrame, cv::Point(kp.pt.x, kp.pt.y), 10, cv::Scalar(255,0,0,255));
+    for (unsigned int i = 0; i < inst_->sceneKeypoints.size(); i++) {
+        const cv::KeyPoint &kp = inst_->sceneKeypoints[i];
+        cv::circle(mRgbaFrame, cv::Point(kp.pt.x, kp.pt.y), 10, cv::Scalar(255, 0, 0, 255));
     }
 
     return returnThis;

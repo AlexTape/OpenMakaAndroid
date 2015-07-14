@@ -8,7 +8,7 @@
 #include "Application/Controller.hpp"
 
 JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeFunctions_native_1start
-  (JNIEnv *, jclass clazz)
+  (JNIEnv *env, jclass clazz)
 {
     Controller::getInstance()->start();
 }

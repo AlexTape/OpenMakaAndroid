@@ -304,11 +304,8 @@ public class JavaCameraView extends CameraBridgeViewBase implements PreviewCallb
 
         @Override
         public Mat rgba() {
-
-            // TODO make this happen
             Imgproc.cvtColor(mYuvFrameData, mRgba, Imgproc.COLOR_YUV2RGBA_NV21, 4);
             return mRgba;
-//            return mYuvFrameData.submat(0, mHeight, 0, mWidth);
         }
 
         public JavaCameraFrame(Mat Yuv420sp, int width, int height) {

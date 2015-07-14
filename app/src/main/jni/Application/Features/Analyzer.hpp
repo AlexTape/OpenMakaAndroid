@@ -10,36 +10,41 @@
 
 class Analyzer {
 
-    private:
+private:
 
-        static Analyzer*    inst_;
+    static Analyzer *inst_;
 
-        Analyzer(void);
-        ~Analyzer(void);
+    Analyzer(void);
 
-        bool    initialize(cv::Mat mGrayFrame);
-        void    match();
+    ~Analyzer(void);
 
-        cv::Ptr<cv::FeatureDetector>        detector;
-        cv::Ptr<cv::DescriptorExtractor>    extractor;
-        cv::Ptr<cv::DescriptorMatcher>      matcher;
+    bool initialize(cv::Mat mGrayFrame);
 
-        std::vector<cv::KeyPoint>   objectKeypoints;
-        std::vector<cv::KeyPoint>   sceneKeypoints;
-        cv::Mat                     objectDescriptors;
-        cv::Mat                     sceneDescriptors;
+    void match();
 
-        bool    isInitialized;
-        bool    isComputed;
+    cv::Ptr<cv::FeatureDetector> detector;
+    cv::Ptr<cv::DescriptorExtractor> extractor;
+    cv::Ptr<cv::DescriptorMatcher> matcher;
 
-    public:
+    std::vector<cv::KeyPoint> objectKeypoints;
+    std::vector<cv::KeyPoint> sceneKeypoints;
+    cv::Mat objectDescriptors;
+    cv::Mat sceneDescriptors;
 
-        static  Analyzer*    getInstance();
+    bool isInitialized;
+    bool isComputed;
 
-        bool    initialized(cv::Mat mGrayFrame);
-        int     compute(cv::Mat mRgbaFrame, cv::Mat mGrayFrame);
-        void    setDetector(std::string type);
-        void    setExtractor(std::string type);
+public:
+
+    static Analyzer *getInstance();
+
+    bool initialized(cv::Mat mGrayFrame);
+
+    int compute(cv::Mat mRgbaFrame, cv::Mat mGrayFrame);
+
+    void setDetector(std::string type);
+
+    void setExtractor(std::string type);
 
 };
 

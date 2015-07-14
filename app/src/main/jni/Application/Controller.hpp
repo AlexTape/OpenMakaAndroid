@@ -8,9 +8,11 @@
 #include <opencv2/features2d/features2d.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
+#ifdef __ANDROID__
 #include <EGL/egl.h> // requires ndk r5 or newer
 #include <GLES/gl.h>
 #include <GLES/glext.h>
+#endif
 
 #define SIZE 1024
 #define ControllerTAG "OpenMaka::Controller"
@@ -19,38 +21,62 @@
 extern "C" {
 #endif
 
+#include "../Legacy/ControlOR.h"
+#include "../Legacy/ImageDB.h"
+#include "../Legacy/TrackerKLT.h"
+
 class Controller {
 
-    private:
+private:
 
-        static Controller*  inst_;
+    static Controller *inst_;
 
-        Controller(void);
-        ~Controller(void);
+    Controller(void);
 
-        bool                isObjectDetection;
-        bool                isTracking;
-        bool                isOpenGL;
 
-        GLuint              Name;
-        GLubyte*            ImagePtr;
-        double              featureFinished;
+    bool isObjectDetection;
+    bool isTracking;
+    bool isOpenGL;
 
-        int                 findFeatures(cv::Mat mRgbaFrame, cv::Mat mGrayFrame);
+    double featureFinished;
+    clock_t lastRelease;
 
-    public:
+    int queryScale;
+    int recognizedObjectId;
 
-        static Controller*  getInstance();
+    int findFeatures(cv::Mat mRgbaFrame, cv::Mat mGrayFrame);
 
-        void                start();
-        int                 initialize(cv::Mat& mGrayFrame, std::string configPath);
-        int                 displayFunction(cv::Mat& mRgbaFrame, cv::Mat& mGrayFrame);
-        void                glRender();
-        void                glResize(int height, int width);
+    int seq_id; // Sequence ID of track
+    int wait_seq_id; // Sequence ID at the time of non-track
+    int max_query_size; // Maximum query image size
 
-        void                setObjectDetection(bool isActive);
-        void                setTracking(bool isActive);
-        void                setOpenGL(bool isActive);
+    om::orns::ControlOR ctrlOR;
+    cv::Mat query_image;
+
+    std::vector<om::orns::resultInfo> recog_result;
+    om::track::TrackerKLT *trckOBJ;    // Object track class
+
+public:
+
+    ~Controller(void);
+
+    static Controller *getInstance();
+
+    void start();
+
+    int initialize(cv::Mat &mGrayFrame, std::string configPath);
+
+    int displayFunction(cv::Mat &mRgbaFrame, cv::Mat &mGrayFrame);
+
+    void glRender();
+
+    void glResize(int height, int width);
+
+    void setObjectDetection(bool isActive);
+
+    void setTracking(bool isActive);
+
+    void setOpenGL(bool isActive);
 
 };
 

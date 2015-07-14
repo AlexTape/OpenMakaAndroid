@@ -12,10 +12,11 @@ extern "C" {
 
 namespace Helper {
 
-    double      now_ms(void);
+    double now_ms(void);
+
     std::string type2str(int type);
 
-};
+} ;
 
 #ifdef __cplusplus
 }

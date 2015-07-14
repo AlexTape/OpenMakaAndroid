@@ -1,49 +1,60 @@
-#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <vector>
+
+#ifdef __ANDROID__
+#include <android/log.h>
+#include <android/native_window.h> // requires ndk r5 or newer
+#include <EGL/egl.h> // requires ndk r5 or newer
+#include <GLES/gl.h>
+#include <GLES/glext.h>
+#endif
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/features2d/features2d.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
-#include <EGL/egl.h> // requires ndk r5 or newer
-#include <GLES/gl.h>
-#include <GLES/glext.h>
-
-#include "native_logger.h"
-#include "Helper.hpp"
 #include "Controller.hpp"
 
-#include "Application/Features/Analyzer.hpp"
+#include "Features/Analyzer.hpp"
+#include "../Legacy/HelperFunctions.h"
+#include "../native_logger.h"
 
 using namespace std;
 
 #define SIZE 1024
 
-Controller* Controller::inst_ = NULL;
+Controller *Controller::inst_ = NULL;
 
 Controller::Controller(void) {
     isObjectDetection = false;
     isTracking = false;
     isOpenGL = false;
     featureFinished = 1.0;
+    queryScale = 1;
+    seq_id = 0;
+    recognizedObjectId = 0;
+    wait_seq_id = 0;
+    max_query_size = 320;
+    trckOBJ = 0;
+    lastRelease = 0;
 }
 
 Controller::~Controller(void) {
 }
 
-Controller* Controller::getInstance() {
+Controller *Controller::getInstance() {
     if (inst_ == NULL) {
         inst_ = new Controller();
     }
     return inst_;
 }
 
-int Controller::findFeatures(cv::Mat mRgbaFrame, cv::Mat mGrayFrame)
-{
-    log_info(ControllerTAG, "findFeatures..");
+int Controller::findFeatures(cv::Mat mRgbaFrame, cv::Mat mGrayFrame) {
     int returnThis = 0;
 
-    Analyzer* analyzer = Analyzer::getInstance();
+    Analyzer *analyzer = Analyzer::getInstance();
 
     analyzer->setDetector("");
     analyzer->setExtractor("");
@@ -53,195 +64,182 @@ int Controller::findFeatures(cv::Mat mRgbaFrame, cv::Mat mGrayFrame)
         analyzer->compute(mRgbaFrame, mGrayFrame);
     }
 
-    log_info(ControllerTAG, "findFeatures.. done");
 
-	return returnThis;
+    return returnThis;
 }
-
-
 
 void Controller::start() {
-    log_info(ControllerTAG, "start..");
-
-    // acquisition of viewModel
-    //viewMDL = cvar::overlay::viewModel::getInstance();
-
-	glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
-	//glClearColor(0.0f, 0.0f, 0.0f, 0.5f);				// Black Background
-	glEnable(GL_DEPTH_TEST);							// Enables Depth Testing
-	glDepthFunc(GL_LEQUAL);								// The Type Of Depth Testing To Do
-	//glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations
-
-
-	glEnable(GL_TEXTURE_2D);
-	glGenTextures(1, &Name);
-	glBindTexture(GL_TEXTURE_2D, Name);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-	ImagePtr = new GLubyte[SIZE*SIZE*4];
-	for(int i =0;i < SIZE*SIZE; i++)
-	{
-		ImagePtr[i*4+0] = 100;
-		ImagePtr[i*4+1] =0;
-		ImagePtr[i*4+2] = 0;
-		ImagePtr[i*4+3] = 128;
-
-	}
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SIZE, SIZE,
-		0, GL_RGBA, GL_UNSIGNED_BYTE, ImagePtr);
-
-    log_info(ControllerTAG, "start.. done");
+    log("start");
 }
 
-//void *worker_thread(void *arg)
-//{
-//        log_info(ControllerTAG, "THREADA running");
-//        pthread_exit(NULL);
-//}
-
-int Controller::initialize(cv::Mat& mGrayFrame, std::string configPath)
-{
-    log_info(ControllerTAG, "initializing..");
+int Controller::initialize(cv::Mat &mGrayFrame, std::string configPath) {
     int isInitialized = 0;
 
+    trckOBJ = new om::track::TrackerKLT();
+
     cv::FileStorage cvfs(configPath, cv::FileStorage::READ);
+    cv::Size frame_size = cv::Size(mGrayFrame.cols, mGrayFrame.rows);
     cv::FileNode fn;
 
-    std::string markerPath;
-    fn = cvfs["markerPathes"];
-    fn["keyboardMarker"] >> markerPath;
+    // reading of visual word
+    fn = cvfs["VisualWord"];
+    std::string vwfile;
+    fn["visualWord"] >> vwfile;
+    //log("visualWord = %s",vwfile.c_str());
 
-    log("Marker: %s", markerPath.c_str());
+    std::string idxfile;
+    fn["index"] >> idxfile;
+    if (idxfile.empty()) {
+        ctrlOR.loadVisualWords(vwfile);
+    } else {
+        ctrlOR.loadVisualWordsBinary(vwfile, idxfile);
+    }
 
-//            pthread_t my_thread;
-//            int ret;
-//
-//            log_info(ControllerTAG, "THREADA CREATE");
-//            ret =  pthread_create(&my_thread, NULL, &worker_thread, NULL);
-//            if(ret != 0) {
-//                    printf("Error: pthread_create() failed\n");
-//                    exit(EXIT_FAILURE);
-//            }
-            //pthread_exit(NULL);
-//            log_info(ControllerTAG, "THREADA DETACHED");
+    // Reading of the object DB
+    ctrlOR.loadObjectDB(cvfs["ObjectDB"]);
+
+    // Reading of the maximum image size for image recognition query
+    int max_query_size = 320;
+    cvfs["max_query_size"] >> max_query_size;
+
+    // Area secured by reducing the image size for the query to the appropriate size
+    int frame_max_size;
+    if (frame_size.width > frame_size.height) {
+        frame_max_size = frame_size.width;
+    } else {
+        frame_max_size = frame_size.height;
+    }
+
+    while ((frame_max_size / queryScale) > max_query_size) {
+        queryScale *= 2;
+    }
+    query_image.create(frame_size.height / queryScale,
+                       frame_size.width / queryScale, CV_8UC1);
 
     isInitialized = 1;
 
-    log_info(ControllerTAG, "initializing.. done");
     return isInitialized;
 
 }
 
-int Controller::displayFunction(cv::Mat& mRgbaFrame, cv::Mat& mGrayFrame)
-{
-	log_info(ControllerTAG, "display..");
-    int i =0;
+clock_t lastRelease;
 
+int Controller::displayFunction(cv::Mat &mRgbaFrame, cv::Mat &mGrayFrame) {
+
+    int i = 0;
     if (isObjectDetection) {
-        //int thisTime = Helper::now_ms();
-        int recognizedObjectId = findFeatures(mRgbaFrame, mGrayFrame);
-        //featureFinished = Helper::now_ms();
-        //int featureRuntime = featureFinished - thisTime;
-        //log_info(DTAG, "FIND FEATURE RUNTIME: %d ms Detected Feature: %d", featureRuntime, recognizedObjectId);
+        if (!isTracking) {
+
+
+            const clock_t timestamp = clock();
+            printf("BEGIN: %d\n", timestamp);
+
+            // essential to do this
+            cv::resize(mGrayFrame, query_image, query_image.size());
+
+            recog_result = ctrlOR.queryImage(query_image);
+            if (!recog_result.empty()) {
+                printf("Recognized id=%d,probility=%f,matchnum=%d, size=%d\n",
+                       recog_result[0].img_id, recog_result[0].probability,
+                       recog_result[0].matched_num,
+                       recog_result[0].object_position.size());
+
+                std::vector<cv::Point2f> objPositionUnscaled = recog_result[0]
+                        .object_position;
+                std::vector<cv::Point2f> objPosition = om::scalePoints(
+                        objPositionUnscaled, (double) queryScale);
+
+                trckOBJ->startTracking(mGrayFrame, objPosition);
+                isTracking = true;
+                seq_id = 0;
+                wait_seq_id = 0;
+
+                cv::line(mRgbaFrame, objPosition.at((int) 0),
+                         objPosition.at((int) 1), cv::Scalar(255), 3, 8, 0);
+                cv::line(mRgbaFrame, objPosition.at((int) 1),
+                         objPosition.at((int) 2), cv::Scalar(255), 3, 8, 0);
+                cv::line(mRgbaFrame, objPosition.at((int) 2),
+                         objPosition.at((int) 3), cv::Scalar(255), 3, 8, 0);
+                cv::line(mRgbaFrame, objPosition.at((int) 3),
+                         objPosition.at((int) 0), cv::Scalar(255), 3, 8, 0);
+
+                recognizedObjectId = recog_result[0].img_id;
+
+                lastRelease = clock();
+                double runtime = float(lastRelease - timestamp) / CLOCKS_PER_SEC;
+
+                printf("DESTINATION: %d\n", runtime);
+                isObjectDetection = false;
+            }
+
+
+// if opengl is off, show feature circles
+//            if (!isOpenGL) {
+//                std::vector<std::KeyPoint> v;
+//
+//                FastFeatureDetector detector(50);
+//                detector.detect(mGrayFrame, v);
+//
+//                for( unsigned int i = 0; i < v.size(); i++ )
+//                {
+//                    const KeyPoint& kp = v[i];
+//                    circle(mRgbaFrame, Point(kp.pt.x, kp.pt.y), 10, Scalar(255,0,0,255));
+//                }
+//            }
+//    if (isObjectDetection) {
+//        //int thisTime = Helper::now_ms();
+//        int recognizedObjectId = findFeatures(mRgbaFrame, mGrayFrame);
+//        //featureFinished = Helper::now_ms();
+//        //int featureRuntime = featureFinished - thisTime;
+//        //log(DTAG, "FIND FEATURE RUNTIME: %d ms Detected Feature: %d", featureRuntime, recognizedObjectId);
+//    }
+//        log(ControllerTAG, "display.. done");
+
+        } else {
+
+        isTracking = trckOBJ->onTracking(mGrayFrame);
+
+        // Draw Result
+        std::vector<cv::Point2f> points = trckOBJ->object_position;
+
+        cv::line(mRgbaFrame, trckOBJ->object_position[0],
+                 trckOBJ->object_position[1], cv::Scalar(255), 3, 8, 0);
+        cv::line(mRgbaFrame, trckOBJ->object_position[1],
+                 trckOBJ->object_position[2], cv::Scalar(255), 3, 8, 0);
+        cv::line(mRgbaFrame, trckOBJ->object_position[2],
+                 trckOBJ->object_position[3], cv::Scalar(255), 3, 8, 0);
+        cv::line(mRgbaFrame, trckOBJ->object_position[3],
+                 trckOBJ->object_position[0], cv::Scalar(255), 3, 8, 0);
+
+        seq_id++;
+
+        }
     }
-	log_info(ControllerTAG, "display.. done");
-	return i;
+
+    return i;
 }
 
-void Controller::glRender()
-{
-	log_info(ControllerTAG, "rendering..");
-    if (isOpenGL) {
-       int recognizedObjectId = 1;
-       if (recognizedObjectId > 0) {
-
-           glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffer
-           glLoadIdentity();									// Reset The Current Modelview cv::Matrix
-           glScalef(2,2,2);
-           glTranslatef(-1.5f,0.0f,-6.0f);						// Move Left 1.5 Units And Into The Screen 6.0
-           glClearColor(0,0,0,0);
-
-
-           //glDeleteTextures(1,&Name);
-           glEnable(GL_TEXTURE_2D);
-           glBindTexture(GL_TEXTURE_2D, Name);
-           glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-           glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-           glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-           glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-
-           GLfloat vertex[3*2*10];
-           int vertexIndex = 0;
-           vertex[vertexIndex++] =-30.0;
-           vertex[vertexIndex++] =-10.0;
-           vertex[vertexIndex++] = 5;
-           vertex[vertexIndex++] =-20.0;
-           vertex[vertexIndex++] =10.0;
-           vertex[vertexIndex++] =5;
-           vertex[vertexIndex++] =0.0;
-           vertex[vertexIndex++] =10.0;
-           vertex[vertexIndex++] = 5;
-           vertex[vertexIndex++] =0.0;
-           vertex[vertexIndex++] =10.0;
-           vertex[vertexIndex++] = 5;
-           vertex[vertexIndex++] =0.0;
-           vertex[vertexIndex++] =-10.0;
-           vertex[vertexIndex++] = 5;
-           vertex[vertexIndex++] =-20.0;
-           vertex[vertexIndex++] =-10.0;
-           vertex[vertexIndex++] = 5;
-           glColor4f(1,1,1,1);
-           glEnableClientState(GL_VERTEX_ARRAY);
-           glVertexPointer(3,GL_FLOAT,0,vertex);
-           glDrawArrays(GL_TRIANGLE_FAN,0,6);
-           glDisableClientState(GL_VERTEX_ARRAY);
-           glFlush();
-
-       } else {
-
-           glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear Screen And Depth Buffe
-           glClearColor(0,0,0,0);
-       }
-   }
-   log_info(ControllerTAG, "rendering.. done");
+void Controller::glRender() {
+    log("rendering..");
+    log("rendering.. done");
 }
 
 void Controller::glResize(int height, int width) {
-	log_info(ControllerTAG, "resizing..");
-	if (height==0)										// Prevent A Divide By Zero By
-	{
-		height=1;										// Making Height Equal One
-	}
-
-	glViewport(0,0,width,height);						// Reset The Current Viewport
-
-	glMatrixMode(GL_PROJECTION);						// Select The Projection cv::Matrix
-	glLoadIdentity();									// Reset The Projection cv::Matrix
-
-	// Calculate The Aspect Ratio Of The Window
-	glOrthof(width/4*-1, width/4, height/4*-1, height/4, 0, 1000);
-
-	glMatrixMode(GL_MODELVIEW);							// Select The Modelview cv::Matrix
-	glLoadIdentity();									// Reset The Modelview cv::Matrix
-    log_info(ControllerTAG, "resizing.. done");
+    log("resizing..");
+    log("resizing.. done");
 }
 
 void Controller::setObjectDetection(bool isActive) {
-    log_info(ControllerTAG, "setObjectDetection: %b", isActive);
+    log("setObjectDetection: %b", isActive);
     isObjectDetection = isActive;
 }
 
 void Controller::setTracking(bool isActive) {
-    log_info(ControllerTAG, "setTracking: %b", isActive);
+    log("setTracking: %b", isActive);
     isTracking = isActive;
 }
 
 void Controller::setOpenGL(bool isActive) {
-    log_info(ControllerTAG, "setOpenGL: %b", isActive);
+    log("setOpenGL: %b", isActive);
     isOpenGL = isActive;
 }

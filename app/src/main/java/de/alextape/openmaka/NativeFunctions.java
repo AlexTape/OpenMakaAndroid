@@ -7,9 +7,9 @@ public class NativeFunctions {
 
     private static final String TAG = "OpenMaka::NativeFunctions";
 
-    private static boolean VIEW_MODE_OBJECT_DETECTION = false;
-    private static boolean VIEW_MODE_TRACKING = false;
-    private static boolean VIEW_MODE_OPEN_GL = false;
+    private static boolean MODE_OBJECT_DETECTION = false;
+    private static boolean MODE_TRACKING = false;
+    private static boolean MODE_OPEN_GL = false;
 
     /**
      * Basic functions.
@@ -35,10 +35,7 @@ public class NativeFunctions {
      * Display functions.
      */
     public static Integer displayFunction(long matAddrRgba, long matAddrGray) {
-        if (VIEW_MODE_OBJECT_DETECTION || VIEW_MODE_TRACKING || VIEW_MODE_OPEN_GL) {
             return native_displayFunction(matAddrRgba, matAddrGray);
-        }
-        return null;
     }
 
     public static void glRender() {
@@ -58,31 +55,31 @@ public class NativeFunctions {
     /**
      * Options getter/setter.
      */
-    public static boolean isViewModeObjectDetection() {
-        return VIEW_MODE_OBJECT_DETECTION;
+    public static boolean isModeObjectDetection() {
+        return MODE_OBJECT_DETECTION;
     }
 
-    public static void setViewModeObjectDetection(boolean viewModeObjectDetection) {
-        VIEW_MODE_OBJECT_DETECTION = viewModeObjectDetection;
-        native_setObjectDetection(VIEW_MODE_OBJECT_DETECTION);
+    public static void setModeObjectDetection(boolean isObjectDetection) {
+        MODE_OBJECT_DETECTION = isObjectDetection;
+        native_setObjectDetection(MODE_OBJECT_DETECTION);
     }
 
-    public static boolean isViewModeTracking() {
-        return VIEW_MODE_TRACKING;
+    public static boolean isModeTracking() {
+        return MODE_TRACKING;
     }
 
-    public static void setViewModeTracking(boolean viewModeTracking) {
-        VIEW_MODE_TRACKING = viewModeTracking;
-        native_setTracking(VIEW_MODE_TRACKING);
+    public static void setModeTracking(boolean isModeTracking) {
+        MODE_TRACKING = isModeTracking;
+        native_setTracking(MODE_TRACKING);
     }
 
-    public static boolean isViewModeOpenGl() {
-        return VIEW_MODE_OPEN_GL;
+    public static boolean isModeOpenGl() {
+        return MODE_OPEN_GL;
     }
 
-    public static void setViewModeOpenGl(boolean viewModeOpenGl) {
-        VIEW_MODE_OPEN_GL = viewModeOpenGl;
-        native_setOpenGL(VIEW_MODE_OPEN_GL);
+    public static void setModeOpenGl(boolean isModeOpenGl) {
+        MODE_OPEN_GL = isModeOpenGl;
+        native_setOpenGL(MODE_OPEN_GL);
     }
 
     private static native void native_setObjectDetection(boolean isActive);

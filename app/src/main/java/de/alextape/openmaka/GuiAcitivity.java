@@ -3,27 +3,17 @@ package de.alextape.openmaka;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.text.Layout;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.SubMenu;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -31,14 +21,9 @@ abstract class GuiAcitivity extends Activity {
 
     private static final String TAG = "OpenMaka::GuiActivity";
 
-    private ArrayList<String> menuItems;
-    private Dialog menuDialog;
-
     public GuiAcitivity() {
         Log.i(TAG, "Instantiated new " + this.getClass());
     }
-
-    private LinearLayout mContainer;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,8 +50,6 @@ abstract class GuiAcitivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
-        // View view = LayoutInflater.from(this).inflate(R.layout.menu_headline, null);
-        // menu.findItem(R.id.featureDetectorsHeadline).setOnMenuItemClickListener(null).setActionView(view);
         return true;
     }
 
@@ -78,16 +61,16 @@ abstract class GuiAcitivity extends Activity {
 
         switch (item.getItemId()) {
             case R.id.featureDetector_FAST:
-                boolean isDetection = NativeFunctions.isViewModeObjectDetection();
-                NativeFunctions.setViewModeObjectDetection(!isDetection);
+                boolean isDetection = NativeFunctions.isModeObjectDetection();
+                NativeFunctions.setModeObjectDetection(!isDetection);
                 break;
             case 1:
-                boolean isTracking = NativeFunctions.isViewModeTracking();
-                NativeFunctions.setViewModeTracking(!isTracking);
+                boolean isTracking = NativeFunctions.isModeTracking();
+                NativeFunctions.setModeTracking(!isTracking);
                 break;
             case 2:
-                boolean isOpenGL = NativeFunctions.isViewModeOpenGl();
-                NativeFunctions.setViewModeOpenGl(!isOpenGL);
+                boolean isOpenGL = NativeFunctions.isModeOpenGl();
+                NativeFunctions.setModeOpenGl(!isOpenGL);
                 break;
         }
 

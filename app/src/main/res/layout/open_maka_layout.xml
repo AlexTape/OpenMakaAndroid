@@ -23,23 +23,21 @@
     </FrameLayout>
 
     <LinearLayout
-        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:background="@android:color/transparent"
         android:layout_height="wrap_content"
-        android:padding="10dp" >
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/transparent"
+        android:orientation="vertical"
+        android:padding="10dp">
 
         <TextView
             android:id="@+id/infoLine"
-            android:text="Configuration: FAST - FREAK - NONE"
-            android:textColor="@android:color/white"
             android:layout_width="match_parent"
-            android:layout_height="20dp"/>
+            android:layout_height="20dp"
+            android:text="Configuration: FAST - FREAK - NONE"
+            android:textColor="@android:color/white"/>
 
     </LinearLayout>
-
-
 
 
 </RelativeLayout>

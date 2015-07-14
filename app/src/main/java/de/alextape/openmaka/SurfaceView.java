@@ -14,6 +14,10 @@ public class SurfaceView extends GLSurfaceView {
 
     private static String TAG = "OpenMaka::SurfaceView";
 
+    boolean isObjectDetection = false;
+
+    long timestamp;
+
     public SurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
         getHolder().setFormat(PixelFormat.TRANSLUCENT);
@@ -33,12 +37,27 @@ public class SurfaceView extends GLSurfaceView {
 		setFocusableInTouchMode(true);
 		*/
     }
+
     @Override
     public boolean onTouchEvent(final MotionEvent event)
     {
+        timestamp = System.currentTimeMillis();
         queueEvent(new Runnable() {
             public void run() {
                 //NativeFunctions.touchEvent(event.getX(), event.getY(), event.getAction());
+                Log.d(TAG, "onTouchEvent=" + event.getAction());
+
+                long time = System.currentTimeMillis();
+
+                if (timestamp + 300 < time) {
+                    if (event.getAction() == MotionEvent.ACTION_UP) {
+
+                        isObjectDetection = !isObjectDetection;
+                        NativeFunctions.setModeObjectDetection(isObjectDetection);
+                        Log.d(TAG, "isObjectDetection=" + isObjectDetection);
+                        timestamp = System.currentTimeMillis();
+                    }
+                }
             }
         });
 
@@ -50,6 +69,7 @@ public class SurfaceView extends GLSurfaceView {
     {
         queueEvent(new Runnable() {
             public void run() {
+                Log.d(TAG, "onKeyDown=" + event.getAction());
                 //NativeFunctions.keyEvent(keyCode, event.getAction());
             }
         });
@@ -61,6 +81,7 @@ public class SurfaceView extends GLSurfaceView {
     {
         queueEvent(new Runnable() {
             public void run() {
+                Log.d(TAG, "onKeyUp=" + event.getAction());
                 //NativeFunctions.keyEvent(keyCode, event.getAction());
             }
         });
