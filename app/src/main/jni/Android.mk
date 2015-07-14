@@ -6,8 +6,8 @@ include $(CLEAR_VARS)
 #LOCAL_SRC_FILES := libs/libnonfree.so
 #include $(PREBUILT_SHARED_LIBRARY)
 
-#include $(CLEAR_VARS) 
-#LOCAL_MODULE := lgnustl_shared 
+#include $(CLEAR_VARS)
+#LOCAL_MODULE := lgnustl_shared
 #LOCAL_SRC_FILES := lib/libgnustl_shared.so
 #include $(PREBUILT_SHARED_LIBRARY)
 

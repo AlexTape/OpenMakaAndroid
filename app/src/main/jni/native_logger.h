@@ -22,7 +22,7 @@
 #endif // _dbg_h_
 
 
-/**
+/*
 #ifdef __ANDROID__
 #include <android/log.h>
 #ifdef NDEBUG
