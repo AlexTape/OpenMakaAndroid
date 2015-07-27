@@ -12,27 +12,27 @@ class StaticHelper {
         boolean result;
         String libs = "";
 
-        if(InitCuda)
-        {
-            loadLibrary("cudart");
-            loadLibrary("nppc");
-            loadLibrary("nppi");
-            loadLibrary("npps");
-            loadLibrary("cufft");
-            loadLibrary("cublas");
-        }
+//        if(InitCuda)
+//        {
+//            loadLibrary("cudart");
+//            loadLibrary("nppc");
+//            loadLibrary("nppi");
+//            loadLibrary("npps");
+//            loadLibrary("cufft");
+//            loadLibrary("cublas");
+//        }
 
-        Log.d(TAG, "Trying to get library list");
-
-        try
-        {
-            System.loadLibrary("opencv_info");
-            libs = getLibraryList();
-        }
-        catch(UnsatisfiedLinkError e)
-        {
-            Log.e(TAG, "OpenCV error: Cannot load info library for OpenCV");
-        }
+//        Log.d(TAG, "Trying to get library list");
+//
+//        try
+//        {
+//            System.loadLibrary("opencv_info");
+//            libs = getLibraryList();
+//        }
+//        catch(UnsatisfiedLinkError e)
+//        {
+//            Log.e(TAG, "OpenCV error: Cannot load info library for OpenCV");
+//        }
 
         Log.d(TAG, "Library list: \"" + libs + "\"");
         Log.d(TAG, "First attempt to load libs");

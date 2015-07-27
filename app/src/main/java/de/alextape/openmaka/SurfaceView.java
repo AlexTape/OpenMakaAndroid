@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
@@ -41,8 +42,11 @@ public class SurfaceView extends GLSurfaceView {
     @Override
     public boolean onTouchEvent(final MotionEvent event)
     {
-        timestamp = System.currentTimeMillis();
+
         queueEvent(new Runnable() {
+
+            private long timestamp = System.currentTimeMillis();
+
             public void run() {
                 //NativeFunctions.touchEvent(event.getX(), event.getY(), event.getAction());
                 Log.d(TAG, "onTouchEvent=" + event.getAction());

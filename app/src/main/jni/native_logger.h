@@ -13,6 +13,7 @@
 
 #include <android/log.h>
 #define log(M, ...) __android_log_print(ANDROID_LOG_INFO, DTAG, M "", ##__VA_ARGS__)
+#define log_info(D, M, ...) __android_log_print(ANDROID_LOG_INFO, D, "[INFO] " M "", ##__VA_ARGS__)
 
 #else
 

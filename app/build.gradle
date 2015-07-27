@@ -7,7 +7,7 @@ android {
     buildToolsVersion "21.1.2"
     defaultConfig {
         applicationId "de.alextape.openmaka"
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 16
         versionCode 1
         versionName "1.0"
