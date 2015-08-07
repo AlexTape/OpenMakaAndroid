@@ -35,7 +35,8 @@ public class NativeFunctions {
      * Display functions.
      */
     public static Integer displayFunction(long matAddrRgba, long matAddrGray) {
-            return native_displayFunction(matAddrRgba, matAddrGray);
+        System.out.println("display call");
+        return native_displayFunction(matAddrRgba, matAddrGray);
     }
 
     public static void glRender() {

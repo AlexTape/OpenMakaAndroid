@@ -20,6 +20,8 @@ public class FileManager {
 
     private Context context;
 
+    private static boolean forceReload = true;
+
     public FileManager(Context context) {
         this.context = context;
         Log.i(TAG, "Instantiated new " + this.getClass());
@@ -35,12 +37,12 @@ public class FileManager {
             InputStream inputStream = context.getAssets().open("config/config.xml");
             configFile = IOUtils.toString(inputStream, "UTF-8");
 
-            String[] dataFiles = new String[]{"marker/book.jpg","config/config.xml"};
+            String[] dataFiles = new String[]{"images/book.jpg","config/config.xml"};
 
             File storage = context.getExternalFilesDir(null);
             storage.mkdirs();
 
-            String[] folders = new String[]{"config", "marker"};
+            String[] folders = new String[]{"config", "images"};
 
             for (String folder : folders) {
                 File f = new File(storage.getPath() + "/" + folder);
@@ -51,7 +53,7 @@ public class FileManager {
                 String filename = dataFiles[i];
                 String filepath = storage.getPath() + "/" + filename;
                 File file = new File(filepath);
-                if (!file.exists()) {
+                if (!file.exists() || forceReload) {
 
                     InputStream in = null;
                     OutputStream out = null;
