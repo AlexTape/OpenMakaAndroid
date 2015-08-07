@@ -194,6 +194,13 @@ public class AsyncCameraCallback implements CameraCallbackInterface {
             }
 
             mImageView.invalidate();
+            if (mBitmap.getWidth() != mOutputWidth || mBitmap.getHeight() != mOutputHeight) {
+                Log.i("OpenMaka", "ARGH new");
+                mBitmap.recycle();
+                mBitmap = Bitmap.createBitmap(mOutputWidth, mOutputHeight,
+                        Bitmap.Config.ARGB_8888);
+                mImageView.setImageBitmap(mBitmap);
+            }
             mBitmap.setPixels(pixels, 0, mOutputWidth,
                     0, 0, mOutputWidth, mOutputHeight);
 //            mImageView.setImageBitmap(mBitmap);
