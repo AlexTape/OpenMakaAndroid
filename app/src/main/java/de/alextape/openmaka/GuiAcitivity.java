@@ -4,6 +4,7 @@ package de.alextape.openmaka;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -71,6 +72,10 @@ abstract class GuiAcitivity extends Activity {
             case 2:
                 boolean isOpenGL = NativeFunctions.isModeOpenGl();
                 NativeFunctions.setModeOpenGl(!isOpenGL);
+                break;
+            case R.id.generalOptionsHeadline:
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
                 break;
         }
 

@@ -37,6 +37,7 @@ public class StorageHelper {
 
     public String getValue(String key) {
         SharedPreferences preferences = getSharedPreferences();
+        // should not be a string overall..
         return preferences.getString(key, null);
     }
 
