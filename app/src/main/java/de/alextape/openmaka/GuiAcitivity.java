@@ -3,7 +3,6 @@ package de.alextape.openmaka;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -14,9 +13,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.LinearLayout;
-
-import java.util.ArrayList;
 
 abstract class GuiAcitivity extends Activity {
 
@@ -61,19 +57,19 @@ abstract class GuiAcitivity extends Activity {
         Log.d(TAG, "ItemClick: " + item.getTitle());
 
         switch (item.getItemId()) {
-            case R.id.featureDetector_FAST:
-                boolean isDetection = NativeFunctions.isModeObjectDetection();
-                NativeFunctions.setModeObjectDetection(!isDetection);
+            case R.id.enableModeObjectDetection:
+                boolean isDetection = NativeController.isModeObjectDetection();
+                NativeController.setModeObjectDetection(!isDetection);
                 break;
-            case 1:
-                boolean isTracking = NativeFunctions.isModeTracking();
-                NativeFunctions.setModeTracking(!isTracking);
+            case R.id.enableModeTracking:
+                boolean isTracking = NativeController.isModeTracking();
+                NativeController.setModeTracking(!isTracking);
                 break;
-            case 2:
-                boolean isOpenGL = NativeFunctions.isModeOpenGl();
-                NativeFunctions.setModeOpenGl(!isOpenGL);
+            case R.id.enableModeOpenGL:
+                boolean isOpenGL = NativeController.isModeOpenGl();
+                NativeController.setModeOpenGl(!isOpenGL);
                 break;
-            case R.id.generalOptionsHeadline:
+            case R.id.generalOptions:
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
                 break;

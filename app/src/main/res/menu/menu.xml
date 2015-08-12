@@ -16,25 +16,20 @@
                 android:checkableBehavior="single"
                 >
                 <item
-                    android:id="@+id/showFeatures"
+                    android:id="@+id/enableModeObjectDetection"
                     android:orderInCategory="100"
                     android:showAsAction="never"
-                    android:title="@string/show_features"/>
+                    android:title="@string/enableModeObjectDetection"/>
                 <item
-                    android:id="@+id/showDetection"
+                    android:id="@+id/enableModeTracking"
                     android:orderInCategory="100"
                     android:showAsAction="never"
-                    android:title="@string/show_detection"/>
+                    android:title="@string/enableModeTracking"/>
                 <item
-                    android:id="@+id/enableTracking"
+                    android:id="@+id/enableModeOpenGL"
                     android:orderInCategory="100"
                     android:showAsAction="never"
-                    android:title="@string/enable_tracking"/>
-                <item
-                    android:id="@+id/attachObject"
-                    android:orderInCategory="100"
-                    android:showAsAction="never"
-                    android:title="@string/attach_object"/>
+                    android:title="@string/enableModeOpenGL"/>
             </group>
         </menu>
     </item>
@@ -49,7 +44,7 @@
                 android:id="@+id/featureDetectorsHeadline"
                 android:orderInCategory="100"
                 android:showAsAction="never"
-                android:title="@string/featureDetectors_title"/>
+                android:title="@string/featureDetectorsTitle"/>
             <group
                 android:checkableBehavior="single"
                 >
@@ -112,7 +107,7 @@
                 android:id="@+id/featureExtractorsHeadline"
                 android:orderInCategory="100"
                 android:showAsAction="never"
-                android:title="@string/featureExtractors_title"/>
+                android:title="@string/featureExtractorsTitle"/>
             <group
                 android:checkableBehavior="single"
                 >
@@ -160,43 +155,38 @@
                 android:id="@+id/featureMatchersHeadline"
                 android:orderInCategory="100"
                 android:showAsAction="never"
-                android:title="@string/featureMatchers_title"/>
+                android:title="@string/featureMatchersTitle"/>
             <group
                 android:checkableBehavior="single"
                 >
                 <item
-                    android:id="@+id/featureMatcher_FLANN_LSH"
+                    android:id="@+id/matcherFlannBased"
                     android:orderInCategory="100"
                     android:showAsAction="never"
-                    android:title="@string/matcher_FLANN_LSH"/>
+                    android:title="@string/matcherFlannBased"/>
                 <item
-                    android:id="@+id/featureMatcher_FLANN_KD_TREE"
+                    android:id="@+id/matcherBruteForce"
                     android:orderInCategory="100"
                     android:showAsAction="never"
-                    android:title="@string/matcher_FLANN_KDTREE"/>
-                <item
-                    android:id="@+id/featureMatcher_"
-                    android:orderInCategory="100"
-                    android:showAsAction="never"
-                    android:title="@string/matcher_BRUTE_FORCE"/>
+                    android:title="@string/matcherBruteForce"/>
             </group>
         </menu>
     </item>
 
     <item
-        android:id="@+id/generalOptionsHeadline"
+        android:id="@+id/generalOptions"
         android:orderInCategory="100"
         android:showAsAction="never"
-        android:title="@string/generalOptions_title"/>
+        android:title="@string/generalOptions"/>
     <item
-        android:id="@+id/generalOptions_reload"
+        android:id="@+id/generalOptionsReload"
         android:icon="@android:drawable/ic_menu_help"
         android:showAsAction="never"
-        android:title="@string/generalOptions_reload"/>
+        android:title="@string/generalOptionsReload"/>
     <item
-        android:id="@+id/generalOptions_impressum"
+        android:id="@+id/generalOptionsImpessum"
         android:icon="@android:drawable/ic_menu_help"
         android:showAsAction="never"
-        android:title="@string/generalOptions_impessum"/>
+        android:title="@string/generalOptionsImpessum"/>
 
 </menu>

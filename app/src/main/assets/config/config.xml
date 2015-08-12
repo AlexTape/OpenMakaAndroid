@@ -1,19 +1,20 @@
 <?xml version="1.0"?>
 <opencv_storage>
     <storagePath>/storage/emulated/0/Android/data/de.alextape.openmaka/files</storagePath>
+    <!--<storagePath>/home/thinker/ClionProjects/OpenMakaEngine</storagePath>-->
     <defaultObjectImage>/images/book.jpg</defaultObjectImage>
-    <statisticsMode>false</statisticsMode>
+    <statisticsMode>true</statisticsMode>
+    <statisticsFile>statistics.csv</statisticsFile>
     <debugMode>false</debugMode>
     <useWindows>false</useWindows>
-    <query>
-        <imageScale>1</imageScale>
-        <imageMaxSize>320</imageMaxSize>
-    </query>
+    <sceneFrame>
+        <maxImageSize>320</maxImageSize>
+    </sceneFrame>
     <analyzer>
-        <detector>SURF</detector>
-        <extractor>SURF</extractor>
-        <matcher>BF_NORM_HAMMING</matcher>
-        <minimumInliers>10</minimumInliers>
+        <detector>SIFT</detector>
+        <extractor>SIFT</extractor>
+        <matcher>FLANN_X</matcher>
+        <minimumInliers>25</minimumInliers>
         <minimumMatches>4</minimumMatches>
         <nnDistanceRatio>0.6</nnDistanceRatio>
         <kGroups>2</kGroups>

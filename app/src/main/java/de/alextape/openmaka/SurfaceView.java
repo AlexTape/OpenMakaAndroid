@@ -57,7 +57,7 @@ public class SurfaceView extends GLSurfaceView {
                     if (event.getAction() == MotionEvent.ACTION_UP) {
 
                         isObjectDetection = !isObjectDetection;
-                        NativeFunctions.setModeObjectDetection(isObjectDetection);
+                        NativeController.setModeObjectDetection(isObjectDetection);
                         Log.d(TAG, "isObjectDetection=" + isObjectDetection);
                         timestamp = System.currentTimeMillis();
                     }

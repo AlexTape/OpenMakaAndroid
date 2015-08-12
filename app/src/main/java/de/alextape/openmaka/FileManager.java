@@ -37,7 +37,7 @@ public class FileManager {
             InputStream inputStream = context.getAssets().open("config/config.xml");
             configFile = IOUtils.toString(inputStream, "UTF-8");
 
-            String[] dataFiles = new String[]{"images/book.jpg","config/config.xml"};
+            String[] dataFiles = new String[]{"images/book.jpg","images/book_frame.jpg","config/config.xml"};
 
             File storage = context.getExternalFilesDir(null);
             storage.mkdirs();

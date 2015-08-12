@@ -3,7 +3,7 @@ package de.alextape.openmaka;
 /**
  * Created by thinker on 11.06.15.
  */
-public class NativeFunctions {
+public class NativeController {
 
     private static final String TAG = "OpenMaka::NativeFunctions";
 
@@ -14,10 +14,6 @@ public class NativeFunctions {
     /**
      * Basic functions.
      */
-    public static void start() {
-        native_start();
-    }
-
     public static boolean initialize(long matAddrRgba, String configPath) {
         boolean returnThis = false;
         int i = native_initialize(matAddrRgba, configPath);
@@ -26,8 +22,6 @@ public class NativeFunctions {
         }
         return returnThis;
     }
-
-    private static native void native_start();
 
     private static native int native_initialize(long matAddrRgba, String configPath);
 
@@ -62,7 +56,7 @@ public class NativeFunctions {
 
     public static void setModeObjectDetection(boolean isObjectDetection) {
         MODE_OBJECT_DETECTION = isObjectDetection;
-        native_setObjectDetection(MODE_OBJECT_DETECTION);
+        native_setModeObjectDetection(MODE_OBJECT_DETECTION);
     }
 
     public static boolean isModeTracking() {
@@ -71,7 +65,7 @@ public class NativeFunctions {
 
     public static void setModeTracking(boolean isModeTracking) {
         MODE_TRACKING = isModeTracking;
-        native_setTracking(MODE_TRACKING);
+        native_setModeTracking(MODE_TRACKING);
     }
 
     public static boolean isModeOpenGl() {
@@ -80,13 +74,13 @@ public class NativeFunctions {
 
     public static void setModeOpenGl(boolean isModeOpenGl) {
         MODE_OPEN_GL = isModeOpenGl;
-        native_setOpenGL(MODE_OPEN_GL);
+        native_setModeOpenGL(MODE_OPEN_GL);
     }
 
-    private static native void native_setObjectDetection(boolean isActive);
+    private static native void native_setModeObjectDetection(boolean isActive);
 
-    private static native void native_setTracking(boolean isActive);
+    private static native void native_setModeTracking(boolean isActive);
 
-    private static native void native_setOpenGL(boolean isActive);
+    private static native void native_setModeOpenGL(boolean isActive);
 
 }
