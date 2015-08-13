@@ -3,8 +3,8 @@
     <storagePath>/storage/emulated/0/Android/data/de.alextape.openmaka/files</storagePath>
     <!--<storagePath>/home/thinker/ClionProjects/OpenMakaEngine</storagePath>-->
     <defaultObjectImage>/images/book.jpg</defaultObjectImage>
-    <statisticsMode>true</statisticsMode>
     <statisticsFile>statistics.csv</statisticsFile>
+    <statisticsMode>true</statisticsMode>
     <debugMode>false</debugMode>
     <useWindows>false</useWindows>
     <sceneFrame>

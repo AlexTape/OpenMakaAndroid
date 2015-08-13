@@ -22,7 +22,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Global Options"
+                android:text="@string/developer_modes"
                 android:textSize="18sp" />
 
             <LinearLayout
@@ -36,59 +36,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Processing Resolution" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="right">
-
-                    <Spinner
-                        android:id="@+id/spinner_processing_resolution"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:entries="@array/resolution" />
-
-                </LinearLayout>
-
-
-            </LinearLayout>
-        </LinearLayout>
-
-        <View
-            android:layout_marginTop="14dp"
-            android:layout_width="match_parent"
-            android:background="@android:color/black"
-            android:layout_height="1dp"/>
-
-
-        <LinearLayout
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="18dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Developer Modes"
-                android:textSize="18sp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Statistic Mode" />
+                    android:text="@string/edit_statistic_mode" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -115,7 +63,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Debug Mode" />
+                    android:text="@string/edit_debug_mode" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -145,6 +93,59 @@
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:layout_marginTop="18dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/edit_global_options"
+                android:textSize="18sp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/edit_maximal_image_size"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="0.3"
+                    android:layout_height="wrap_content"
+                    android:gravity="right">
+
+                    <EditText
+                        android:inputType="numberDecimal"
+                        android:id="@+id/edit_maximal_image_size"
+                        android:imeOptions="actionDone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_marginTop="14dp"
+            android:layout_width="match_parent"
+            android:background="@android:color/black"
+            android:layout_height="1dp"/>
+
+
+        <LinearLayout
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="18dp"
             android:descendantFocusability="beforeDescendants"
             android:focusableInTouchMode="true"
             android:layout_width="match_parent"
@@ -155,7 +156,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Analyzer Options"
+                android:text="@string/edit_analyzer_options"
                 android:textSize="18sp" />
 
             <LinearLayout
@@ -169,7 +170,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="NN Distance Ratio" />
+                    android:text="@string/edit_minimum_inliers"/>
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -179,7 +180,64 @@
 
                     <EditText
                         android:inputType="numberDecimal"
-                        android:id="@+id/edit_distance_ratio"
+                        android:id="@+id/edit_minimum_inliers"
+                        android:imeOptions="actionDone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/edit_minimum_matches"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="0.3"
+                    android:layout_height="wrap_content"
+                    android:gravity="right">
+
+                    <EditText
+                        android:inputType="numberDecimal"
+                        android:id="@+id/edit_minimum_matches"
+                        android:imeOptions="actionDone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/edit_nn_distance_ratio" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="0.3"
+                    android:layout_height="wrap_content"
+                    android:gravity="right">
+
+                    <EditText
+                        android:inputType="numberDecimal"
+                        android:id="@+id/edit_nn_distance_ratio"
+                        android:imeOptions="actionDone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
@@ -198,7 +256,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="K Groups" />
+                    android:text="@string/edit_k_groups" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -208,7 +266,8 @@
 
                     <EditText
                         android:inputType="number"
-                        android:id="@+id/edit_k_group"
+                        android:id="@+id/edit_k_groups"
+                        android:imeOptions="actionDone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
@@ -227,7 +286,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Ransac Reprojection Threshold" />
+                    android:text="@string/edit_ransac_reprojection_threshold" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -237,7 +296,8 @@
 
                     <EditText
                         android:inputType="numberDecimal"
-                        android:id="@+id/edit_ransac_reprojection"
+                        android:id="@+id/edit_ransac_reprojection_threshold"
+                        android:imeOptions="actionDone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
@@ -270,7 +330,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Tracker Options"
+                android:text="@string/edit_tracker_options"
                 android:textSize="18sp" />
 
             <LinearLayout
@@ -284,7 +344,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Max Corners" />
+                    android:text="@string/edit_max_corners" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -295,6 +355,7 @@
                     <EditText
                         android:inputType="number"
                         android:id="@+id/edit_max_corners"
+                        android:imeOptions="actionDone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
@@ -313,7 +374,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Quality Level" />
+                    android:text="@string/edit_quality_level" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -324,6 +385,7 @@
                     <EditText
                         android:inputType="numberDecimal"
                         android:id="@+id/edit_quality_level"
+                        android:imeOptions="actionDone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
@@ -342,7 +404,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Minimum Distance" />
+                    android:text="@string/edit_minimum_distance" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -353,6 +415,7 @@
                     <EditText
                         android:inputType="number"
                         android:id="@+id/edit_minimum_distance"
+                        android:imeOptions="actionDone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 

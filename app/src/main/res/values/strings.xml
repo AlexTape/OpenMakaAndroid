@@ -32,4 +32,21 @@
     <string name="renderOptionsMenu">RenderOptionsMenu</string>
     <string name="featureExtractorsMenu">FeatureExtractorsMenu</string>
     <string name="featureMatchersMenu">FeatureMatchersMenu</string>
+    <string name="edit_debug_mode">Debug Mode</string>
+    <string name="edit_statistic_mode">Statistic Mode</string>
+    <string name="developer_modes">Developer Modes</string>
+    <string name="edit_maximal_image_size">Maximal Image Size</string>
+    <string name="edit_global_options">Processing Options</string>
+    <string name="edit_analyzer_options">Analyzer Options</string>
+    <string name="edit_nn_distance_ratio">NN Distance Ratio</string>
+    <string name="edit_k_groups">K Groups</string>
+    <string name="edit_ransac_reprojection_threshold">Ransac Reprojection Threshold</string>
+    <string name="edit_tracker_options">Tracker Options</string>
+    <string name="edit_max_corners">Max Corners</string>
+    <string name="edit_quality_level">Quality Level</string>
+    <string name="edit_minimum_distance">Minimum Distance</string>
+    <string name="edit_detector">Default Detector</string>
+    <string name="edit_extractor">Default Extractor</string>
+    <string name="edit_minimum_inliers">Minimum Inliers</string>
+    <string name="edit_minimum_matches">Minimum Matches</string>
 </resources>
