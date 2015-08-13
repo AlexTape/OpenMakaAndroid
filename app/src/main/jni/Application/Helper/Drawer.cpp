@@ -22,16 +22,50 @@ Drawer::~Drawer(void) {
 
 void Drawer::drawContour(cv::Mat &image, std::vector<cv::Point2f> points2d, cv::Scalar color, int thickness,
                          int lineType, int shift) {
+
+    // for all points
     for (size_t i = 0; i < points2d.size(); i++) {
-        cv::line(image, points2d[i], points2d[(i + 1) % points2d.size()], color, thickness, lineType, shift);
+
+        // rescale point a coordinates
+        cv::Point2f a;
+        a.x = (int) ((points2d[i].x * SceneFrame::IMAGE_SCALE) + 0.5);
+        a.y = (int) ((points2d[i].y * SceneFrame::IMAGE_SCALE) + 0.5);
+
+        // resale point b coordinates
+        cv::Point2f b;
+        b.x = (int) ((points2d[(i + 1) % points2d.size()].x * SceneFrame::IMAGE_SCALE) + 0.5);
+        b.y = (int) ((points2d[(i + 1) % points2d.size()].y * SceneFrame::IMAGE_SCALE) + 0.5);
+
+        // draw line
+        cv::line(image, a, b, color, thickness, lineType, shift);
     }
 }
 
 void Drawer::drawKeypoints(cv::Mat &image, std::vector<cv::KeyPoint> keyPoints, cv::Scalar color) {
+
+    // for all keypoints
     for (unsigned int i = 0; i < keyPoints.size(); i++) {
-        const cv::KeyPoint &kp = keyPoints[i];
-        // TODO fix this
-        cv::circle(image, cv::Point(kp.pt.x, kp.pt.y), 10, cv::Scalar(255, 0, 0, 255));
+
+        // rescale coordinates
+        int x = (int) ((keyPoints[i].pt.x * SceneFrame::IMAGE_SCALE) + 0.5);
+        int y = (int) ((keyPoints[i].pt.y * SceneFrame::IMAGE_SCALE) + 0.5);
+
+        // draw circles
+        cv::circle(image, cv::Point(x, y), 10, cv::Scalar(255, 0, 0, 255));
+    }
+}
+
+void Drawer::drawKeypointsWithResponse(cv::Mat &image, std::vector<cv::KeyPoint> keyPoints, cv::Scalar color) {
+
+    // for all keypoints
+    for (unsigned int i = 0; i < keyPoints.size(); i++) {
+
+        // rescale coordinates
+        int x = (int) ((keyPoints[i].pt.x * SceneFrame::IMAGE_SCALE) + 0.5);
+        int y = (int) ((keyPoints[i].pt.y * SceneFrame::IMAGE_SCALE) + 0.5);
+
+        // draw circles
+        cv::circle(image, cv::Point(x, y), (int) (keyPoints[i].response + 0.5), cv::Scalar(255, 0, 0, 255));
     }
 }
 

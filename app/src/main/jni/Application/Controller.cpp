@@ -286,6 +286,15 @@ int Controller::displayFunction(cv::Mat &mRgbaFrame, cv::Mat &mGrayFrame) {
                 // if object found
                 if (STATE_OBJECT_FOUND) {
 
+                    // resize gray image
+                    cv::Mat trackerFrame = sceneFrame->gray;
+                    try {
+                        cv::resize(mGrayFrame, trackerFrame, trackerFrame.size());
+                    } catch (cv::Exception &exception) {
+                        cvError(0, "TrackerFrame", "Resizing failed!", __FILE__, __LINE__);
+                        cout << exception.what() << endl;
+                    }
+
                     if (Controller::MODE_STATISTICS) {
                         Controller::statistics("InputResolution",
                                                (string) sceneFrame->getInputResolution());
@@ -295,7 +304,7 @@ int Controller::displayFunction(cv::Mat &mRgbaFrame, cv::Mat &mGrayFrame) {
                     }
 
                     // analyzer processing
-                    bool isInImage = tracker->isObjectInsideImage(mGrayFrame.size(), sceneFrame->objectPosition);
+                    bool isInImage = tracker->isObjectInsideImage(trackerFrame.size(), sceneFrame->objectPosition);
 
                     if (Controller::MODE_STATISTICS) {
                         Controller::statistics("isObjectInsideImage(ms)", (double) timer->getMillis());
@@ -309,7 +318,7 @@ int Controller::displayFunction(cv::Mat &mRgbaFrame, cv::Mat &mGrayFrame) {
                         }
 
                         // initialize tracking
-                        tracker->initialize(mGrayFrame, sceneFrame->objectPosition);
+                        tracker->initialize(trackerFrame, sceneFrame->objectPosition);
 
                         if (Controller::MODE_STATISTICS) {
                             Controller::statistics("TrackerInitialize(ms)", (double) timer->getMillis());
@@ -335,12 +344,21 @@ int Controller::displayFunction(cv::Mat &mRgbaFrame, cv::Mat &mGrayFrame) {
             // if object IS trackable
             if (STATE_TRACKING_OBJECT) {
 
+                // resize gray image
+                cv::Mat trackerFrame = sceneFrame->gray;
+                try {
+                    cv::resize(mGrayFrame, trackerFrame, trackerFrame.size());
+                } catch (cv::Exception &exception) {
+                    cvError(0, "TrackerFrame", "Resizing failed!", __FILE__, __LINE__);
+                    cout << exception.what() << endl;
+                }
+
                 if (Controller::MODE_STATISTICS) {
                     timer->restart();
                 }
 
                 // processing
-                STATE_TRACKING_OBJECT = tracker->process(mGrayFrame);
+                STATE_TRACKING_OBJECT = tracker->process(trackerFrame);
 
                 if (Controller::MODE_STATISTICS) {
                     Controller::statistics("TrackingProcess(ms)", (double) timer->getMillis());

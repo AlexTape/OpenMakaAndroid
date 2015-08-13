@@ -20,7 +20,7 @@ public class FileManager {
 
     private Context context;
 
-    private static boolean forceReload = false;
+    private static boolean forceReload = true;
 
     public FileManager(Context context) {
         this.context = context;

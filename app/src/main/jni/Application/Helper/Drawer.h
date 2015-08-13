@@ -28,6 +28,8 @@ namespace om {
         cv::Mat drawKeypointsWindow(cv::Mat query, cv::Mat pattern, const std::vector<cv::KeyPoint> &queryKp,
                                     const std::vector<cv::KeyPoint> &trainKp, std::vector<cv::DMatch> matches,
                                     int maxMatchesDrawn);
+
+        void drawKeypointsWithResponse(cv::Mat &image, std::vector<cv::KeyPoint> keyPoints, cv::Scalar color);
     };
 
 };
