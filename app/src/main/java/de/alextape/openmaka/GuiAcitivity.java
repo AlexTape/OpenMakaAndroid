@@ -13,10 +13,19 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 abstract class GuiAcitivity extends Activity {
 
     private static final String TAG = "OpenMaka::GuiActivity";
+
+    private TextView infoLine;
+
+    private String infoLineText;
+
+    private String detector;
+    private String extractor;
+    private String matcher;
 
     public GuiAcitivity() {
         Log.i(TAG, "Instantiated new " + this.getClass());
@@ -41,6 +50,10 @@ abstract class GuiAcitivity extends Activity {
             actionBar.setTitle("");
             actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0000ffff")));
         }
+
+        infoLine = (TextView) findViewById(R.id.infoLine);
+
+        infoLineText = getResources().getString(R.string.infoLineText);
     }
 
     @Override
@@ -49,9 +62,22 @@ abstract class GuiAcitivity extends Activity {
         inflater.inflate(R.menu.menu, menu);
 
         // predeclare checked options
+        detector = "SIFT";
+        extractor = "SIFT";
+        matcher = "FLANN_X";
+
+        // configure native controller
+        NativeController.setDetector(detector);
+        NativeController.setExtractor(extractor);
+        NativeController.setMatcher(matcher);
+
+        // check checkboxes
         menu.findItem(R.id.featureDetector_SIFT).setChecked(true);
         menu.findItem(R.id.featureExtractor_SIFT).setChecked(true);
         menu.findItem(R.id.matcherFlannBased).setChecked(true);
+
+        // set info line
+        infoLine.setText(String.format(infoLineText, detector, extractor, matcher));
 
         return true;
     }
@@ -83,59 +109,65 @@ abstract class GuiAcitivity extends Activity {
                 break;
             // detector switching
             case R.id.featureDetector_SURF:
-                NativeController.setDetector("SURF");
+                detector ="SURF";
                 break;
             case R.id.featureDetector_SIFT:
-                NativeController.setDetector("SIFT");
+                detector ="SIFT";
                 break;
             case R.id.featureDetector_FAST:
-                NativeController.setDetector("FAST");
+                detector ="FAST";
                 break;
             case R.id.featureDetector_ORB:
-                NativeController.setDetector("ORB");
+                detector ="ORB";
                 break;
             case R.id.featureDetector_BRISK:
-                NativeController.setDetector("BRISK");
+                detector ="BRISK";
                 break;
             case R.id.featureDetector_DENSE:
-                NativeController.setDetector("DENSE");
+                detector ="DENSE";
                 break;
             case R.id.featureDetector_GFTT:
-                NativeController.setDetector("GFTT");
+                detector ="GFTT";
                 break;
             case R.id.featureDetector_MSER:
-                NativeController.setDetector("MSER");
+                detector ="MSER";
                 break;
             case R.id.featureDetector_STAR:
-                NativeController.setDetector("STAR");
+                detector ="STAR";
                 break;
             // extractor switching
             case R.id.featureExtractor_SIFT:
-                NativeController.setExtractor("SIFT");
+                extractor ="SIFT";
                 break;
             case R.id.featureExtractor_BRIEF:
-                NativeController.setExtractor("BRIEF");
+                extractor ="BRIEF";
                 break;
             case R.id.featureExtractor_ORB:
-                NativeController.setExtractor("ORB");
+                extractor ="ORB";
                 break;
             case R.id.featureExtractor_SURF:
-                NativeController.setExtractor("SURF");
+                extractor ="SURF";
                 break;
             case R.id.featureExtractor_BRISK:
-                NativeController.setExtractor("BRISK");
+                extractor ="BRISK";
                 break;
             case R.id.featureExtractor_FREAK:
-                NativeController.setExtractor("FREAK");
+                extractor ="FREAK";
                 break;
             // matcher switching
             case R.id.matcherBruteForce:
-                NativeController.setMatcher("BF_NORM_L2");
+                matcher = "BF_NORM_L2";
                 break;
             case R.id.matcherFlannBased:
-                NativeController.setMatcher("FLANN_X");
+                matcher = "FLANN_X";
                 break;
         }
+
+        NativeController.setDetector(detector);
+        NativeController.setExtractor(extractor);
+        NativeController.setMatcher(matcher);
+
+        infoLine.setText(String.format(infoLineText, detector, extractor, matcher));
 
         return true;
     }

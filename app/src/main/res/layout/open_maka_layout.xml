@@ -34,7 +34,7 @@
             android:id="@+id/infoLine"
             android:layout_width="match_parent"
             android:layout_height="20dp"
-            android:text="Configuration: FAST - FREAK - NONE"
+            android:text="@string/infoLineText"
             android:textColor="@android:color/white"/>
 
     </LinearLayout>

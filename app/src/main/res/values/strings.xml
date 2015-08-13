@@ -49,4 +49,5 @@
     <string name="edit_extractor">Default Extractor</string>
     <string name="edit_minimum_inliers">Minimum Inliers</string>
     <string name="edit_minimum_matches">Minimum Matches</string>
+    <string name="infoLineText">Configuration: %1$s - %2$s - %3$s</string>
 </resources>
