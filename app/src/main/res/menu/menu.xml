@@ -13,7 +13,7 @@
                 android:showAsAction="never"
                 android:title="@string/renderOptions_title"/>
             <group
-                android:checkableBehavior="single"
+                android:checkableBehavior="all"
                 >
                 <item
                     android:id="@+id/enableModeObjectDetection"
@@ -52,6 +52,7 @@
                     android:id="@+id/featureDetector_SURF"
                     android:orderInCategory="100"
                     android:showAsAction="never"
+                    android:checked="true"
                     android:title="@string/detector_SURF"/>
                 <item
                     android:id="@+id/featureDetector_SIFT"
@@ -179,14 +180,11 @@
         android:showAsAction="never"
         android:title="@string/generalOptions"/>
     <item
-        android:id="@+id/generalOptionsReload"
+        android:id="@+id/generalOptionsImprint"
+        android:orderInCategory="100"
         android:icon="@android:drawable/ic_menu_help"
         android:showAsAction="never"
-        android:title="@string/generalOptionsReload"/>
-    <item
-        android:id="@+id/generalOptionsImpessum"
-        android:icon="@android:drawable/ic_menu_help"
-        android:showAsAction="never"
-        android:title="@string/generalOptionsImpessum"/>
+        android:title="@string/generalOptionsImprint"/>
+
 
 </menu>

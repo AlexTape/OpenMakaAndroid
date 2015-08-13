@@ -38,21 +38,42 @@ JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeController_native_1glResi
 }
 
 JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeController_native_1setDetector
-        (JNIEnv *env, jclass, jstring type)
+        (JNIEnv *env, jclass clazz, jstring type)
 {
-    return om::Controller::setDetector(type);
+    int i_ = 0;
+    const char *strMsgPtr = env->GetStringUTFChars( type , 0);
+    if (strMsgPtr != NULL) {
+        std::string typeString(strMsgPtr);
+        i_ = om::Controller::getInstance()->setDetector(typeString);
+    }
+    env->ReleaseStringChars(type, (jchar *)strMsgPtr);
+    return i_;
 }
 
 JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeController_native_1setExtractor
-        (JNIEnv *env, jclass, jstring type)
+        (JNIEnv *env, jclass clazz, jstring type)
 {
-    return om::Controller::setExtractor(type);
+    int i_ = 0;
+    const char *strMsgPtr = env->GetStringUTFChars( type , 0);
+    if (strMsgPtr != NULL) {
+        std::string typeString(strMsgPtr);
+        i_ = om::Controller::getInstance()->setExtractor(typeString);
+    }
+    env->ReleaseStringChars(type, (jchar *)strMsgPtr);
+    return i_;
 }
 
 JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeController_native_1setMatcher
-        (JNIEnv *env, jclass, jstring type)
+        (JNIEnv *env, jclass clazz, jstring type)
 {
-    return om::Controller::setMatcher(type);
+    int i_ = 0;
+    const char *strMsgPtr = env->GetStringUTFChars( type , 0);
+    if (strMsgPtr != NULL) {
+        std::string typeString(strMsgPtr);
+        i_ = om::Controller::getInstance()->setMatcher(typeString);
+    }
+    env->ReleaseStringChars(type, (jchar *)strMsgPtr);
+    return i_;
 }
 
 JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeController_native_1setModeObjectDetection

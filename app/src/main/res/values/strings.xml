@@ -26,7 +26,7 @@
     <string name="matcherFlannBased">Flannbased Matcher</string>
     <string name="matcherBruteForce">BruteForce Matcher</string>
     <string name="generalOptionsReload">Reload App</string>
-    <string name="generalOptionsImpessum">Impressum</string>
+    <string name="generalOptionsImprint">Impressum</string>
     <string name="generalOptions">Settings</string>
     <string name="featureDetectorsMenu">FeatureDetectorsMenu</string>
     <string name="renderOptionsMenu">RenderOptionsMenu</string>

@@ -47,13 +47,19 @@ abstract class GuiAcitivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
+
+        // predeclare checked options
+        menu.findItem(R.id.featureDetector_SIFT).setChecked(true);
+        menu.findItem(R.id.featureExtractor_SIFT).setChecked(true);
+        menu.findItem(R.id.matcherFlannBased).setChecked(true);
+
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        item.setChecked(item.isChecked());
 
+        item.setChecked(item.isChecked());
         Log.d(TAG, "ItemClick: " + item.getTitle());
 
         switch (item.getItemId()) {
@@ -70,8 +76,10 @@ abstract class GuiAcitivity extends Activity {
                 NativeController.setModeOpenGl(!isOpenGL);
                 break;
             case R.id.generalOptions:
-                Intent intent = new Intent(this, SettingsActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(this, SettingsActivity.class));
+                break;
+            case R.id.generalOptionsImprint:
+                startActivity(new Intent(this, ImprintActivity.class));
                 break;
             // detector switching
             case R.id.featureDetector_SURF:
