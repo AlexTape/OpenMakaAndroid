@@ -85,6 +85,8 @@ namespace om {
 
         int calcInliers(SceneFrame &sceneFrame, std::vector<cv::Point2f> &goodTrainKeypoints,
                         std::vector<cv::Point2f> &goodSceneKeypoints);
+
+        bool missingObjectPattern();
     };
 
 };

@@ -790,6 +790,10 @@ bool Analyzer::refineMatches
 bool Analyzer::initialize() {
     if (!isInitialized) {
 
+        // delete activeObjectPattern
+        delete activeObjectPattern;
+        activeObjectPattern = 0;
+
         // clear detector/extractor instances if needed
         if (Analyzer::detector || Analyzer::extractor) {
             Analyzer::releaseOpenCV();
@@ -834,6 +838,18 @@ bool Analyzer::createObjectPattern(cv::Mat &gray) {
         }
     }
 
+    return returnThis;
+}
+
+bool Analyzer::missingObjectPattern() {
+    bool returnThis = true;
+    if (!activeObjectPattern) {
+        cv::Mat objectImage = cv::imread(Controller::STORAGE_PATH + Controller::DEFAULT_OBJECT_IMAGE,
+                                         CV_LOAD_IMAGE_GRAYSCALE);
+        createObjectPattern(objectImage);
+    } else {
+        returnThis = false;
+    }
     return returnThis;
 }
 

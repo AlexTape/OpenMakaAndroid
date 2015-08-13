@@ -55,12 +55,6 @@ Controller::Controller(void) {
     // define tracker instance
     tracker = Tracker::getInstance();
 
-    // create global clock
-    clock = new Timer();
-
-    // create local timer
-    timer = new Timer();
-
     // initialize variables
     sceneFrame = 0;
 
@@ -80,6 +74,12 @@ Controller::Controller(void) {
     // create statistics instance
     stats = new Statistics();
 
+    // create global clock
+    clock = new Timer();
+
+    // create local timer
+    timer = new Timer();
+
 }
 
 Controller::~Controller(void) {
@@ -89,6 +89,7 @@ Controller::~Controller(void) {
     delete tracker;
     delete analyzer;
     delete sceneFrame;
+    delete stats;
     delete clock;
     delete timer;
 }
@@ -119,23 +120,11 @@ int Controller::initialize(cv::Mat &frame, std::string configPath) {
 
     // load environment variables
     string statistics = (string) storage["statisticsMode"];
-    if (statistics == "true") {
-        Controller::MODE_STATISTICS = true;
-    } else {
-        Controller::MODE_STATISTICS = false;
-    }
+    Controller::MODE_STATISTICS = statistics == "true";
     string debug = (string) storage["debugMode"];
-    if (debug == "true") {
-        Controller::MODE_DEBUG = true;
-    } else {
-        Controller::MODE_DEBUG = false;
-    }
+    Controller::MODE_DEBUG = debug == "true";
     string windows = (string) storage["useWindows"];
-    if (windows == "true") {
-        Controller::USE_WINDOWS = true;
-    } else {
-        Controller::USE_WINDOWS = false;
-    }
+    Controller::USE_WINDOWS = windows == "true";
 
     // load scene frame attributes
     cv::FileNode sceneFrameNode = storage["sceneFrame"];
@@ -224,6 +213,13 @@ int Controller::displayFunction(cv::Mat &mRgbaFrame, cv::Mat &mGrayFrame) {
 
     // if object detection is enabled..
     if (MODE_OBJECT_DETECTION) {
+
+        // recreate object pattern if it is not existing
+        if (analyzer->missingObjectPattern()) {
+//            if (MODE_DEBUG) {
+                cout << "ObjectPattern (re-) created!" << endl;
+//            }
+        }
 
         // ..and tracking disabled
         if (!MODE_TRACKING) {
@@ -395,6 +391,70 @@ void Controller::glResize(int height, int width) {
 //    log(ControllerTAG, "resizing.. done");
 }
 
+int Controller::setDetector(std::string type) {
+    int returnThis = 0;
+
+    // save state and disable processing
+    bool isActiveObjectRecognition = MODE_OBJECT_DETECTION;
+    bool isActiveTracking = MODE_TRACKING;
+    MODE_OBJECT_DETECTION = false;
+    MODE_TRACKING = false;
+
+    bool result = configure(type, Analyzer::EXTRACTOR, Analyzer::MATCHER);
+
+    if (result) {
+        returnThis = 1;
+    }
+
+    // return to state
+    MODE_OBJECT_DETECTION = isActiveObjectRecognition;
+    MODE_TRACKING = isActiveTracking;
+
+    return returnThis;
+}
+
+int Controller::setExtractor(std::string type) {
+    int returnThis = 0;
+
+    // save state and disable processing
+    bool isActiveObjectRecognition = MODE_OBJECT_DETECTION;
+    bool isActiveTracking = MODE_TRACKING;
+    MODE_OBJECT_DETECTION = false;
+    MODE_TRACKING = false;
+
+    bool result = Controller::configure(Analyzer::DETECTOR, type, Analyzer::MATCHER);
+    if (result) {
+        returnThis = 1;
+    }
+
+    // return to state
+    MODE_OBJECT_DETECTION = isActiveObjectRecognition;
+    MODE_TRACKING = isActiveTracking;
+
+    return returnThis;;
+}
+
+int Controller::setMatcher(std::string type) {
+    int returnThis = 0;
+
+    // save state and disable processing
+    bool isActiveObjectRecognition = MODE_OBJECT_DETECTION;
+    bool isActiveTracking = MODE_TRACKING;
+    MODE_OBJECT_DETECTION = false;
+    MODE_TRACKING = false;
+
+    bool result = Controller::configure(Analyzer::DETECTOR, Analyzer::EXTRACTOR, type);
+    if (result) {
+        returnThis = 1;
+    }
+
+    // return to state
+    MODE_OBJECT_DETECTION = isActiveObjectRecognition;
+    MODE_TRACKING = isActiveTracking;
+
+    return returnThis;
+}
+
 void Controller::isModeObjectDetection(bool isActive) {
 //    log(ControllerTAG, "MODE_OBJECT_DETECTION: %b", isActive);
     MODE_OBJECT_DETECTION = isActive;
@@ -429,7 +489,7 @@ bool Controller::createObjectPattern(cv::Mat &rgb, cv::Mat &gray) {
 
 }
 
-void Controller::configure(std::string detector, std::string extractor, std::string matcher) {
+bool Controller::configure(std::string detector, std::string extractor, std::string matcher) {
 
     // disable analyzer
     analyzer->isInitialized = false;
@@ -440,16 +500,14 @@ void Controller::configure(std::string detector, std::string extractor, std::str
     Analyzer::MATCHER = matcher;
 
     // update analyzer
-    analyzer->initialize();
+    bool returnThis = analyzer->initialize();
 
-    if (MODE_DEBUG) {
+    if (MODE_DEBUG && returnThis) {
         cout << "Controller initialized [Detector=" << Analyzer::DETECTOR << ", Extractor" << Analyzer::EXTRACTOR <<
         ", Matcher" << Analyzer::MATCHER << "]" << endl;
     }
 
-    // enable analyzer
-    analyzer->isInitialized = true;
-
+    return returnThis;
 }
 
 void Controller::statistics(std::string key, int value) {

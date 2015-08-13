@@ -50,6 +50,22 @@ public class NativeController {
     /**
      * Options getter/setter.
      */
+    public static int setDetector(String type) {
+        return native_setDetector(type);
+    }
+
+    public static int setExtractor(String type) {
+        return native_setExtractor(type);
+    }
+
+    public static int setMatcher(String type) {
+        return native_setMatcher(type);
+    }
+
+    private static native int native_setDetector(String type);
+    private static native int native_setExtractor(String type);
+    private static native int native_setMatcher(String type);
+
     public static boolean isModeObjectDetection() {
         return MODE_OBJECT_DETECTION;
     }

@@ -73,6 +73,60 @@ abstract class GuiAcitivity extends Activity {
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
                 break;
+            // detector switching
+            case R.id.featureDetector_SURF:
+                NativeController.setDetector("SURF");
+                break;
+            case R.id.featureDetector_SIFT:
+                NativeController.setDetector("SIFT");
+                break;
+            case R.id.featureDetector_FAST:
+                NativeController.setDetector("FAST");
+                break;
+            case R.id.featureDetector_ORB:
+                NativeController.setDetector("ORB");
+                break;
+            case R.id.featureDetector_BRISK:
+                NativeController.setDetector("BRISK");
+                break;
+            case R.id.featureDetector_DENSE:
+                NativeController.setDetector("DENSE");
+                break;
+            case R.id.featureDetector_GFTT:
+                NativeController.setDetector("GFTT");
+                break;
+            case R.id.featureDetector_MSER:
+                NativeController.setDetector("MSER");
+                break;
+            case R.id.featureDetector_STAR:
+                NativeController.setDetector("STAR");
+                break;
+            // extractor switching
+            case R.id.featureExtractor_SIFT:
+                NativeController.setExtractor("SIFT");
+                break;
+            case R.id.featureExtractor_BRIEF:
+                NativeController.setExtractor("BRIEF");
+                break;
+            case R.id.featureExtractor_ORB:
+                NativeController.setExtractor("ORB");
+                break;
+            case R.id.featureExtractor_SURF:
+                NativeController.setExtractor("SURF");
+                break;
+            case R.id.featureExtractor_BRISK:
+                NativeController.setExtractor("BRISK");
+                break;
+            case R.id.featureExtractor_FREAK:
+                NativeController.setExtractor("FREAK");
+                break;
+            // matcher switching
+            case R.id.matcherBruteForce:
+                NativeController.setMatcher("BF_NORM_L2");
+                break;
+            case R.id.matcherFlannBased:
+                NativeController.setMatcher("FLANN_X");
+                break;
         }
 
         return true;

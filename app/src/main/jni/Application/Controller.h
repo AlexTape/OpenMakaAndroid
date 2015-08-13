@@ -50,6 +50,12 @@ namespace om {
 
         void glResize(int height, int width);
 
+        int setDetector(std::string type);
+
+        int setExtractor(std::string type);
+
+        int setMatcher(std::string type);
+
         void isModeObjectDetection(bool isActive);
 
         void isModeTracking(bool isActive);
@@ -60,7 +66,7 @@ namespace om {
 
         bool createObjectPattern(cv::Mat &rgb, cv::Mat &gray);
 
-        void configure(std::string detector, std::string extractor, std::string matcher);
+        bool configure(std::string detector, std::string extractor, std::string matcher);
 
         om::Timer *clock;
 

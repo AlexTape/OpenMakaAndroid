@@ -41,6 +41,30 @@ JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeController_native_1glResi
 
 /*
  * Class:     de_alextape_openmaka_NativeController
+ * Method:    native_setDetector
+ * Signature: (Ljava/lang/String;)I
+ */
+JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeController_native_1setDetector
+  (JNIEnv *, jclass, jstring);
+
+/*
+ * Class:     de_alextape_openmaka_NativeController
+ * Method:    native_setExtractor
+ * Signature: (Ljava/lang/String;)I
+ */
+JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeController_native_1setExtractor
+  (JNIEnv *, jclass, jstring);
+
+/*
+ * Class:     de_alextape_openmaka_NativeController
+ * Method:    native_setMatcher
+ * Signature: (Ljava/lang/String;)I
+ */
+JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeController_native_1setMatcher
+  (JNIEnv *, jclass, jstring);
+
+/*
+ * Class:     de_alextape_openmaka_NativeController
  * Method:    native_setModeObjectDetection
  * Signature: (Z)V
  */

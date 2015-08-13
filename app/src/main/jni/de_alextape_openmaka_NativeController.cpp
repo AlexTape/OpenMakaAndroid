@@ -37,6 +37,24 @@ JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeController_native_1glResi
     om::Controller::getInstance()->glResize(width, height);
 }
 
+JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeController_native_1setDetector
+        (JNIEnv *env, jclass, jstring type)
+{
+    return om::Controller::setDetector(type);
+}
+
+JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeController_native_1setExtractor
+        (JNIEnv *env, jclass, jstring type)
+{
+    return om::Controller::setExtractor(type);
+}
+
+JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeController_native_1setMatcher
+        (JNIEnv *env, jclass, jstring type)
+{
+    return om::Controller::setMatcher(type);
+}
+
 JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeController_native_1setModeObjectDetection
   (JNIEnv *env, jclass clazz, jboolean isActive)
 {
