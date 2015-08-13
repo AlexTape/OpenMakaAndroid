@@ -482,8 +482,6 @@ void Controller::isModeStatistics(bool isActive) {
 
 bool Controller::createObjectPattern(cv::Mat &rgb, cv::Mat &gray) {
 
-    // TODO resize or crop here if needed
-
     // register object pattern to analyzer
     return analyzer->createObjectPattern(gray);
 

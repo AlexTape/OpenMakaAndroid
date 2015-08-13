@@ -67,9 +67,10 @@ abstract class GuiAcitivity extends Activity {
         matcher = "FLANN_X";
 
         // configure native controller
-        NativeController.setDetector(detector);
-        NativeController.setExtractor(extractor);
-        NativeController.setMatcher(matcher);
+        // TODO bind config.xml here
+//        NativeController.setDetector(detector);
+//        NativeController.setExtractor(extractor);
+//        NativeController.setMatcher(matcher);
 
         // check checkboxes
         menu.findItem(R.id.featureDetector_SIFT).setChecked(true);
