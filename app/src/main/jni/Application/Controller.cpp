@@ -22,7 +22,9 @@
 #include "Controller.h"
 #include "Helper/Drawer.h"
 
+#ifdef __ANDROID__
 #include "androidbuf.h"
+#endif
 
 using namespace std;
 using namespace cv;
@@ -113,7 +115,7 @@ Controller *Controller::getInstance() {
 }
 
 // NEEDED
-int Controller::initialize(cv::Mat &frame, std::string configPath) {
+int Controller::initialize(cv::Mat &frame, std::string storagePath) {
 
     // initializing..
     isInitialized = false;
@@ -121,11 +123,13 @@ int Controller::initialize(cv::Mat &frame, std::string configPath) {
     // grab frame size
     Controller::FRAME_SIZE = cv::Size(frame.cols, frame.rows);
 
-    // load storage
-    cv::FileStorage storage(configPath, cv::FileStorage::READ);
+    // define storage path
+    Controller::STORAGE_PATH = storagePath;
+
+    // load config.xml
+    cv::FileStorage storage(STORAGE_PATH + "/config/config.xml", cv::FileStorage::READ);
 
     // load image store path
-    Controller::STORAGE_PATH = (string) storage["storagePath"];
     Controller::DEFAULT_OBJECT_IMAGE = (string) storage["defaultObjectImage"];
     Controller::STATISTICS_FILE = (string) storage["statisticsFile"];
 
@@ -171,7 +175,7 @@ int Controller::initialize(cv::Mat &frame, std::string configPath) {
         storage.release();
     }
 
-//    if (Controller::MODE_DEBUG) {
+    if (Controller::MODE_DEBUG) {
     cout << "Loading attributes.." << endl;
     cout << "-----------------------------------------------------" << endl;
     cout << "C O N T R O L L E R" << endl;
@@ -201,7 +205,7 @@ int Controller::initialize(cv::Mat &frame, std::string configPath) {
     cout << "::MINIMUM_DISTANCE=" << Tracker::MINIMUM_DISTANCE << endl;
     cout << "-----------------------------------------------------" << endl;
     cout << "Loading done!" << endl;
-//    }
+    }
 
     // instance is initialized
     isInitialized = true;
@@ -211,7 +215,6 @@ int Controller::initialize(cv::Mat &frame, std::string configPath) {
 }
 
 int Controller::displayFunction(cv::Mat &mRgbaFrame, cv::Mat &mGrayFrame) {
-
 
     if (Controller::MODE_STATISTICS) {
         clock->restart();
@@ -404,65 +407,28 @@ void Controller::glResize(int height, int width) {
 
 int Controller::setDetector(std::string type) {
     int returnThis = 0;
-
-    // save state and disable processing
-    bool isActiveObjectRecognition = MODE_OBJECT_DETECTION;
-    bool isActiveTracking = MODE_TRACKING;
-    MODE_OBJECT_DETECTION = false;
-    MODE_TRACKING = false;
-
     bool result = configure(type, Analyzer::EXTRACTOR, Analyzer::MATCHER);
-
     if (result) {
         returnThis = 1;
     }
-
-    // return to state
-    MODE_OBJECT_DETECTION = isActiveObjectRecognition;
-    MODE_TRACKING = isActiveTracking;
-
     return returnThis;
 }
 
 int Controller::setExtractor(std::string type) {
     int returnThis = 0;
-
-    // save state and disable processing
-    bool isActiveObjectRecognition = MODE_OBJECT_DETECTION;
-    bool isActiveTracking = MODE_TRACKING;
-    MODE_OBJECT_DETECTION = false;
-    MODE_TRACKING = false;
-
     bool result = Controller::configure(Analyzer::DETECTOR, type, Analyzer::MATCHER);
     if (result) {
         returnThis = 1;
     }
-
-    // return to state
-    MODE_OBJECT_DETECTION = isActiveObjectRecognition;
-    MODE_TRACKING = isActiveTracking;
-
     return returnThis;;
 }
 
 int Controller::setMatcher(std::string type) {
     int returnThis = 0;
-
-    // save state and disable processing
-    bool isActiveObjectRecognition = MODE_OBJECT_DETECTION;
-    bool isActiveTracking = MODE_TRACKING;
-    MODE_OBJECT_DETECTION = false;
-    MODE_TRACKING = false;
-
     bool result = Controller::configure(Analyzer::DETECTOR, Analyzer::EXTRACTOR, type);
     if (result) {
         returnThis = 1;
     }
-
-    // return to state
-    MODE_OBJECT_DETECTION = isActiveObjectRecognition;
-    MODE_TRACKING = isActiveTracking;
-
     return returnThis;
 }
 
@@ -600,18 +566,6 @@ int Controller::test(int test, int quantifier) {
     bool doORB = false;
     bool doAKAZE = false;
 
-    cout << "------" << test << "-----" << quantifier << endl;
-    cout << "------" << test << "-----" << quantifier << endl;
-    cout << "------" << test << "-----" << quantifier << endl;
-    cout << "------" << test << "-----" << quantifier << endl;
-    cout << "------" << test << "-----" << quantifier << endl;
-    cout << "------" << test << "-----" << quantifier << endl;
-    cout << "------" << test << "-----" << quantifier << endl;
-    cout << "------" << test << "-----" << quantifier << endl;
-    cout << "------" << test << "-----" << quantifier << endl;
-    cout << "------" << test << "-----" << quantifier << endl;
-    cout << "------" << test << "-----" << quantifier << endl;
-
     // trigger tests
     switch (test) {
         case 0:
@@ -672,21 +626,21 @@ int Controller::test(int test, int quantifier) {
         if (doSIFT) {
             //*********** SIFT BF Tests ***********//
             testConfigurations.push_back(std::vector<string>{"SIFT", "SIFT", "BF_NORM_L2"});
-//            testConfigurations.push_back(std::vector<string>{"SIFT", "BRIEF", "BF_NORM_L2"});
-//            testConfigurations.push_back(std::vector<string>{"SIFT", "ORB", "BF_NORM_L2"});
-//            testConfigurations.push_back(std::vector<string>{"SIFT", "SURF", "BF_NORM_L2"});
-//            testConfigurations.push_back(std::vector<string>{"SIFT", "BRISK", "BF_NORM_L2"});
-//            testConfigurations.push_back(std::vector<string>{"SIFT", "FREAK", "BF_NORM_L2"});
-//            testConfigurations.push_back(std::vector<string>{"SIFT", "AKAZE", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"SIFT", "BRIEF", "BF_NORM_L2"});
+            // TODO fix testConfigurations.push_back(std::vector<string>{"SIFT", "ORB", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"SIFT", "SURF", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"SIFT", "BRISK", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"SIFT", "FREAK", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"SIFT", "AKAZE", "BF_NORM_L2"});
 
             //*********** SIFT FLANN Tests ***********//
-//            testConfigurations.push_back(std::vector<string>{"SIFT", "SIFT", "FLANN_X"});
-//            testConfigurations.push_back(std::vector<string>{"SIFT", "BRIEF", "FLANN_X"});
-//            testConfigurations.push_back(std::vector<string>{"SIFT", "ORB", "FLANN_X"});
-//            testConfigurations.push_back(std::vector<string>{"SIFT", "SURF", "FLANN_X"});
-//            testConfigurations.push_back(std::vector<string>{"SIFT", "BRISK", "FLANN_X"});
-//            testConfigurations.push_back(std::vector<string>{"SIFT", "FREAK", "FLANN_X"});
-//            testConfigurations.push_back(std::vector<string>{"SIFT", "AKAZE", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"SIFT", "SIFT", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"SIFT", "BRIEF", "FLANN_X"});
+            // TODO fix testConfigurations.push_back(std::vector<string>{"SIFT", "ORB", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"SIFT", "SURF", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"SIFT", "BRISK", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"SIFT", "FREAK", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"SIFT", "AKAZE", "FLANN_X"});
         }
 
         if (doFAST) {

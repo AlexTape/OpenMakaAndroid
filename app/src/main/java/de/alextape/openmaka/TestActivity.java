@@ -102,13 +102,15 @@ public class TestActivity extends Activity implements NativeController.OnResultL
     }
 
     private void shareResults() {
-        String path = "/storage/emulated/0/Android/data/de.alextape.openmaka/files/statistics.csv";
-        Intent intentShareFile = new Intent(Intent.ACTION_SEND);
-        File fileWithinMyDir = new File(path);
 
-        if (fileWithinMyDir.exists()) {
+        Intent intentShareFile = new Intent(Intent.ACTION_SEND);
+
+        // check if existing
+        File file = new File(FileManager.STATISTICS_FILE_PATH);
+
+        if (file.exists()) {
             intentShareFile.setType("application/pdf");
-            intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + path));
+            intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + FileManager.STATISTICS_FILE_PATH));
 
             intentShareFile.putExtra(Intent.EXTRA_SUBJECT,
                     "Sharing File...");

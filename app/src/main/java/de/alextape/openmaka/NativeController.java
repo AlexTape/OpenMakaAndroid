@@ -25,9 +25,9 @@ public class NativeController {
     /**
      * Basic functions.
      */
-    public static boolean initialize(long matAddrRgba, String configPath) {
+    public static boolean initialize(long matAddrRgba) {
         boolean returnThis = false;
-        int i = native_initialize(matAddrRgba, configPath);
+        int i = native_initialize(matAddrRgba, FileManager.STORAGE_PATH);
         if (i == 1) {
             returnThis = true;
         }
@@ -47,7 +47,6 @@ public class NativeController {
      * Display functions.
      */
     public static Integer displayFunction(long matAddrRgba, long matAddrGray) {
-        System.out.println("display call");
         return native_displayFunction(matAddrRgba, matAddrGray);
     }
 
@@ -68,21 +67,12 @@ public class NativeController {
     /**
      * Options getter/setter.
      */
-    public static int setDetector(String type) {
-        return native_setDetector(type);
+    public static int configure(String detector, String extractor, String matcher) {
+        // be aware of SEGFAULTS by changing types in online phase
+        return native_configure(detector, extractor, matcher);
     }
 
-    public static int setExtractor(String type) {
-        return native_setExtractor(type);
-    }
-
-    public static int setMatcher(String type) {
-        return native_setMatcher(type);
-    }
-
-    private static native int native_setDetector(String type);
-    private static native int native_setExtractor(String type);
-    private static native int native_setMatcher(String type);
+    private static native int native_configure(String detector, String extractor, String matcher);
 
     public static boolean isModeObjectDetection() {
         return MODE_OBJECT_DETECTION;

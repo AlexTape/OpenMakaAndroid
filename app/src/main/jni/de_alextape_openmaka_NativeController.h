@@ -17,8 +17,8 @@ JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeController_native_1initia
 
 /*
  * Class:     de_alextape_openmaka_NativeController
- * Method:    native_tests
- * Signature: ()I
+ * Method:    native_test
+ * Signature: (II)I
  */
 JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeController_native_1test
   (JNIEnv *, jclass, jint, jint);
@@ -49,27 +49,11 @@ JNIEXPORT void JNICALL Java_de_alextape_openmaka_NativeController_native_1glResi
 
 /*
  * Class:     de_alextape_openmaka_NativeController
- * Method:    native_setDetector
- * Signature: (Ljava/lang/String;)I
+ * Method:    native_configure
+ * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)I
  */
-JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeController_native_1setDetector
-  (JNIEnv *, jclass, jstring);
-
-/*
- * Class:     de_alextape_openmaka_NativeController
- * Method:    native_setExtractor
- * Signature: (Ljava/lang/String;)I
- */
-JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeController_native_1setExtractor
-  (JNIEnv *, jclass, jstring);
-
-/*
- * Class:     de_alextape_openmaka_NativeController
- * Method:    native_setMatcher
- * Signature: (Ljava/lang/String;)I
- */
-JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeController_native_1setMatcher
-  (JNIEnv *, jclass, jstring);
+JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeController_native_1configure
+  (JNIEnv *, jclass, jstring, jstring, jstring);
 
 /*
  * Class:     de_alextape_openmaka_NativeController

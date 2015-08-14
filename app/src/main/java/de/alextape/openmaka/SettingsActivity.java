@@ -59,8 +59,6 @@ public class SettingsActivity extends Activity implements CompoundButton.OnCheck
 
     private Document document;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -72,7 +70,7 @@ public class SettingsActivity extends Activity implements CompoundButton.OnCheck
 
             findViews();
 
-            readXml("/storage/emulated/0/Android/data/de.alextape.openmaka/files/config/config.xml");
+            readXml(FileManager.CONFIG_FILE_PATH);
 
             fillViews();
 
@@ -203,7 +201,7 @@ public class SettingsActivity extends Activity implements CompoundButton.OnCheck
 
         mMaxConersEditText.setText(String.valueOf(maxCorners));
         mQualityLevelEditText.setText(String.valueOf(qualityLevel));
-        mMinimumDistanceEditText.setText(String.valueOf(minimumMatches));
+        mMinimumDistanceEditText.setText(String.valueOf(minimumDistance));
 
     }
 
@@ -253,7 +251,7 @@ public class SettingsActivity extends Activity implements CompoundButton.OnCheck
             document.getElementsByTagName("qualityLevel").item(0).getFirstChild().setTextContent(String.valueOf(qualityLevel));
             document.getElementsByTagName("minimumMatches").item(0).getFirstChild().setTextContent(String.valueOf(minimumMatches));
 
-            writeXml("/storage/emulated/0/Android/data/de.alextape.openmaka/files/config/config.xml");
+            writeXml(FileManager.CONFIG_FILE_PATH);
 
         } catch (NumberFormatException e) {
             Log.d("OpenMaka","View contains invalid values..");

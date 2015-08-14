@@ -17,7 +17,13 @@ public class FileManager {
 
     private Context context;
 
-    private static boolean forceReload = true;
+    public static String STORAGE_PATH;
+    public static String CONFIG_FILE = "/config/config.xml";
+    public static String CONFIG_FILE_PATH;
+    public static String STATISTICS_FILE = "/statistics.csv";
+    public static String STATISTICS_FILE_PATH;
+    public static String[] STORAGE_FOLDERS = new String[]{"config", "images"};
+    public static String[] COPY_ASSETS = new String[]{"images/book.jpg", "images/book_frame.jpg", "config/config.xml"};
 
     public FileManager(Context context) {
         this.context = context;
@@ -26,44 +32,40 @@ public class FileManager {
 
     public void copyAssets() {
 
+        File storage = context.getExternalFilesDir(null);
+        assert storage != null;
+        storage.mkdirs();
+
+        STORAGE_PATH = storage.getPath();
+        CONFIG_FILE_PATH = storage.getPath() + CONFIG_FILE;
+        STATISTICS_FILE_PATH = storage.getPath() + STATISTICS_FILE;
+
         // TODO save destination
-        Log.i(TAG, "Copy assets.. /storage/emulated/0/Android/data/de.alextape.openmaka/files/");
+        Log.i(TAG, "Copy assets.. " + storage.getPath());
         String configFile = null;
 
         try {
             InputStream inputStream = context.getAssets().open("config/config.xml");
             configFile = IOUtils.toString(inputStream, "UTF-8");
 
-            String[] dataFiles = new String[]{"images/book.jpg","images/book_frame.jpg","config/config.xml"};
-
-            File storage = context.getExternalFilesDir(null);
-            storage.mkdirs();
-
-            String[] folders = new String[]{"config", "images"};
-
-            for (String folder : folders) {
+            for (String folder : STORAGE_FOLDERS) {
                 File f = new File(storage.getPath() + "/" + folder);
                 f.mkdirs();
             }
 
-            for (int i = 0; i < dataFiles.length; i++) {
-                String filename = dataFiles[i];
+            for (String filename : COPY_ASSETS) {
                 String filepath = storage.getPath() + "/" + filename;
-                File file = new File(filepath);
-                if (!file.exists() || forceReload) {
-
-                    InputStream in = null;
-                    OutputStream out = null;
-                    try {
-                        in = context.getAssets().open(filename);
-                        out = new FileOutputStream(filepath);
-                        copyFile(in, out);
-                        in.close();
-                        out.flush();
-                        out.close();
-                    } catch (Exception e) {
-                        Log.e("tag", e.getMessage());
-                    }
+                InputStream in;
+                OutputStream out;
+                try {
+                    in = context.getAssets().open(filename);
+                    out = new FileOutputStream(filepath);
+                    copyFile(in, out);
+                    in.close();
+                    out.flush();
+                    out.close();
+                } catch (Exception e) {
+                    Log.e("tag", e.getMessage());
                 }
 
                 Log.i(TAG, "filepath: " + filepath);

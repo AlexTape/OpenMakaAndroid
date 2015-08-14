@@ -113,8 +113,7 @@ public class CameraActivity extends GuiAcitivity implements CvCameraViewListener
         long mGrayAddr = mGray.getNativeObjAddr();
 
         if (!initialized) {
-            String configPath = "/storage/emulated/0/Android/data/de.alextape.openmaka/files/config/config.xml";
-            initialized = NativeController.initialize(mRgbaAddr, configPath);
+            initialized = NativeController.initialize(mRgbaAddr);
         }
 
         if (SystemClock.uptimeMillis() - time >= 5000) {

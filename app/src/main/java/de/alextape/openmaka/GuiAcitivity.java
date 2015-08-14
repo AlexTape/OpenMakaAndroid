@@ -15,8 +15,6 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import junit.framework.Test;
-
 abstract class GuiAcitivity extends Activity {
 
     private static final String TAG = "OpenMaka::GuiActivity";
@@ -68,12 +66,6 @@ abstract class GuiAcitivity extends Activity {
         extractor = "SIFT";
         matcher = "FLANN_X";
 
-        // configure native controller
-        // TODO bind config.xml here
-//        NativeController.setDetector(detector);
-//        NativeController.setExtractor(extractor);
-//        NativeController.setMatcher(matcher);
-
         // check checkboxes
         menu.findItem(R.id.feature_detector_sift).setChecked(true);
         menu.findItem(R.id.feature_extractor_sift).setChecked(true);
@@ -116,66 +108,86 @@ abstract class GuiAcitivity extends Activity {
             // detector switching
             case R.id.feature_detector_surf:
                 detector ="SURF";
+                update();
                 break;
             case R.id.feature_detector_sift:
                 detector ="SIFT";
+                update();
                 break;
             case R.id.feature_detector_fast:
                 detector ="FAST";
+                update();
                 break;
             case R.id.feature_detector_orb:
                 detector ="ORB";
+                update();
                 break;
             case R.id.feature_detector_brisk:
                 detector ="BRISK";
+                update();
                 break;
             case R.id.feature_detector_dense:
                 detector ="DENSE";
+                update();
                 break;
             case R.id.feature_detector_gftt:
                 detector ="GFTT";
+                update();
                 break;
             case R.id.feature_detector_mser:
                 detector ="MSER";
+                update();
                 break;
             case R.id.feature_detector_star:
                 detector ="STAR";
+                update();
                 break;
             // extractor switching
             case R.id.feature_extractor_sift:
                 extractor ="SIFT";
+                update();
                 break;
             case R.id.featureExtractor_brief:
                 extractor ="BRIEF";
+                update();
                 break;
             case R.id.feature_extractor_orb:
                 extractor ="ORB";
+                update();
                 break;
             case R.id.feature_extractor_surf:
                 extractor ="SURF";
+                update();
                 break;
             case R.id.feature_extractor_brisk:
                 extractor ="BRISK";
+                update();
                 break;
             case R.id.feature_extractor_freak:
                 extractor ="FREAK";
+                update();
                 break;
             // matcher switching
             case R.id.matcher_bruteforce:
                 matcher = "BF_NORM_L2";
+                update();
                 break;
             case R.id.matcher_flannbased:
                 matcher = "FLANN_X";
+                update();
                 break;
         }
-
-        NativeController.setDetector(detector);
-        NativeController.setExtractor(extractor);
-        NativeController.setMatcher(matcher);
 
         infoLine.setText(String.format(infoLineText, detector, extractor, matcher));
 
         return true;
+    }
+
+    private void update() {
+        NativeController.setModeObjectDetection(false);
+        NativeController.setModeTracking(false);
+        Toast.makeText(getApplicationContext(), "Processing disabled.. configuring..", Toast.LENGTH_SHORT).show();
+        NativeController.configure(detector, extractor, matcher);
     }
 
     @Override

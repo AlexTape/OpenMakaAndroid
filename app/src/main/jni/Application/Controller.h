@@ -44,7 +44,7 @@ namespace om {
 
         static Controller *getInstance();
 
-        int initialize(cv::Mat &frame, std::string configPath);
+        int initialize(cv::Mat &frame, std::string storagePath);
 
         int displayFunction(cv::Mat &mRgbaFrame, cv::Mat &mGrayFrame);
 
