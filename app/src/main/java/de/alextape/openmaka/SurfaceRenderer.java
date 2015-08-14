@@ -4,9 +4,6 @@ import android.opengl.GLSurfaceView;
 
 import javax.microedition.khronos.opengles.GL10;
 
-/**
- * Created by thinker on 11.05.15.
- */
 class SurfaceRenderer implements GLSurfaceView.Renderer {
 
     private static final String TAG = "OpenMaka::SurfaceRenderer";

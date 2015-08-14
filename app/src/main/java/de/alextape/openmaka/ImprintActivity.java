@@ -4,9 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.webkit.WebView;
 
-/**
- * Created by thinker on 13.08.15.
- */
 public class ImprintActivity extends Activity {
 
     private WebView webView;

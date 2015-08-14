@@ -21,7 +21,7 @@ JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeController_native_1initia
  * Signature: ()I
  */
 JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeController_native_1test
-  (JNIEnv *, jclass);
+  (JNIEnv *, jclass, jint, jint);
 
 /*
  * Class:     de_alextape_openmaka_NativeController

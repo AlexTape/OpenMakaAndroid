@@ -1,6 +1,7 @@
 package de.alextape.openmaka;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -34,26 +35,31 @@ public class TestActivity extends Activity implements NativeController.OnResultL
         resultButton.setOnClickListener(this);
 
         NativeController.setOnResultListener(this);
-
     }
 
     private void runAsyncTests() {
 
         new AsyncTask<Void, Void, Void>() {
 
+            private ProgressDialog dialog = new ProgressDialog(TestActivity.this);
+
             boolean process = false;
-            String test;
+            int test;
             int quantifier;
+
+            int result;
 
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                test = (String) testSpinner.getSelectedItem();
+                test = testSpinner.getSelectedItemPosition();
                 try {
                     quantifier = Integer.parseInt(quantifierText.getText().toString());
+                    this.dialog.setMessage("Please wait");
+                    this.dialog.show();
                     process = true;
                 } catch (NumberFormatException e) {
-                    Toast.makeText(getApplicationContext(),"Please type iteration number!",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Please type iteration number!", Toast.LENGTH_LONG).show();
                     process = false;
                 }
             }
@@ -61,7 +67,7 @@ public class TestActivity extends Activity implements NativeController.OnResultL
             @Override
             protected Void doInBackground(Void... params) {
                 if (process) {
-                    NativeController.test(test, quantifier);
+                    result = NativeController.test(test, quantifier);
                 }
                 return null;
             }
@@ -69,14 +75,19 @@ public class TestActivity extends Activity implements NativeController.OnResultL
             @Override
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
-                if (process) {
+
+                // dismiss spinner
+                if (dialog.isShowing()) {
+                    dialog.dismiss();
+                }
+
+                // if successful
+                if (process && result == 1) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-
-//stuff that updates ui
                             resultButton.setVisibility(View.VISIBLE);
-
+                            Toast.makeText(getApplicationContext(), "Results saved..", Toast.LENGTH_LONG).show();
                         }
                     });
                 }
@@ -87,11 +98,24 @@ public class TestActivity extends Activity implements NativeController.OnResultL
     }
 
     @Override
-    public void onResult(String result) {
-        TextView resultTextView = (TextView) getLayoutInflater().inflate(R.layout.text_view, resultContainer, false);
-        resultTextView.setText(result);
-        resultContainer.addView(resultTextView);
-
+    public void onResult(final int result) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                TextView resultTextView = (TextView) getLayoutInflater().inflate(R.layout.text_view, resultContainer, false);
+                String text;
+                switch (result) {
+                    case 1:
+                        text = testSpinner.getSelectedItem() + " successful";
+                        break;
+                    default:
+                        text = testSpinner.getSelectedItem() + " failed";
+                        break;
+                }
+                resultTextView.setText(text);
+                resultContainer.addView(resultTextView);
+            }
+        });
     }
 
     @Override
@@ -108,7 +132,6 @@ public class TestActivity extends Activity implements NativeController.OnResultL
 
                 break;
         }
-
     }
 
 }

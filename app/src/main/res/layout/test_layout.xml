@@ -38,6 +38,7 @@
 
     <LinearLayout
         android:id="@+id/result_container"
+        android:layout_marginLeft="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"/>

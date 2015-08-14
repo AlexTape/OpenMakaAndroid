@@ -11,9 +11,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-/**
- * Created by thinker on 11.06.15.
- */
 public class FileManager {
 
     private static final String TAG = "OpenMaka::FileManager";

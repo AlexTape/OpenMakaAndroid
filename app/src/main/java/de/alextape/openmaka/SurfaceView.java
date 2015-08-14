@@ -8,9 +8,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
-/**
- * Created by thinker on 11.05.15.
- */
 public class SurfaceView extends GLSurfaceView {
 
     private static String TAG = "OpenMaka::SurfaceView";

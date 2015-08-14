@@ -1,6 +1,5 @@
 package de.alextape.openmaka;
 
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;

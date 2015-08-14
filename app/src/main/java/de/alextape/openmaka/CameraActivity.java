@@ -12,9 +12,6 @@ import org.opencv.android.OpenCVLoader;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
-/**
- * Created by thinker on 11.06.15.
- */
 public class CameraActivity extends GuiAcitivity implements CvCameraViewListener2 {
 
     private static final String TAG = "OpenMaka::CamActivity";
@@ -33,11 +30,8 @@ public class CameraActivity extends GuiAcitivity implements CvCameraViewListener
             switch (status) {
                 case LoaderCallbackInterface.SUCCESS: {
                     Log.i(TAG, "OpenCV loaded successfully");
-
                     // Load native library after(!) OpenCV initialization
                     System.loadLibrary("native_openmaka");
-                    // System.loadLibrary("opencv_nonfree");
-
                     mOpenCvCameraView.enableView();
                 }
                 break;

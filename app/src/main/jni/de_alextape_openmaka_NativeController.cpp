@@ -20,9 +20,9 @@ JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeController_native_1initia
 }
 
 JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeController_native_1test
-        (JNIEnv *env, jclass clazz)
+        (JNIEnv *env, jclass clazz, jint test, jint quantifier)
 {
-    return om::Controller::getInstance()->test();
+    return om::Controller::getInstance()->test(test, quantifier);
 }
 
 JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeController_native_1displayFunction

@@ -1,8 +1,5 @@
 package de.alextape.openmaka;
 
-/**
- * Created by thinker on 11.06.15.
- */
 public class NativeController {
 
     private static final String TAG = "OpenMaka::NativeFunctions";
@@ -14,17 +11,15 @@ public class NativeController {
     private static OnResultListener onResultListener;
 
     public interface OnResultListener {
-        void onResult(String result);
+        void onResult(int result);
     }
 
     public static void setOnResultListener(OnResultListener resultListener) {
         onResultListener = resultListener;
     }
 
-    public static void receiveResult(String result) {
-        if (onResultListener != null) {
-            onResultListener.onResult(result);
-        }
+    public static void receiveResult(int result) {
+        onResultListener.onResult(result);
     }
 
     /**
@@ -39,18 +34,14 @@ public class NativeController {
         return returnThis;
     }
 
-    public static int test(String test, int quantifier) {
-
-
-        receiveResult("Run: " +test + "-" + quantifier);
-
-        //return native_test();
-
-        return 1;
+    public static int test(int test, int quantifier) {
+        int result = native_test(test, quantifier);
+        receiveResult(result);
+        return result;
     }
 
     private static native int native_initialize(long matAddrRgba, String configPath);
-    private static native int native_test();
+    private static native int native_test(int test, int quantifier);
 
     /**
      * Display functions.

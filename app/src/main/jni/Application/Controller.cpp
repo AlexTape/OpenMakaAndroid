@@ -545,7 +545,7 @@ void Controller::statistics(std::string key, bool value) {
     stats->add(key, value ? "true" : "false");
 }
 
-int Controller::test() {
+int Controller::test(int test, int quantifier) {
 
     Mat sceneRgbImageData, sceneGrayImageData, objectRgbImage, objectGrayImage;
 
@@ -586,19 +586,79 @@ int Controller::test() {
     // some variables to control testing routine
     bool shouldQuit = false;
     int isRun = 0;
-    int doRuns = 5;
+    int doRuns = quantifier;
+
+    // default test configuration
+    bool doSIFT = false;
+    bool doFAST = false;
+    bool doGFTT = false;
+    bool doMSER = false;
+    bool doDENSE = false;
+    bool doSTAR = false;
+    bool doSURF = false;
+    bool doBRISK = false;
+    bool doORB = false;
+    bool doAKAZE = false;
+
+    cout << "------" << test << "-----" << quantifier << endl;
+    cout << "------" << test << "-----" << quantifier << endl;
+    cout << "------" << test << "-----" << quantifier << endl;
+    cout << "------" << test << "-----" << quantifier << endl;
+    cout << "------" << test << "-----" << quantifier << endl;
+    cout << "------" << test << "-----" << quantifier << endl;
+    cout << "------" << test << "-----" << quantifier << endl;
+    cout << "------" << test << "-----" << quantifier << endl;
+    cout << "------" << test << "-----" << quantifier << endl;
+    cout << "------" << test << "-----" << quantifier << endl;
+    cout << "------" << test << "-----" << quantifier << endl;
 
     // trigger tests
-    bool doSIFT = true;
-    bool doFAST = true;
-    bool doGFTT = true;
-    bool doMSER = true;
-    bool doDENSE = true;
-    bool doSTAR = true;
-    bool doSURF = true;
-    bool doBRISK = true;
-    bool doORB = true;
-    bool doAKAZE = true;
+    switch (test) {
+        case 0:
+            doSIFT = true;
+            doFAST = true;
+            doGFTT = true;
+            doMSER = true;
+            doDENSE = true;
+            doSTAR = true;
+            doSURF = true;
+            doBRISK = true;
+            doORB = true;
+            doAKAZE = true;
+            break;
+        case 1:
+            doSIFT = true;
+            break;
+        case 2:
+            doFAST = true;
+            break;
+        case 3:
+            doGFTT = true;
+            break;
+        case 4:
+            doMSER = true;
+            break;
+        case 5:
+            doDENSE = true;
+            break;
+        case 6:
+            doSTAR = true;
+            break;
+        case 7:
+            doSURF = true;
+            break;
+        case 8:
+            doBRISK = true;
+            break;
+        case 9:
+            doORB = true;
+            break;
+        case 10:
+            doAKAZE = true;
+            break;
+        default:
+            return 0;
+    }
 
     do {
 
@@ -612,21 +672,21 @@ int Controller::test() {
         if (doSIFT) {
             //*********** SIFT BF Tests ***********//
             testConfigurations.push_back(std::vector<string>{"SIFT", "SIFT", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"SIFT", "BRIEF", "BF_NORM_L2"});
-            // TODO fix testConfigurations.push_back(std::vector<string>{"SIFT", "ORB", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"SIFT", "SURF", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"SIFT", "BRISK", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"SIFT", "FREAK", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"SIFT", "AKAZE", "BF_NORM_L2"});
+//            testConfigurations.push_back(std::vector<string>{"SIFT", "BRIEF", "BF_NORM_L2"});
+//            testConfigurations.push_back(std::vector<string>{"SIFT", "ORB", "BF_NORM_L2"});
+//            testConfigurations.push_back(std::vector<string>{"SIFT", "SURF", "BF_NORM_L2"});
+//            testConfigurations.push_back(std::vector<string>{"SIFT", "BRISK", "BF_NORM_L2"});
+//            testConfigurations.push_back(std::vector<string>{"SIFT", "FREAK", "BF_NORM_L2"});
+//            testConfigurations.push_back(std::vector<string>{"SIFT", "AKAZE", "BF_NORM_L2"});
 
             //*********** SIFT FLANN Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"SIFT", "SIFT", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"SIFT", "BRIEF", "FLANN_X"});
-            // TODO fix testConfigurations.push_back(std::vector<string>{"SIFT", "ORB", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"SIFT", "SURF", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"SIFT", "BRISK", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"SIFT", "FREAK", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"SIFT", "AKAZE", "FLANN_X"});
+//            testConfigurations.push_back(std::vector<string>{"SIFT", "SIFT", "FLANN_X"});
+//            testConfigurations.push_back(std::vector<string>{"SIFT", "BRIEF", "FLANN_X"});
+//            testConfigurations.push_back(std::vector<string>{"SIFT", "ORB", "FLANN_X"});
+//            testConfigurations.push_back(std::vector<string>{"SIFT", "SURF", "FLANN_X"});
+//            testConfigurations.push_back(std::vector<string>{"SIFT", "BRISK", "FLANN_X"});
+//            testConfigurations.push_back(std::vector<string>{"SIFT", "FREAK", "FLANN_X"});
+//            testConfigurations.push_back(std::vector<string>{"SIFT", "AKAZE", "FLANN_X"});
         }
 
         if (doFAST) {
@@ -811,12 +871,6 @@ int Controller::test() {
 
         for (auto &configuration : testConfigurations) {
 
-            cout << "Testing.. [Detector=" << Analyzer::DETECTOR << ", Extractor=" << Analyzer::EXTRACTOR <<
-            ", Matcher=" << Analyzer::MATCHER << "]" << endl;
-
-            if (Controller::MODE_DEBUG) {
-                cout << "-----------------------------------------------------" << endl;
-            }
 
             // clone images to clean previous drawings
             sceneRgbImage = sceneRgbImageData.clone();
@@ -824,6 +878,9 @@ int Controller::test() {
 
             // configure controller
             configure(configuration.at(0), configuration.at(1), configuration.at(2));
+
+            cout << "Testing.. [Detector=" << Analyzer::DETECTOR << ", Extractor=" << Analyzer::EXTRACTOR <<
+            ", Matcher=" << Analyzer::MATCHER << "]" << endl;
 
             // (re-)create object pattern
             createObjectPattern(objectRgbImage, objectGrayImage);
@@ -835,13 +892,11 @@ int Controller::test() {
             int result = displayFunction(sceneRgbImage, sceneGrayImage);
 
             if (result == 1) {
-                if (Controller::MODE_DEBUG) {
-                    cout << "Object found!" << endl;
-                }
+                    cout << "Result: Object found!" << endl;
+                    cout << "-----------------------------------------------------" << endl;
             } else {
-                if (Controller::MODE_DEBUG) {
-                    cout << "Object NOT found!" << endl;
-                }
+                    cout << "Result: Object NOT found!" << endl;
+                    cout << "-----------------------------------------------------" << endl;
             }
 
         }
@@ -860,9 +915,10 @@ int Controller::test() {
     // success message
     if (MODE_DEBUG) {
         cout << "Tests finished successfull!" << endl;
+        cout << "Results saved to statistics file.." << endl;
     }
 
-    return 0;
+    return 1;
 }
 
 #endif

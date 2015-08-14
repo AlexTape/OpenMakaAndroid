@@ -101,7 +101,7 @@ namespace om {
 
         void statistics(std::string key, bool value);
 
-        int test();
+        int test(int test, int quantifier);
     };
 
 };

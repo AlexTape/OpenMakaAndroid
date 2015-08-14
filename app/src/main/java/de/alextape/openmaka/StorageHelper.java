@@ -3,9 +3,6 @@ package de.alextape.openmaka;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-/**
- * Created by thinker on 11.05.15.
- */
 @Deprecated
 public class StorageHelper {
 
