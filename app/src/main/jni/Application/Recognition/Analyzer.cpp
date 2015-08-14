@@ -233,7 +233,7 @@ bool Analyzer::analyze(cv::Mat &gray, std::vector<cv::KeyPoint> &keypoints, cv::
     return returnThis;
 }
 
-bool Analyzer::analyseSceneFrame(SceneFrame &sceneFrame) {
+bool Analyzer::analyzeSceneFrame(SceneFrame &sceneFrame) {
 
     // validate input data
     if (sceneFrame.gray.empty()) {
@@ -528,11 +528,11 @@ bool Analyzer::process(SceneFrame &sceneFrame) {
             timer->restart();
         }
 
-        // analyse features and descriptors for frame
-        analyseSceneFrame(sceneFrame);
+        // analyze features and descriptors for frame
+        analyzeSceneFrame(sceneFrame);
 
         if (Controller::MODE_STATISTICS) {
-            Controller::statistics("AnalyseSceneFrame(ms)", (double) timer->getMillis());
+            Controller::statistics("AnalyzeSceneFrame(ms)", (double) timer->getMillis());
         }
 
         std::vector<cv::Point2f> goodTrainKeypoints;

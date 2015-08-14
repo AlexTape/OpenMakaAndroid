@@ -14,6 +14,9 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import junit.framework.Test;
 
 abstract class GuiAcitivity extends Activity {
 
@@ -53,7 +56,7 @@ abstract class GuiAcitivity extends Activity {
 
         infoLine = (TextView) findViewById(R.id.infoLine);
 
-        infoLineText = getResources().getString(R.string.infoLineText);
+        infoLineText = getResources().getString(R.string.info_line_text);
     }
 
     @Override
@@ -73,9 +76,9 @@ abstract class GuiAcitivity extends Activity {
 //        NativeController.setMatcher(matcher);
 
         // check checkboxes
-        menu.findItem(R.id.featureDetector_SIFT).setChecked(true);
-        menu.findItem(R.id.featureExtractor_SIFT).setChecked(true);
-        menu.findItem(R.id.matcherFlannBased).setChecked(true);
+        menu.findItem(R.id.feature_detector_sift).setChecked(true);
+        menu.findItem(R.id.feature_extractor_sift).setChecked(true);
+        menu.findItem(R.id.matcher_flannbased).setChecked(true);
 
         // set info line
         infoLine.setText(String.format(infoLineText, detector, extractor, matcher));
@@ -90,76 +93,79 @@ abstract class GuiAcitivity extends Activity {
         Log.d(TAG, "ItemClick: " + item.getTitle());
 
         switch (item.getItemId()) {
-            case R.id.enableModeObjectDetection:
+            case R.id.enable_mode_object_detection:
                 boolean isDetection = NativeController.isModeObjectDetection();
                 NativeController.setModeObjectDetection(!isDetection);
                 break;
-            case R.id.enableModeTracking:
+            case R.id.enable_mode_tracking:
                 boolean isTracking = NativeController.isModeTracking();
                 NativeController.setModeTracking(!isTracking);
                 break;
-            case R.id.enableModeOpenGL:
+            case R.id.enable_mode_opengl:
                 boolean isOpenGL = NativeController.isModeOpenGl();
                 NativeController.setModeOpenGl(!isOpenGL);
                 break;
-            case R.id.generalOptions:
+            case R.id.general_options:
                 startActivity(new Intent(this, SettingsActivity.class));
                 break;
-            case R.id.generalOptionsImprint:
+            case R.id.general_tests:
+                startActivity(new Intent(this, TestActivity.class));
+                break;
+            case R.id.general_options_imprint:
                 startActivity(new Intent(this, ImprintActivity.class));
                 break;
             // detector switching
-            case R.id.featureDetector_SURF:
+            case R.id.feature_detector_surf:
                 detector ="SURF";
                 break;
-            case R.id.featureDetector_SIFT:
+            case R.id.feature_detector_sift:
                 detector ="SIFT";
                 break;
-            case R.id.featureDetector_FAST:
+            case R.id.feature_detector_fast:
                 detector ="FAST";
                 break;
-            case R.id.featureDetector_ORB:
+            case R.id.feature_detector_orb:
                 detector ="ORB";
                 break;
-            case R.id.featureDetector_BRISK:
+            case R.id.feature_detector_brisk:
                 detector ="BRISK";
                 break;
-            case R.id.featureDetector_DENSE:
+            case R.id.feature_detector_dense:
                 detector ="DENSE";
                 break;
-            case R.id.featureDetector_GFTT:
+            case R.id.feature_detector_gftt:
                 detector ="GFTT";
                 break;
-            case R.id.featureDetector_MSER:
+            case R.id.feature_detector_mser:
                 detector ="MSER";
                 break;
-            case R.id.featureDetector_STAR:
+            case R.id.feature_detector_star:
                 detector ="STAR";
                 break;
             // extractor switching
-            case R.id.featureExtractor_SIFT:
+            case R.id.feature_extractor_sift:
                 extractor ="SIFT";
                 break;
-            case R.id.featureExtractor_BRIEF:
+            case R.id.featureExtractor_brief:
                 extractor ="BRIEF";
                 break;
-            case R.id.featureExtractor_ORB:
+            case R.id.feature_extractor_orb:
                 extractor ="ORB";
                 break;
-            case R.id.featureExtractor_SURF:
+            case R.id.feature_extractor_surf:
                 extractor ="SURF";
                 break;
-            case R.id.featureExtractor_BRISK:
+            case R.id.feature_extractor_brisk:
                 extractor ="BRISK";
                 break;
-            case R.id.featureExtractor_FREAK:
+            case R.id.feature_extractor_freak:
                 extractor ="FREAK";
                 break;
             // matcher switching
-            case R.id.matcherBruteForce:
+            case R.id.matcher_bruteforce:
                 matcher = "BF_NORM_L2";
                 break;
-            case R.id.matcherFlannBased:
+            case R.id.matcher_flannbased:
                 matcher = "FLANN_X";
                 break;
         }

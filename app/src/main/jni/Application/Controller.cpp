@@ -22,6 +22,8 @@
 #include "Controller.h"
 #include "Helper/Drawer.h"
 
+#include "androidbuf.h"
+
 using namespace std;
 using namespace cv;
 using namespace om;
@@ -80,6 +82,11 @@ Controller::Controller(void) {
     // create local timer
     timer = new Timer();
 
+#ifdef __ANDROID__
+    // make cout working in logcat
+    std::cout.rdbuf(new androidbuf);
+#endif
+
 }
 
 Controller::~Controller(void) {
@@ -92,6 +99,10 @@ Controller::~Controller(void) {
     delete stats;
     delete clock;
     delete timer;
+
+#ifdef __ANDROID__
+    delete std::cout.rdbuf(0);
+#endif
 }
 
 Controller *Controller::getInstance() {
@@ -217,7 +228,7 @@ int Controller::displayFunction(cv::Mat &mRgbaFrame, cv::Mat &mGrayFrame) {
         // recreate object pattern if it is not existing
         if (analyzer->missingObjectPattern()) {
 //            if (MODE_DEBUG) {
-                cout << "ObjectPattern (re-) created!" << endl;
+            cout << "ObjectPattern (re-) created!" << endl;
 //            }
         }
 
@@ -532,6 +543,326 @@ void Controller::statistics(std::string key, std::string value) {
 
 void Controller::statistics(std::string key, bool value) {
     stats->add(key, value ? "true" : "false");
+}
+
+int Controller::test() {
+
+    Mat sceneRgbImageData, sceneGrayImageData, objectRgbImage, objectGrayImage;
+
+    sceneRgbImageData = cv::imread(STORAGE_PATH + "/images/book_frame.jpg");
+    if (sceneRgbImageData.empty()) {
+        std::cout << "Scene image cannot be read" << std::endl;
+        return 1;
+    }
+
+    objectRgbImage = cv::imread(STORAGE_PATH + "/images/book.jpg");
+    if (objectRgbImage.empty()) {
+        std::cout << "Object image cannot be read" << std::endl;
+        return 2;
+    }
+
+    cvtColor(sceneRgbImageData, sceneGrayImageData, CV_RGB2GRAY);
+    cvtColor(objectRgbImage, objectGrayImage, CV_RGB2GRAY);
+
+    if (!isInitialized) {
+        initialize(sceneRgbImageData, STORAGE_PATH + "/config/config.xml");
+    }
+
+    // set testing mode and save actual configuration
+    bool wasObjectDetection = MODE_OBJECT_DETECTION;
+    bool wasTracking = MODE_TRACKING;
+    bool wasStatistics = MODE_STATISTICS;
+    isModeObjectDetection(true);
+    isModeTracking(false);
+    isModeStatistics(true);
+
+    if (Controller::MODE_DEBUG) {
+        cout << "-----------------------------------------------------" << endl;
+        cout << "-----------------------------------------------------" << endl;
+        cout << " T E S T I N G   S U I T E" << endl;
+        cout << "-----------------------------------------------------" << endl;
+    }
+
+    // some variables to control testing routine
+    bool shouldQuit = false;
+    int isRun = 0;
+    int doRuns = 5;
+
+    // trigger tests
+    bool doSIFT = true;
+    bool doFAST = true;
+    bool doGFTT = true;
+    bool doMSER = true;
+    bool doDENSE = true;
+    bool doSTAR = true;
+    bool doSURF = true;
+    bool doBRISK = true;
+    bool doORB = true;
+    bool doAKAZE = true;
+
+    do {
+
+        // start first test run
+        isRun++;
+
+        // init variables
+        Mat sceneRgbImage, sceneGrayImage;
+        std::vector<std::vector<string>> testConfigurations;
+
+        if (doSIFT) {
+            //*********** SIFT BF Tests ***********//
+            testConfigurations.push_back(std::vector<string>{"SIFT", "SIFT", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"SIFT", "BRIEF", "BF_NORM_L2"});
+            // TODO fix testConfigurations.push_back(std::vector<string>{"SIFT", "ORB", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"SIFT", "SURF", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"SIFT", "BRISK", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"SIFT", "FREAK", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"SIFT", "AKAZE", "BF_NORM_L2"});
+
+            //*********** SIFT FLANN Tests ***********//
+            testConfigurations.push_back(std::vector<string>{"SIFT", "SIFT", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"SIFT", "BRIEF", "FLANN_X"});
+            // TODO fix testConfigurations.push_back(std::vector<string>{"SIFT", "ORB", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"SIFT", "SURF", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"SIFT", "BRISK", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"SIFT", "FREAK", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"SIFT", "AKAZE", "FLANN_X"});
+        }
+
+        if (doFAST) {
+            //*********** FAST BF Tests ***********//
+            testConfigurations.push_back(std::vector<string>{"FAST", "SIFT", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"FAST", "BRIEF", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"FAST", "ORB", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"FAST", "SURF", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"FAST", "BRISK", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"FAST", "FREAK", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"FAST", "AKAZE", "BF_NORM_L2"});
+
+            //*********** FAST FLANN Tests ***********//
+            testConfigurations.push_back(std::vector<string>{"FAST", "SIFT", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"FAST", "BRIEF", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"FAST", "ORB", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"FAST", "SURF", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"FAST", "BRISK", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"FAST", "FREAK", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"FAST", "AKAZE", "FLANN_X"});
+        }
+
+        if (doGFTT) {
+            //*********** GFTT BF Tests ***********//
+            testConfigurations.push_back(std::vector<string>{"GFTT", "SIFT", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"GFTT", "BRIEF", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"GFTT", "ORB", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"GFTT", "SURF", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"GFTT", "BRISK", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"GFTT", "FREAK", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"GFTT", "AKAZE", "BF_NORM_L2"});
+
+            //*********** GFTT FLANN Tests ***********//
+            testConfigurations.push_back(std::vector<string>{"GFTT", "SIFT", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"GFTT", "BRIEF", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"GFTT", "ORB", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"GFTT", "SURF", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"GFTT", "BRISK", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"GFTT", "FREAK", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"GFTT", "AKAZE", "FLANN_X"});
+        }
+
+        if (doMSER) {
+            //*********** MSER BF Tests ***********//
+            testConfigurations.push_back(std::vector<string>{"MSER", "SIFT", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"MSER", "BRIEF", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"MSER", "ORB", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"MSER", "SURF", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"MSER", "BRISK", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"MSER", "FREAK", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"MSER", "AKAZE", "BF_NORM_L2"});
+
+            //*********** MSER FLANN Tests ***********//
+            testConfigurations.push_back(std::vector<string>{"MSER", "SIFT", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"MSER", "BRIEF", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"MSER", "ORB", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"MSER", "SURF", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"MSER", "BRISK", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"MSER", "FREAK", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"MSER", "AKAZE", "FLANN_X"});
+        }
+
+        if (doDENSE) {
+            //*********** DENSE BF Tests ***********//
+            testConfigurations.push_back(std::vector<string>{"DENSE", "SIFT", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"DENSE", "BRIEF", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"DENSE", "ORB", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"DENSE", "SURF", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"DENSE", "BRISK", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"DENSE", "FREAK", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"DENSE", "AKAZE", "BF_NORM_L2"});
+
+            //*********** DENSE FLANN Tests ***********//
+            testConfigurations.push_back(std::vector<string>{"DENSE", "SIFT", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"DENSE", "BRIEF", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"DENSE", "ORB", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"DENSE", "SURF", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"DENSE", "BRISK", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"DENSE", "FREAK", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"DENSE", "AKAZE", "FLANN_X"});
+        }
+
+        if (doSTAR) {
+            //*********** STAR BF Tests ***********//
+            testConfigurations.push_back(std::vector<string>{"STAR", "SIFT", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"STAR", "BRIEF", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"STAR", "ORB", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"STAR", "SURF", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"STAR", "BRISK", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"STAR", "FREAK", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"STAR", "AKAZE", "BF_NORM_L2"});
+
+            //*********** STAR FLANN Tests ***********//
+            testConfigurations.push_back(std::vector<string>{"STAR", "SIFT", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"STAR", "BRIEF", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"STAR", "ORB", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"STAR", "SURF", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"STAR", "BRISK", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"STAR", "FREAK", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"STAR", "AKAZE", "FLANN_X"});
+        }
+
+        if (doSURF) {
+            //*********** SURF BF Tests ***********//
+            testConfigurations.push_back(std::vector<string>{"SURF", "SIFT", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"SURF", "BRIEF", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"SURF", "ORB", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"SURF", "SURF", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"SURF", "BRISK", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"SURF", "FREAK", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"SURF", "AKAZE", "BF_NORM_L2"});
+
+            //*********** SURF FLANN Tests ***********//
+            testConfigurations.push_back(std::vector<string>{"SURF", "SIFT", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"SURF", "BRIEF", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"SURF", "ORB", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"SURF", "SURF", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"SURF", "BRISK", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"SURF", "FREAK", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"SURF", "AKAZE", "FLANN_X"});
+        }
+
+        if (doBRISK) {
+            //*********** BRISK BF Tests ***********//
+            testConfigurations.push_back(std::vector<string>{"BRISK", "SIFT", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"BRISK", "BRIEF", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"BRISK", "ORB", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"BRISK", "SURF", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"BRISK", "BRISK", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"BRISK", "FREAK", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"BRISK", "AKAZE", "BF_NORM_L2"});
+
+            //*********** BRISK FLANN Tests ***********//
+            testConfigurations.push_back(std::vector<string>{"BRISK", "SIFT", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"BRISK", "BRIEF", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"BRISK", "ORB", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"BRISK", "SURF", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"BRISK", "BRISK", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"BRISK", "FREAK", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"BRISK", "AKAZE", "FLANN_X"});
+        }
+
+        if (doORB) {
+            //*********** ORB BF Tests ***********//
+            testConfigurations.push_back(std::vector<string>{"ORB", "SIFT", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"ORB", "BRIEF", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"ORB", "ORB", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"ORB", "SURF", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"ORB", "BRISK", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"ORB", "FREAK", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"ORB", "AKAZE", "BF_NORM_L2"});
+
+            //*********** ORB FLANN Tests ***********//
+            testConfigurations.push_back(std::vector<string>{"ORB", "SIFT", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"ORB", "BRIEF", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"ORB", "ORB", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"ORB", "SURF", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"ORB", "BRISK", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"ORB", "FREAK", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"ORB", "AKAZE", "FLANN_X"});
+        }
+
+        if (doAKAZE) {
+            //*********** AKAZE BF Tests ***********//
+            testConfigurations.push_back(std::vector<string>{"AKAZE", "SIFT", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"AKAZE", "BRIEF", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"AKAZE", "ORB", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"AKAZE", "SURF", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"AKAZE", "BRISK", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"AKAZE", "FREAK", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"AKAZE", "AKAZE", "BF_NORM_L2"});
+
+            //*********** AKAZE FLANN Tests ***********//
+            testConfigurations.push_back(std::vector<string>{"AKAZE", "SIFT", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"AKAZE", "BRIEF", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"AKAZE", "ORB", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"AKAZE", "SURF", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"AKAZE", "BRISK", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"AKAZE", "FREAK", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"AKAZE", "AKAZE", "FLANN_X"});
+        }
+
+        for (auto &configuration : testConfigurations) {
+
+            cout << "Testing.. [Detector=" << Analyzer::DETECTOR << ", Extractor=" << Analyzer::EXTRACTOR <<
+            ", Matcher=" << Analyzer::MATCHER << "]" << endl;
+
+            if (Controller::MODE_DEBUG) {
+                cout << "-----------------------------------------------------" << endl;
+            }
+
+            // clone images to clean previous drawings
+            sceneRgbImage = sceneRgbImageData.clone();
+            sceneGrayImage = sceneGrayImageData.clone();
+
+            // configure controller
+            configure(configuration.at(0), configuration.at(1), configuration.at(2));
+
+            // (re-)create object pattern
+            createObjectPattern(objectRgbImage, objectGrayImage);
+
+            if (Controller::MODE_DEBUG) {
+                cout << "::Run_" << isRun << "/" << doRuns << "::" << endl;
+            }
+
+            int result = displayFunction(sceneRgbImage, sceneGrayImage);
+
+            if (result == 1) {
+                if (Controller::MODE_DEBUG) {
+                    cout << "Object found!" << endl;
+                }
+            } else {
+                if (Controller::MODE_DEBUG) {
+                    cout << "Object NOT found!" << endl;
+                }
+            }
+
+        }
+
+        if (isRun == doRuns) {
+            shouldQuit = true;
+        }
+
+    } while (!shouldQuit);
+
+    // restore last state
+    isModeObjectDetection(wasObjectDetection);
+    isModeTracking(wasTracking);
+    isModeStatistics(wasStatistics);
+
+    // success message
+    if (MODE_DEBUG) {
+        cout << "Tests finished successfull!" << endl;
+    }
+
+    return 0;
 }
 
 #endif

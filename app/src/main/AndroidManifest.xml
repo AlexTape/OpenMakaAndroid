@@ -27,6 +27,13 @@
         </activity>
 
         <activity
+            android:name=".TestActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Holo.Light.DarkActionBar">
+        </activity>
+
+        <activity
             android:name=".ImprintActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="landscape"

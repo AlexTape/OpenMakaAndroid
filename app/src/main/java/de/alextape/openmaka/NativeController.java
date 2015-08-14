@@ -11,6 +11,22 @@ public class NativeController {
     private static boolean MODE_TRACKING = false;
     private static boolean MODE_OPEN_GL = false;
 
+    private static OnResultListener onResultListener;
+
+    public interface OnResultListener {
+        void onResult(String result);
+    }
+
+    public static void setOnResultListener(OnResultListener resultListener) {
+        onResultListener = resultListener;
+    }
+
+    public static void receiveResult(String result) {
+        if (onResultListener != null) {
+            onResultListener.onResult(result);
+        }
+    }
+
     /**
      * Basic functions.
      */
@@ -23,7 +39,18 @@ public class NativeController {
         return returnThis;
     }
 
+    public static int test(String test, int quantifier) {
+
+
+        receiveResult("Run: " +test + "-" + quantifier);
+
+        //return native_test();
+
+        return 1;
+    }
+
     private static native int native_initialize(long matAddrRgba, String configPath);
+    private static native int native_test();
 
     /**
      * Display functions.
@@ -98,5 +125,6 @@ public class NativeController {
     private static native void native_setModeTracking(boolean isActive);
 
     private static native void native_setModeOpenGL(boolean isActive);
+
 
 }

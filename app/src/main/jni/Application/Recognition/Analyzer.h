@@ -69,7 +69,7 @@ namespace om {
 
         bool createObjectPattern(cv::Mat &image);
 
-        bool analyseSceneFrame(SceneFrame &sceneFrame);
+        bool analyzeSceneFrame(SceneFrame &sceneFrame);
 
         void matchBinaryDescriptors(SceneFrame &sceneFrame, std::vector<cv::Point2f> &goodTrainKeypoints,
                                     std::vector<cv::Point2f> &goodSceneKeypoints);

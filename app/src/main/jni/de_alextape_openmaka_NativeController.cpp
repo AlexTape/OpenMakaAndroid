@@ -19,6 +19,12 @@ JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeController_native_1initia
     return i_;
 }
 
+JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeController_native_1test
+        (JNIEnv *env, jclass clazz)
+{
+    return om::Controller::getInstance()->test();
+}
+
 JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeController_native_1displayFunction
   (JNIEnv *env, jclass clazz, jlong mRgbaAddr, jlong mGrayAddr)
 {

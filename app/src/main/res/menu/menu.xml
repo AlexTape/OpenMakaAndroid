@@ -2,189 +2,194 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/renderOptions"
+        android:id="@+id/render_options"
         android:icon="@drawable/ic_filter_list_white_24dp"
         android:showAsAction="always"
-        android:title="@string/renderOptionsMenu">
+        android:title="@string/render_options_menu">
         <menu>
             <item
-                android:id="@+id/renderOptionsHeadline"
+                android:id="@+id/render_options_headline"
                 android:orderInCategory="100"
                 android:showAsAction="never"
-                android:title="@string/renderOptions_title"/>
+                android:title="@string/render_options_title"/>
             <group
                 android:checkableBehavior="all"
                 >
                 <item
-                    android:id="@+id/enableModeObjectDetection"
+                    android:id="@+id/enable_mode_object_detection"
                     android:orderInCategory="100"
                     android:showAsAction="never"
-                    android:title="@string/enableModeObjectDetection"/>
+                    android:title="@string/enable_mode_object_detection"/>
                 <item
-                    android:id="@+id/enableModeTracking"
+                    android:id="@+id/enable_mode_tracking"
                     android:orderInCategory="100"
                     android:showAsAction="never"
-                    android:title="@string/enableModeTracking"/>
+                    android:title="@string/enable_mode_tracking"/>
                 <item
-                    android:id="@+id/enableModeOpenGL"
+                    android:id="@+id/enable_mode_opengl"
                     android:orderInCategory="100"
                     android:showAsAction="never"
-                    android:title="@string/enableModeOpenGL"/>
+                    android:title="@string/enable_mode_opengl"/>
             </group>
         </menu>
     </item>
 
     <item
-        android:id="@+id/featureDetectors"
+        android:id="@+id/feature_detectors"
         android:icon="@drawable/ic_select_all_white_24dp"
         android:showAsAction="always"
-        android:title="@string/featureDetectorsMenu">
+        android:title="@string/feature_detectors_menu">
         <menu>
             <item
-                android:id="@+id/featureDetectorsHeadline"
+                android:id="@+id/feature_detectors_headline"
                 android:orderInCategory="100"
                 android:showAsAction="never"
-                android:title="@string/featureDetectorsTitle"/>
+                android:title="@string/feature_detectors_title"/>
             <group
                 android:checkableBehavior="single"
                 >
                 <item
-                    android:id="@+id/featureDetector_SURF"
+                    android:id="@+id/feature_detector_surf"
                     android:orderInCategory="100"
                     android:showAsAction="never"
                     android:checked="true"
-                    android:title="@string/detector_SURF"/>
+                    android:title="@string/detector_surf"/>
                 <item
-                    android:id="@+id/featureDetector_SIFT"
+                    android:id="@+id/feature_detector_sift"
                     android:orderInCategory="100"
                     android:showAsAction="never"
-                    android:title="@string/detector_SIFT"/>
+                    android:title="@string/detector_sift"/>
                 <item
-                    android:id="@+id/featureDetector_FAST"
+                    android:id="@+id/feature_detector_fast"
                     android:orderInCategory="100"
                     android:showAsAction="never"
-                    android:title="@string/detector_FAST"/>
+                    android:title="@string/detector_fast"/>
                 <item
-                    android:id="@+id/featureDetector_ORB"
+                    android:id="@+id/feature_detector_orb"
                     android:orderInCategory="100"
                     android:showAsAction="never"
-                    android:title="@string/detector_ORB"/>
+                    android:title="@string/detector_orb"/>
                 <item
-                    android:id="@+id/featureDetector_BRISK"
+                    android:id="@+id/feature_detector_brisk"
                     android:orderInCategory="100"
                     android:showAsAction="never"
-                    android:title="@string/detector_BRISK"/>
+                    android:title="@string/detector_brisk"/>
                 <item
-                    android:id="@+id/featureDetector_DENSE"
+                    android:id="@+id/feature_detector_dense"
                     android:orderInCategory="100"
                     android:showAsAction="never"
-                    android:title="@string/detector_DENSE"/>
+                    android:title="@string/detector_dense"/>
                 <item
-                    android:id="@+id/featureDetector_GFTT"
+                    android:id="@+id/feature_detector_gftt"
                     android:orderInCategory="100"
                     android:showAsAction="never"
-                    android:title="@string/detector_GFTT"/>
+                    android:title="@string/detector_gftt"/>
                 <item
-                    android:id="@+id/featureDetector_MSER"
+                    android:id="@+id/feature_detector_mser"
                     android:orderInCategory="100"
                     android:showAsAction="never"
-                    android:title="@string/detector_MSER"/>
+                    android:title="@string/detector_mser"/>
                 <item
-                    android:id="@+id/featureDetector_STAR"
+                    android:id="@+id/feature_detector_star"
                     android:orderInCategory="100"
                     android:showAsAction="never"
-                    android:title="@string/detector_STAR"/>
+                    android:title="@string/detector_star"/>
             </group>
         </menu>
     </item>
 
     <item
-        android:id="@+id/featureExtractors"
+        android:id="@+id/feature_extractors"
         android:icon="@drawable/ic_content_cut_white_24dp"
         android:showAsAction="always"
-        android:title="@string/featureExtractorsMenu">
+        android:title="@string/feature_extractors_menu">
         <menu>
             <item
-                android:id="@+id/featureExtractorsHeadline"
+                android:id="@+id/feature_extractors_headline"
                 android:orderInCategory="100"
                 android:showAsAction="never"
-                android:title="@string/featureExtractorsTitle"/>
+                android:title="@string/feature_extractors_title"/>
             <group
                 android:checkableBehavior="single"
                 >
                 <item
-                    android:id="@+id/featureExtractor_SIFT"
+                    android:id="@+id/feature_extractor_sift"
                     android:orderInCategory="100"
                     android:showAsAction="never"
-                    android:title="@string/extractor_SIFT"/>
+                    android:title="@string/extractor_sift"/>
                 <item
-                    android:id="@+id/featureExtractor_BRIEF"
+                    android:id="@+id/featureExtractor_brief"
                     android:orderInCategory="100"
                     android:showAsAction="never"
-                    android:title="@string/extractor_BRIEF"/>
+                    android:title="@string/extractor_brief"/>
                 <item
-                    android:id="@+id/featureExtractor_ORB"
+                    android:id="@+id/feature_extractor_orb"
                     android:orderInCategory="100"
                     android:showAsAction="never"
-                    android:title="@string/extractor_ORB"/>
+                    android:title="@string/extractor_orb"/>
                 <item
-                    android:id="@+id/featureExtractor_SURF"
+                    android:id="@+id/feature_extractor_surf"
                     android:orderInCategory="100"
                     android:showAsAction="never"
-                    android:title="@string/extractor_SURF"/>
+                    android:title="@string/extractor_surf"/>
                 <item
-                    android:id="@+id/featureExtractor_BRISK"
+                    android:id="@+id/feature_extractor_brisk"
                     android:orderInCategory="100"
                     android:showAsAction="never"
-                    android:title="@string/extractor_BRISK"/>
+                    android:title="@string/extractor_brisk"/>
                 <item
-                    android:id="@+id/featureExtractor_FREAK"
+                    android:id="@+id/feature_extractor_freak"
                     android:orderInCategory="100"
                     android:showAsAction="never"
-                    android:title="@string/extractor_FREAK"/>
+                    android:title="@string/extractor_freak"/>
             </group>
         </menu>
     </item>
 
     <item
-        android:id="@+id/featureMatchers"
+        android:id="@+id/feature_matchers"
         android:icon="@drawable/ic_content_copy_white_24dp"
         android:showAsAction="always"
-        android:title="@string/featureMatchersMenu">
+        android:title="@string/feature_matchers_menu">
         <menu>
             <item
-                android:id="@+id/featureMatchersHeadline"
+                android:id="@+id/feature_matchers_headline"
                 android:orderInCategory="100"
                 android:showAsAction="never"
-                android:title="@string/featureMatchersTitle"/>
+                android:title="@string/feature_matchers_title"/>
             <group
                 android:checkableBehavior="single"
                 >
                 <item
-                    android:id="@+id/matcherFlannBased"
+                    android:id="@+id/matcher_flannbased"
                     android:orderInCategory="100"
                     android:showAsAction="never"
-                    android:title="@string/matcherFlannBased"/>
+                    android:title="@string/matcher_flannbased"/>
                 <item
-                    android:id="@+id/matcherBruteForce"
+                    android:id="@+id/matcher_bruteforce"
                     android:orderInCategory="100"
                     android:showAsAction="never"
-                    android:title="@string/matcherBruteForce"/>
+                    android:title="@string/matcher_bruteforce"/>
             </group>
         </menu>
     </item>
 
     <item
-        android:id="@+id/generalOptions"
+        android:id="@+id/general_options"
         android:orderInCategory="100"
         android:showAsAction="never"
-        android:title="@string/generalOptions"/>
+        android:title="@string/general_options"/>
     <item
-        android:id="@+id/generalOptionsImprint"
+        android:id="@+id/general_tests"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/general_tests"/>
+    <item
+        android:id="@+id/general_options_imprint"
         android:orderInCategory="100"
         android:icon="@android:drawable/ic_menu_help"
         android:showAsAction="never"
-        android:title="@string/generalOptionsImprint"/>
+        android:title="@string/general_options_imprint"/>
 
 
 </menu>

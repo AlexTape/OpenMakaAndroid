@@ -20,7 +20,7 @@ const std::string Statistics::values[25] = {
         "DisplayFunction(ms)",
         "ObjectFound",
 
-        "AnalyseSceneFrame(ms)",
+        "AnalyzeSceneFrame(ms)",
         "AnalyzerProcess(ms)",
 
         "SceneKeypoints",

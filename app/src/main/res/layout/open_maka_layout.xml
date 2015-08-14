@@ -34,7 +34,7 @@
             android:id="@+id/infoLine"
             android:layout_width="match_parent"
             android:layout_height="20dp"
-            android:text="@string/infoLineText"
+            android:text="@string/info_line_text"
             android:textColor="@android:color/white"/>
 
     </LinearLayout>
