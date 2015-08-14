@@ -43,12 +43,31 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"/>
 
-    <Button
-        android:visibility="gone"
+    <LinearLayout
         android:layout_marginTop="16dp"
-        android:text="@string/save_result_button"
-        android:id="@+id/save_result_button"
+        android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="60dp"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <Button
+            android:visibility="gone"
+            android:text="@string/save_result_button"
+            android:id="@+id/save_result_button"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+
+        <View
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
 
 </LinearLayout>

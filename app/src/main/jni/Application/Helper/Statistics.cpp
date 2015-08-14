@@ -61,6 +61,7 @@ void Statistics::add(string key, string value) {
 }
 
 void Statistics::write(string filename) {
+
     ofstream file;
     if (!wroteHeader) {
 
@@ -75,12 +76,15 @@ void Statistics::write(string filename) {
         // print linefeed
         file << endl;
 
+        // close file
+        file.close();
+
         // set header state true
         wroteHeader = true;
 
     }
 
-    // append to existing file
+    // reopen file in appending mode
     file.open(Controller::STORAGE_PATH + "/" + filename, ios::app);
 
     // print all attribute keys
@@ -97,6 +101,8 @@ void Statistics::write(string filename) {
 
     // print linefeed
     file << std::endl;
+
+    // close file again
     file.close();
 }
 

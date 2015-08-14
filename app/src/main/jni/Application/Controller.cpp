@@ -212,12 +212,12 @@ int Controller::initialize(cv::Mat &frame, std::string configPath) {
 
 int Controller::displayFunction(cv::Mat &mRgbaFrame, cv::Mat &mGrayFrame) {
 
+
     if (Controller::MODE_STATISTICS) {
         clock->restart();
         Controller::stats->reset();
         Controller::statistics("Detector", (string) Analyzer::DETECTOR);
         Controller::statistics("Extractor", (string) Analyzer::EXTRACTOR);
-        // Controller::statistics("Matcher", (string) Analyzer::MATCHER);
     }
 
     int returnThis = 0;
@@ -227,9 +227,9 @@ int Controller::displayFunction(cv::Mat &mRgbaFrame, cv::Mat &mGrayFrame) {
 
         // recreate object pattern if it is not existing
         if (analyzer->missingObjectPattern()) {
-//            if (MODE_DEBUG) {
-            cout << "ObjectPattern (re-) created!" << endl;
-//            }
+            if (MODE_DEBUG) {
+                cout << "ObjectPattern (re-) created!" << endl;
+            }
         }
 
         // ..and tracking disabled
@@ -572,9 +572,9 @@ int Controller::test(int test, int quantifier) {
     bool wasObjectDetection = MODE_OBJECT_DETECTION;
     bool wasTracking = MODE_TRACKING;
     bool wasStatistics = MODE_STATISTICS;
-    isModeObjectDetection(true);
-    isModeTracking(false);
-    isModeStatistics(true);
+    MODE_OBJECT_DETECTION = true;
+    MODE_TRACKING = false;
+    MODE_STATISTICS = true;
 
     if (Controller::MODE_DEBUG) {
         cout << "-----------------------------------------------------" << endl;

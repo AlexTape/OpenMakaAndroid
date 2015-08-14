@@ -2,6 +2,8 @@ package de.alextape.openmaka;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.File;
 
 public class TestActivity extends Activity implements NativeController.OnResultListener, View.OnClickListener {
 
@@ -97,6 +101,23 @@ public class TestActivity extends Activity implements NativeController.OnResultL
 
     }
 
+    private void shareResults() {
+        String path = "/storage/emulated/0/Android/data/de.alextape.openmaka/files/statistics.csv";
+        Intent intentShareFile = new Intent(Intent.ACTION_SEND);
+        File fileWithinMyDir = new File(path);
+
+        if (fileWithinMyDir.exists()) {
+            intentShareFile.setType("application/pdf");
+            intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + path));
+
+            intentShareFile.putExtra(Intent.EXTRA_SUBJECT,
+                    "Sharing File...");
+            intentShareFile.putExtra(Intent.EXTRA_TEXT, "Sharing File...");
+
+            startActivity(Intent.createChooser(intentShareFile, "Share File"));
+        }
+    }
+
     @Override
     public void onResult(final int result) {
         runOnUiThread(new Runnable() {
@@ -129,7 +150,7 @@ public class TestActivity extends Activity implements NativeController.OnResultL
                 runAsyncTests();
                 break;
             case R.id.save_result_button:
-
+                shareResults();
                 break;
         }
     }
