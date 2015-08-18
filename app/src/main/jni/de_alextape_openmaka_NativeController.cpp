@@ -9,11 +9,8 @@ std::string convertJString(JNIEnv* env, jstring str)
 {
     const jsize len = env->GetStringUTFLength(str);
     const char* strChars = env->GetStringUTFChars(str, (jboolean *)0);
-
     std::string Result(strChars, len);
-
     env->ReleaseStringUTFChars(str, strChars);
-
     return Result;
 }
 
@@ -22,12 +19,7 @@ JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeController_native_1initia
 {
     int i_ = 0;
     std::string pathString = convertJString( env, storagePath );
-//    const char *strMsgPtr = env->GetStringUTFChars( storagePath , 0);
-//    if (strMsgPtr != NULL) {
-//        std::string pathString(strMsgPtr);
-        i_ = om::Controller::getInstance()->initialize(*(cv::Mat*)mAddrGray, pathString);
-//    }
-//    env->ReleaseStringChars(storagePath, (jchar *)strMsgPtr);
+    i_ = om::Controller::getInstance()->initialize(*(cv::Mat*)mAddrGray, pathString);
     return i_;
 }
 
@@ -62,12 +54,7 @@ JNIEXPORT jint JNICALL Java_de_alextape_openmaka_NativeController_native_1config
     std::string detectorString = convertJString( env, detector );
     std::string extractorString = convertJString( env, extractor );
     std::string matcherString = convertJString( env, matcher );
-//    const char *strMsgPtr = env->GetStringUTFChars( type , 0);
-//    if (strMsgPtr != NULL) {
-//        std::string typeString(strMsgPtr);
-        i_ = om::Controller::getInstance()->configure(detectorString, extractorString, matcherString);
-//    }
-//    env->ReleaseStringChars(type, (jchar *)strMsgPtr);
+    i_ = om::Controller::getInstance()->configure(detectorString, extractorString, matcherString);
     return i_;
 }
 
