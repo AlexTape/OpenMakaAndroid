@@ -48,6 +48,7 @@ public class TestActivity extends Activity implements NativeController.OnResultL
             private ProgressDialog dialog = new ProgressDialog(TestActivity.this);
 
             boolean process = false;
+
             int test;
             int quantifier;
 
@@ -58,7 +59,8 @@ public class TestActivity extends Activity implements NativeController.OnResultL
                 super.onPreExecute();
                 test = testSpinner.getSelectedItemPosition();
                 try {
-                    quantifier = Integer.parseInt(quantifierText.getText().toString());
+                    this.quantifier = Integer.parseInt(quantifierText.getText().toString());
+                    this.dialog.setCanceledOnTouchOutside(false);
                     this.dialog.setMessage("Please wait");
                     this.dialog.show();
                     process = true;
