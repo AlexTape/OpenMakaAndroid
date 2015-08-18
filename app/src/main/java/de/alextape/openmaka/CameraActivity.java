@@ -76,11 +76,14 @@ public class CameraActivity extends GuiAcitivity implements CvCameraViewListener
 
     public void onResume() {
         super.onResume();
-        if (!OpenCVLoader.initDebug()) {
-            Log.e(TAG, "Cannot connect to OpenCV Manager");
-        } else {
-            mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
+        if (mOpenCvCameraView != null) {
+            mOpenCvCameraView.enableView();
         }
+//        if (!OpenCVLoader.initDebug()) {
+//            Log.e(TAG, "Cannot connect to OpenCV Manager");
+//        } else {
+//            mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
+//        }
     }
 
     public void onDestroy() {

@@ -6,6 +6,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,7 +20,9 @@ import android.widget.Toast;
 
 import java.io.File;
 
-public class TestActivity extends Activity implements NativeController.OnResultListener, View.OnClickListener {
+import javax.xml.transform.TransformerException;
+
+public class TestActivity extends AppCompatActivity implements NativeController.OnResultListener, View.OnClickListener {
 
     private LinearLayout resultContainer;
     private Spinner testSpinner;
@@ -38,7 +44,34 @@ public class TestActivity extends Activity implements NativeController.OnResultL
         resultButton = (Button) findViewById(R.id.save_result_button);
         resultButton.setOnClickListener(this);
 
+        ActionBar actionBar = getSupportActionBar();
+
+        if (actionBar != null) {
+            actionBar.setTitle(R.string.general_tests);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
+        }
+
         NativeController.setOnResultListener(this);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch(item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+            default:
+                break;
+        }
+
+        return true;
     }
 
     private void runAsyncTests() {
@@ -61,6 +94,7 @@ public class TestActivity extends Activity implements NativeController.OnResultL
                 try {
                     this.quantifier = Integer.parseInt(quantifierText.getText().toString());
                     this.dialog.setCanceledOnTouchOutside(false);
+                    this.dialog.setCancelable(false);
                     this.dialog.setMessage("Please wait");
                     this.dialog.show();
                     process = true;

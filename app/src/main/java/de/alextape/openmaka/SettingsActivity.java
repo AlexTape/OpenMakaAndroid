@@ -2,7 +2,14 @@ package de.alextape.openmaka;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.internal.app.ToolbarActionBar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.Window;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -25,7 +32,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-public class SettingsActivity extends Activity implements CompoundButton.OnCheckedChangeListener {
+public class SettingsActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
 
     private CheckBox mStatisticBox;
     private CheckBox mDebugBox;
@@ -66,6 +73,14 @@ public class SettingsActivity extends Activity implements CompoundButton.OnCheck
 
         setContentView(R.layout.settings_layout);
 
+        ActionBar actionBar = getSupportActionBar();
+
+        if (actionBar != null) {
+            actionBar.setTitle(R.string.general_options);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
+        }
+
         try {
 
             findViews();
@@ -82,6 +97,38 @@ public class SettingsActivity extends Activity implements CompoundButton.OnCheck
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_save, menu);
+
+        return true;
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch(item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+            case R.id.settings_save:
+                try {
+                    readViews();
+                } catch (TransformerException e) {
+                    e.printStackTrace();
+                }
+                onBackPressed();
+                break;
+            default:
+                break;
+        }
+
+        return true;
     }
 
     private void findViews() {
@@ -203,18 +250,6 @@ public class SettingsActivity extends Activity implements CompoundButton.OnCheck
         mQualityLevelEditText.setText(String.valueOf(qualityLevel));
         mMinimumDistanceEditText.setText(String.valueOf(minimumDistance));
 
-    }
-
-    @Override
-    public void onBackPressed() {
-        try {
-
-            readViews();
-
-        } catch (TransformerException e) {
-            e.printStackTrace();
-        }
-        super.onBackPressed();
     }
 
     private void readViews() throws TransformerException {

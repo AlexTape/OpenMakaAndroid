@@ -12,7 +12,7 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/app_name"
             android:screenOrientation="landscape"
-            android:theme="@android:style/Theme.Holo.Light">
+            android:theme="@style/open_maka_base_transparent">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -23,21 +23,21 @@
             android:name=".SettingsActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="landscape"
-            android:theme="@android:style/Theme.Holo.Light">
+            android:theme="@style/open_maka_base">
         </activity>
 
         <activity
             android:name=".TestActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="landscape"
-            android:theme="@android:style/Theme.Holo.Light">
+            android:theme="@style/open_maka_base">
         </activity>
 
         <activity
             android:name=".ImprintActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="landscape"
-            android:theme="@android:style/Theme.Holo.Light">
+            android:theme="@style/open_maka_base">
         </activity>
 
     </application>

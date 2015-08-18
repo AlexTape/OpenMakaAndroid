@@ -1,11 +1,10 @@
 package de.alextape.openmaka;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.internal.app.ToolbarActionBar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,8 +13,11 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
-abstract class GuiAcitivity extends Activity {
+import java.util.Set;
+
+abstract class GuiAcitivity extends AppCompatActivity {
 
     private static final String TAG = "OpenMaka::GuiActivity";
 
@@ -38,17 +40,17 @@ abstract class GuiAcitivity extends Activity {
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
+//        getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
 
         setContentView(R.layout.open_maka_layout);
 
-        ActionBar actionBar = getActionBar();
-
+//        ActionBar actionBar = getActionBar();
+        ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayShowHomeEnabled(false);
             actionBar.setDisplayHomeAsUpEnabled(false);
             actionBar.setTitle("");
-            actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0000ffff")));
+//            actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0000ffff")));
         }
 
         infoLine = (TextView) findViewById(R.id.infoLine);
@@ -80,8 +82,11 @@ abstract class GuiAcitivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        item.setChecked(item.isChecked());
         Log.d(TAG, "ItemClick: " + item.getTitle());
+
+        if (item.isCheckable()) {
+            item.setChecked(!item.isChecked());
+        }
 
         switch (item.getItemId()) {
             case R.id.enable_mode_object_detection:
@@ -97,7 +102,9 @@ abstract class GuiAcitivity extends Activity {
                 NativeController.setModeOpenGl(!isOpenGL);
                 break;
             case R.id.general_options:
-                startActivity(new Intent(this, SettingsActivity.class));
+                Intent intent = new Intent(this, SettingsActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intent);
                 break;
             case R.id.general_tests:
                 startActivity(new Intent(this, TestActivity.class));
