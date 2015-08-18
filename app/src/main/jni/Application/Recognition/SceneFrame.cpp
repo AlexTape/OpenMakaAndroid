@@ -38,7 +38,6 @@ SceneFrame::SceneFrame(cv::Mat &rgbInputFrame, cv::Mat &grayInputFrame) {
 
     // calc scale factor via max image size
     while ((maxSize / IMAGE_SCALE) >= MAX_IMAGE_SIZE) {
-        float test = (maxSize / IMAGE_SCALE);
         IMAGE_SCALE = IMAGE_SCALE + (float) 0.1;
     }
 

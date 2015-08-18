@@ -27,6 +27,7 @@ namespace om {
 
         void reset();
 
+        void setDefaults();
     };
 
 };

@@ -81,11 +81,14 @@ namespace om {
         static std::string STATISTICS_FILE;
 
         static std::string STORAGE_PATH;
+        static std::string CONFIG_FILE;
         static std::string DEFAULT_OBJECT_IMAGE;
 
         static void statistics(std::string key, int value);
 
         static void statistics(std::string key, double value);
+
+        static void statistics(std::string key, bool value);
 
         static void statistics(std::string key, long unsigned int value);
 
@@ -99,9 +102,8 @@ namespace om {
 
         void isModeStatistics(bool isActive);
 
-        void statistics(std::string key, bool value);
-
         int test(int test, int quantifier);
+
     };
 
 };

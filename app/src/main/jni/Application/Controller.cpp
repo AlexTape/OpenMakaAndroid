@@ -41,6 +41,7 @@ Statistics *Controller::stats;
 bool Controller::isInitialized;
 cv::Size Controller::FRAME_SIZE;
 std::string Controller::STORAGE_PATH;
+std::string Controller::CONFIG_FILE;
 std::string Controller::DEFAULT_OBJECT_IMAGE;
 std::string Controller::STATISTICS_FILE;
 bool Controller::MODE_STATISTICS;
@@ -117,6 +118,9 @@ Controller *Controller::getInstance() {
 // NEEDED
 int Controller::initialize(cv::Mat &frame, std::string storagePath) {
 
+    // set default config file
+    CONFIG_FILE = "/config/config.xml";
+
     // initializing..
     isInitialized = false;
 
@@ -126,11 +130,13 @@ int Controller::initialize(cv::Mat &frame, std::string storagePath) {
     // define storage path
     Controller::STORAGE_PATH = storagePath;
 
-    // load config.xml
-    cv::FileStorage storage(STORAGE_PATH + "/config/config.xml", cv::FileStorage::READ);
+    // load config file
+    cv::FileStorage storage(STORAGE_PATH + CONFIG_FILE, cv::FileStorage::READ);
 
-    // load image store path
+    // load default image/pattern
     Controller::DEFAULT_OBJECT_IMAGE = (string) storage["defaultObjectImage"];
+
+	// load statistics file path
     Controller::STATISTICS_FILE = (string) storage["statisticsFile"];
 
     // load environment variables
@@ -255,6 +261,7 @@ int Controller::displayFunction(cv::Mat &mRgbaFrame, cv::Mat &mGrayFrame) {
             // analyzer processing
             STATE_OBJECT_FOUND = analyzer->process(*sceneFrame);
 
+            // write statistics for analyzer in non-tracking mode
             if (Controller::MODE_STATISTICS) {
                 Controller::statistics("AnalyzerProcess(ms)", (double) timer->getMillis());
                 Controller::statistics("ObjectFound", (bool) STATE_OBJECT_FOUND);
@@ -288,6 +295,7 @@ int Controller::displayFunction(cv::Mat &mRgbaFrame, cv::Mat &mGrayFrame) {
                 // analyzer processing
                 STATE_OBJECT_FOUND = analyzer->process(*sceneFrame);
 
+                // write statistics for analyzer in tracking mode
                 if (Controller::MODE_STATISTICS) {
                     Controller::statistics("AnalyzerProcess(ms)", (double) timer->getMillis());
                     Controller::statistics("ObjectFound", (bool) STATE_OBJECT_FOUND);
@@ -485,43 +493,17 @@ bool Controller::configure(std::string detector, std::string extractor, std::str
     return returnThis;
 }
 
-void Controller::statistics(std::string key, int value) {
-    stringstream sstr;
-    sstr << value;
-    stats->add(key, sstr.str());
-}
-
-void Controller::statistics(std::string key, double value) {
-    stringstream sstr;
-    sstr << value;
-    stats->add(key, sstr.str());
-}
-
-void Controller::statistics(std::string key, long unsigned int value) {
-    stringstream sstr;
-    sstr << value;
-    stats->add(key, sstr.str());
-}
-
-void Controller::statistics(std::string key, std::string value) {
-    stats->add(key, value);
-}
-
-void Controller::statistics(std::string key, bool value) {
-    stats->add(key, value ? "true" : "false");
-}
-
 int Controller::test(int test, int quantifier) {
 
     Mat sceneRgbImageData, sceneGrayImageData, objectRgbImage, objectGrayImage;
 
-    sceneRgbImageData = cv::imread(STORAGE_PATH + "/images/book_frame.jpg");
+    sceneRgbImageData = cv::imread(STORAGE_PATH + "/images/card_frame.jpg");
     if (sceneRgbImageData.empty()) {
         std::cout << "Scene image cannot be read" << std::endl;
         return 1;
     }
 
-    objectRgbImage = cv::imread(STORAGE_PATH + "/images/book.jpg");
+    objectRgbImage = cv::imread(STORAGE_PATH + "/images/card.jpg");
     if (objectRgbImage.empty()) {
         std::cout << "Object image cannot be read" << std::endl;
         return 2;
@@ -531,7 +513,7 @@ int Controller::test(int test, int quantifier) {
     cvtColor(objectRgbImage, objectGrayImage, CV_RGB2GRAY);
 
     if (!isInitialized) {
-        initialize(sceneRgbImageData, STORAGE_PATH + "/config/config.xml");
+        initialize(sceneRgbImageData, STORAGE_PATH);
     }
 
     // set testing mode and save actual configuration
@@ -873,6 +855,32 @@ int Controller::test(int test, int quantifier) {
     }
 
     return 1;
+}
+
+void Controller::statistics(std::string key, int value) {
+    stringstream sstr;
+    sstr << value;
+    stats->add(key, sstr.str());
+}
+
+void Controller::statistics(std::string key, double value) {
+    stringstream sstr;
+    sstr << value;
+    stats->add(key, sstr.str());
+}
+
+void Controller::statistics(std::string key, long unsigned int value) {
+    stringstream sstr;
+    sstr << value;
+    stats->add(key, sstr.str());
+}
+
+void Controller::statistics(std::string key, std::string value) {
+    stats->add(key, value);
+}
+
+void Controller::statistics(std::string key, bool value) {
+    stats->add(key, value ? "true" : "false");
 }
 
 #endif
