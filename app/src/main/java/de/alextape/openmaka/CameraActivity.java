@@ -3,6 +3,7 @@ package de.alextape.openmaka;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.View;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
@@ -32,6 +33,8 @@ public class CameraActivity extends GuiAcitivity implements CvCameraViewListener
                     Log.i(TAG, "OpenCV loaded successfully");
                     // Load native library after(!) OpenCV initialization
                     System.loadLibrary("native_openmaka");
+
+                    // enable view
                     mOpenCvCameraView.enableView();
                 }
                 break;
@@ -64,7 +67,6 @@ public class CameraActivity extends GuiAcitivity implements CvCameraViewListener
         } else {
             this.mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
         }
-
     }
 
     public void onPause() {

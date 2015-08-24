@@ -30,35 +30,33 @@ public class SurfaceView extends GLSurfaceView {
 
         //setZOrderOnTop(true);
         setRenderer(new SurfaceRenderer());
-		/*
+        /*
 		requestFocus();
 		setFocusableInTouchMode(true);
 		*/
     }
 
     @Override
-    public boolean onTouchEvent(final MotionEvent event)
-    {
+    public boolean onTouchEvent(final MotionEvent event) {
 
         queueEvent(new Runnable() {
 
-            private long timestamp = System.currentTimeMillis();
-
             public void run() {
+
                 //NativeFunctions.touchEvent(event.getX(), event.getY(), event.getAction());
                 Log.d(TAG, "onTouchEvent=" + event.getAction());
 
-                long time = System.currentTimeMillis();
-
-                if (timestamp + 300 < time) {
-                    if (event.getAction() == MotionEvent.ACTION_UP) {
-
-                        isObjectDetection = !isObjectDetection;
-                        NativeController.setModeObjectDetection(isObjectDetection);
-                        Log.d(TAG, "isObjectDetection=" + isObjectDetection);
-                        timestamp = System.currentTimeMillis();
-                    }
-                }
+//                long time = System.currentTimeMillis();
+//
+//                if (timestamp + 300 < time) {
+//                    if (event.getAction() == MotionEvent.ACTION_UP) {
+//
+//                        isObjectDetection = !isObjectDetection;
+//                        NativeController.setModeObjectDetection(isObjectDetection);
+//                        Log.d(TAG, "isObjectDetection=" + isObjectDetection);
+//                        timestamp = System.currentTimeMillis();
+//                    }
+//                }
             }
         });
 
@@ -66,8 +64,7 @@ public class SurfaceView extends GLSurfaceView {
     }
 
     @Override
-    public boolean onKeyDown(final int keyCode, final KeyEvent event)
-    {
+    public boolean onKeyDown(final int keyCode, final KeyEvent event) {
         queueEvent(new Runnable() {
             public void run() {
                 Log.d(TAG, "onKeyDown=" + event.getAction());
@@ -78,8 +75,7 @@ public class SurfaceView extends GLSurfaceView {
     }
 
     @Override
-    public boolean onKeyUp(final int keyCode, final KeyEvent event)
-    {
+    public boolean onKeyUp(final int keyCode, final KeyEvent event) {
         queueEvent(new Runnable() {
             public void run() {
                 Log.d(TAG, "onKeyUp=" + event.getAction());
