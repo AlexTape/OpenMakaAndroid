@@ -137,7 +137,14 @@ void Analyzer::initMatcher(std::string &type) {
 
         // NOTE: OpenCV Error: Assertion failed (K == 1 && update == 0 && mask.empty()) in batchDistance
         // https://github.com/MasteringOpenCV/code/issues/
-        matcher = cv::Ptr<cv::DescriptorMatcher>(new cv::BFMatcher(cv::NORM_L2, false));
+
+        // TODO Configure distances
+        // One of NORM_L1, NORM_L2, NORM_HAMMING, NORM_HAMMING2.
+        // L1 and L2 norms are preferable choices for SIFT and SURF descriptors,
+        // NORM_HAMMING should be used with ORB, BRISK and BRIEF,
+        // NORM_HAMMING2 should be used with ORB when WTA_K==3 or 4 (see ORB::ORB constructor description).
+        int distance = cv::NORM_L2;
+        matcher = cv::Ptr<cv::DescriptorMatcher>(new cv::BFMatcher(distance, false));
         // matcher = cv::Ptr<cv::DescriptorMatcher>(new cv::BFMatcher(cv::NORM_HAMMING, false));
 
         // using bruteforce matching
@@ -150,18 +157,18 @@ void Analyzer::initMatcher(std::string &type) {
 
     }
 
-// else if (type == "FLANN_LSF") {
-//  indexParams = new cv::flann::LshIndexParams(12, 20, 2);
-//  searchParams = new cv::flann::SearchParams();
-//  matcher = cv::Ptr<cv::DescriptorMatcher>(new cv::FlannBasedMatcher(indexParams, searchParams));
-//  IS_BRUTEFORCE_MATCHER = false;
-// }
-// else if (type == "FLANN_KD") {
-//  indexParams = new cv::flann::KDTreeIndexParams();
-//  searchParams = new cv::flann::SearchParams();
-//  matcher = cv::Ptr<cv::DescriptorMatcher>(new cv::FlannBasedMatcher(indexParams, searchParams));
-//  IS_BRUTEFORCE_MATCHER = false;
-// }
+    // else if (type == "FLANN_LSF") {
+    //  indexParams = new cv::flann::LshIndexParams(12, 20, 2);
+    //  searchParams = new cv::flann::SearchParams();
+    //  matcher = cv::Ptr<cv::DescriptorMatcher>(new cv::FlannBasedMatcher(indexParams, searchParams));
+    //  IS_BRUTEFORCE_MATCHER = false;
+    // }
+    // else if (type == "FLANN_KD") {
+    //  indexParams = new cv::flann::KDTreeIndexParams();
+    //  searchParams = new cv::flann::SearchParams();
+    //  matcher = cv::Ptr<cv::DescriptorMatcher>(new cv::FlannBasedMatcher(indexParams, searchParams));
+    //  IS_BRUTEFORCE_MATCHER = false;
+    // }
 }
 
 bool Analyzer::analyze(cv::Mat &gray, std::vector<cv::KeyPoint> &keypoints, cv::Mat &descriptors) {
@@ -369,11 +376,11 @@ void Analyzer::matchBinaryDescriptors(SceneFrame &sceneFrame, std::vector<cv::Po
     }
 
     if (Controller::MODE_DEBUG) {
-        cout << "matchBinaryDescriptors=" << timer->getMillis() << endl;
+        cout << "matchingDescriptors=" << timer->getMillis() << endl;
     }
 
     if (Controller::MODE_STATISTICS) {
-        Controller::statistics("MatchBinaryDescriptors(ms)", (double) timer->getMillis());
+        Controller::statistics("MatchingDescriptors(ms)", (double) timer->getMillis());
     }
 }
 
@@ -408,9 +415,6 @@ void Analyzer::matchFloatDescriptors(SceneFrame &sceneFrame, std::vector<cv::Poi
         if (Controller::MODE_STATISTICS) {
             Controller::statistics("Matcher", (string) "BF_NORM_L2");
         }
-
-        cv::Mat test = activeObjectPattern->descriptors;
-        cv::Mat tes1 = sceneFrame.descriptors;
 
         // knnMatch
         matcher->knnMatch(activeObjectPattern->descriptors, sceneFrame.descriptors, matches, K_GROUPS);
@@ -504,11 +508,11 @@ void Analyzer::matchFloatDescriptors(SceneFrame &sceneFrame, std::vector<cv::Poi
     }
 
     if (Controller::MODE_DEBUG) {
-        cout << "matchFloatDescriptors=" << timer->getMillis() << endl;
+        cout << "matchingDescriptors=" << timer->getMillis() << endl;
     }
 
     if (Controller::MODE_STATISTICS) {
-        Controller::statistics("MatchFloatDescriptors(ms)", (double) timer->getMillis());
+        Controller::statistics("MatchingDescriptors(ms)", (double) timer->getMillis());
     }
 
 }

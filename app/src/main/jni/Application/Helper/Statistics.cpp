@@ -8,7 +8,7 @@
 using namespace std;
 using namespace om;
 
-const std::string Statistics::values[26] = {
+const std::string Statistics::values[25] = {
 
         "Detector",
         "Extractor",
@@ -33,8 +33,7 @@ const std::string Statistics::values[26] = {
         "InliersCalc(ms)",
 
         "DescriptorType",
-        "MatchFloatDescriptors(ms)",
-        "MatchBinaryDescriptors(ms)",
+        "MatchingDescriptors(ms)",
 
         "PerspectiveTransform(ms)",
 
@@ -148,8 +147,7 @@ void Statistics::setDefaults() {
     stats["InliersCalc(ms)"] = "0";
 
     stats["DescriptorType"] = "nill";
-    stats["MatchFloatDescriptors(ms)"] = "0";
-    stats["MatchBinaryDescriptors(ms)"] = "0";
+    stats["MatchingDescriptors(ms)"] = "0";
 
     stats["PerspectiveTransform(ms)"] = "0";
 
