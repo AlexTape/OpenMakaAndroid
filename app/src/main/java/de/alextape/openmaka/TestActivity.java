@@ -1,11 +1,12 @@
 package de.alextape.openmaka;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -19,8 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
-
-import javax.xml.transform.TransformerException;
 
 public class TestActivity extends AppCompatActivity implements NativeController.OnResultListener, View.OnClickListener {
 
@@ -63,7 +62,7 @@ public class TestActivity extends AppCompatActivity implements NativeController.
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
                 break;
@@ -78,6 +77,7 @@ public class TestActivity extends AppCompatActivity implements NativeController.
 
         new AsyncTask<Void, Void, Void>() {
 
+            private PowerManager.WakeLock wakeLock;
             private ProgressDialog dialog = new ProgressDialog(TestActivity.this);
 
             boolean process = false;
@@ -98,6 +98,12 @@ public class TestActivity extends AppCompatActivity implements NativeController.
                     this.dialog.setMessage("Please wait");
                     this.dialog.show();
                     process = true;
+
+                    // wake lock till process finished
+                    PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+                    wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "OpenMaka Wake Lock for Test Processing");
+                    wakeLock.acquire();
+
                 } catch (NumberFormatException e) {
                     Toast.makeText(getApplicationContext(), "Please type iteration number!", Toast.LENGTH_LONG).show();
                     process = false;
@@ -119,6 +125,11 @@ public class TestActivity extends AppCompatActivity implements NativeController.
                 // dismiss spinner
                 if (dialog.isShowing()) {
                     dialog.dismiss();
+                }
+
+                // release wake lock
+                if (wakeLock != null) {
+                    wakeLock.release();
                 }
 
                 // if successful

@@ -5,7 +5,7 @@
     <defaultObjectImage>/images/card.jpg</defaultObjectImage>
     <statisticsMode>true</statisticsMode>
     <statisticsFile>statistics.csv</statisticsFile>
-    <debugMode>false</debugMode>
+    <debugMode>true</debugMode>
     <useWindows>false</useWindows>
     <sceneFrame>
         <maxImageSize>320</maxImageSize>
