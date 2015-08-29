@@ -27,6 +27,8 @@ namespace om {
 
         cv::Ptr<cv::DescriptorMatcher> matcher;
 
+        int distance;
+
         ObjectPattern *activeObjectPattern;
 
         om::Timer *clock;
@@ -87,6 +89,9 @@ namespace om {
                         std::vector<cv::Point2f> &goodSceneKeypoints);
 
         bool missingObjectPattern();
+
+        bool isRectangle(std::vector<cv::Point2f> &rectanglePoints);
+
     };
 
 };

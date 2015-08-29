@@ -607,202 +607,202 @@ int Controller::test(int test, int quantifier) {
 
         if (doSIFT) {
             //*********** SIFT BF Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"SIFT", "SIFT", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"SIFT", "BRIEF", "BF_NORM_L2"});
-            // TODO fix testConfigurations.push_back(std::vector<string>{"SIFT", "ORB", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"SIFT", "SURF", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"SIFT", "BRISK", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"SIFT", "FREAK", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"SIFT", "AKAZE", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"SIFT", "SIFT", "BF"});
+            testConfigurations.push_back(std::vector<string>{"SIFT", "BRIEF", "BF"});
+            // TODO fix testConfigurations.push_back(std::vector<string>{"SIFT", "ORB", "BF"});
+            testConfigurations.push_back(std::vector<string>{"SIFT", "SURF", "BF"});
+            testConfigurations.push_back(std::vector<string>{"SIFT", "BRISK", "BF"});
+            testConfigurations.push_back(std::vector<string>{"SIFT", "FREAK", "BF"});
+            testConfigurations.push_back(std::vector<string>{"SIFT", "AKAZE", "BF"});
 
             //*********** SIFT FLANN Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"SIFT", "SIFT", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"SIFT", "BRIEF", "FLANN_X"});
-            // TODO fix testConfigurations.push_back(std::vector<string>{"SIFT", "ORB", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"SIFT", "SURF", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"SIFT", "BRISK", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"SIFT", "FREAK", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"SIFT", "AKAZE", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"SIFT", "SIFT", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"SIFT", "BRIEF", "FLANN"});
+            // TODO fix testConfigurations.push_back(std::vector<string>{"SIFT", "ORB", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"SIFT", "SURF", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"SIFT", "BRISK", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"SIFT", "FREAK", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"SIFT", "AKAZE", "FLANN"});
         }
 
         if (doFAST) {
             //*********** FAST BF Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"FAST", "SIFT", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"FAST", "BRIEF", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"FAST", "ORB", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"FAST", "SURF", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"FAST", "BRISK", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"FAST", "FREAK", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"FAST", "AKAZE", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"FAST", "SIFT", "BF"});
+            testConfigurations.push_back(std::vector<string>{"FAST", "BRIEF", "BF"});
+            testConfigurations.push_back(std::vector<string>{"FAST", "ORB", "BF"});
+            testConfigurations.push_back(std::vector<string>{"FAST", "SURF", "BF"});
+            testConfigurations.push_back(std::vector<string>{"FAST", "BRISK", "BF"});
+            testConfigurations.push_back(std::vector<string>{"FAST", "FREAK", "BF"});
+            testConfigurations.push_back(std::vector<string>{"FAST", "AKAZE", "BF"});
 
             //*********** FAST FLANN Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"FAST", "SIFT", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"FAST", "BRIEF", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"FAST", "ORB", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"FAST", "SURF", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"FAST", "BRISK", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"FAST", "FREAK", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"FAST", "AKAZE", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"FAST", "SIFT", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"FAST", "BRIEF", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"FAST", "ORB", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"FAST", "SURF", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"FAST", "BRISK", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"FAST", "FREAK", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"FAST", "AKAZE", "FLANN"});
         }
 
         if (doGFTT) {
             //*********** GFTT BF Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"GFTT", "SIFT", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"GFTT", "BRIEF", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"GFTT", "ORB", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"GFTT", "SURF", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"GFTT", "BRISK", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"GFTT", "FREAK", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"GFTT", "AKAZE", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"GFTT", "SIFT", "BF"});
+            testConfigurations.push_back(std::vector<string>{"GFTT", "BRIEF", "BF"});
+            testConfigurations.push_back(std::vector<string>{"GFTT", "ORB", "BF"});
+            testConfigurations.push_back(std::vector<string>{"GFTT", "SURF", "BF"});
+            testConfigurations.push_back(std::vector<string>{"GFTT", "BRISK", "BF"});
+            testConfigurations.push_back(std::vector<string>{"GFTT", "FREAK", "BF"});
+            testConfigurations.push_back(std::vector<string>{"GFTT", "AKAZE", "BF"});
 
             //*********** GFTT FLANN Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"GFTT", "SIFT", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"GFTT", "BRIEF", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"GFTT", "ORB", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"GFTT", "SURF", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"GFTT", "BRISK", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"GFTT", "FREAK", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"GFTT", "AKAZE", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"GFTT", "SIFT", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"GFTT", "BRIEF", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"GFTT", "ORB", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"GFTT", "SURF", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"GFTT", "BRISK", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"GFTT", "FREAK", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"GFTT", "AKAZE", "FLANN"});
         }
 
         if (doMSER) {
             //*********** MSER BF Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"MSER", "SIFT", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"MSER", "BRIEF", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"MSER", "ORB", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"MSER", "SURF", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"MSER", "BRISK", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"MSER", "FREAK", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"MSER", "AKAZE", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"MSER", "SIFT", "BF"});
+            testConfigurations.push_back(std::vector<string>{"MSER", "BRIEF", "BF"});
+            testConfigurations.push_back(std::vector<string>{"MSER", "ORB", "BF"});
+            testConfigurations.push_back(std::vector<string>{"MSER", "SURF", "BF"});
+            testConfigurations.push_back(std::vector<string>{"MSER", "BRISK", "BF"});
+            testConfigurations.push_back(std::vector<string>{"MSER", "FREAK", "BF"});
+            testConfigurations.push_back(std::vector<string>{"MSER", "AKAZE", "BF"});
 
             //*********** MSER FLANN Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"MSER", "SIFT", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"MSER", "BRIEF", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"MSER", "ORB", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"MSER", "SURF", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"MSER", "BRISK", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"MSER", "FREAK", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"MSER", "AKAZE", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"MSER", "SIFT", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"MSER", "BRIEF", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"MSER", "ORB", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"MSER", "SURF", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"MSER", "BRISK", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"MSER", "FREAK", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"MSER", "AKAZE", "FLANN"});
         }
 
         if (doDENSE) {
             //*********** DENSE BF Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"DENSE", "SIFT", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"DENSE", "BRIEF", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"DENSE", "ORB", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"DENSE", "SURF", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"DENSE", "BRISK", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"DENSE", "FREAK", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"DENSE", "AKAZE", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"DENSE", "SIFT", "BF"});
+            testConfigurations.push_back(std::vector<string>{"DENSE", "BRIEF", "BF"});
+            testConfigurations.push_back(std::vector<string>{"DENSE", "ORB", "BF"});
+            testConfigurations.push_back(std::vector<string>{"DENSE", "SURF", "BF"});
+            testConfigurations.push_back(std::vector<string>{"DENSE", "BRISK", "BF"});
+            testConfigurations.push_back(std::vector<string>{"DENSE", "FREAK", "BF"});
+            testConfigurations.push_back(std::vector<string>{"DENSE", "AKAZE", "BF"});
 
             //*********** DENSE FLANN Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"DENSE", "SIFT", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"DENSE", "BRIEF", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"DENSE", "ORB", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"DENSE", "SURF", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"DENSE", "BRISK", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"DENSE", "FREAK", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"DENSE", "AKAZE", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"DENSE", "SIFT", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"DENSE", "BRIEF", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"DENSE", "ORB", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"DENSE", "SURF", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"DENSE", "BRISK", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"DENSE", "FREAK", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"DENSE", "AKAZE", "FLANN"});
         }
 
         if (doSTAR) {
             //*********** STAR BF Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"STAR", "SIFT", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"STAR", "BRIEF", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"STAR", "ORB", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"STAR", "SURF", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"STAR", "BRISK", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"STAR", "FREAK", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"STAR", "AKAZE", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"STAR", "SIFT", "BF"});
+            testConfigurations.push_back(std::vector<string>{"STAR", "BRIEF", "BF"});
+            testConfigurations.push_back(std::vector<string>{"STAR", "ORB", "BF"});
+            testConfigurations.push_back(std::vector<string>{"STAR", "SURF", "BF"});
+            testConfigurations.push_back(std::vector<string>{"STAR", "BRISK", "BF"});
+            testConfigurations.push_back(std::vector<string>{"STAR", "FREAK", "BF"});
+            testConfigurations.push_back(std::vector<string>{"STAR", "AKAZE", "BF"});
 
             //*********** STAR FLANN Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"STAR", "SIFT", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"STAR", "BRIEF", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"STAR", "ORB", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"STAR", "SURF", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"STAR", "BRISK", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"STAR", "FREAK", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"STAR", "AKAZE", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"STAR", "SIFT", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"STAR", "BRIEF", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"STAR", "ORB", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"STAR", "SURF", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"STAR", "BRISK", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"STAR", "FREAK", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"STAR", "AKAZE", "FLANN"});
         }
 
         if (doSURF) {
             //*********** SURF BF Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"SURF", "SIFT", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"SURF", "BRIEF", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"SURF", "ORB", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"SURF", "SURF", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"SURF", "BRISK", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"SURF", "FREAK", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"SURF", "AKAZE", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"SURF", "SIFT", "BF"});
+            testConfigurations.push_back(std::vector<string>{"SURF", "BRIEF", "BF"});
+            testConfigurations.push_back(std::vector<string>{"SURF", "ORB", "BF"});
+            testConfigurations.push_back(std::vector<string>{"SURF", "SURF", "BF"});
+            testConfigurations.push_back(std::vector<string>{"SURF", "BRISK", "BF"});
+            testConfigurations.push_back(std::vector<string>{"SURF", "FREAK", "BF"});
+            testConfigurations.push_back(std::vector<string>{"SURF", "AKAZE", "BF"});
 
             //*********** SURF FLANN Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"SURF", "SIFT", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"SURF", "BRIEF", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"SURF", "ORB", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"SURF", "SURF", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"SURF", "BRISK", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"SURF", "FREAK", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"SURF", "AKAZE", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"SURF", "SIFT", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"SURF", "BRIEF", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"SURF", "ORB", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"SURF", "SURF", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"SURF", "BRISK", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"SURF", "FREAK", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"SURF", "AKAZE", "FLANN"});
         }
 
         if (doBRISK) {
             //*********** BRISK BF Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"BRISK", "SIFT", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"BRISK", "BRIEF", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"BRISK", "ORB", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"BRISK", "SURF", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"BRISK", "BRISK", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"BRISK", "FREAK", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"BRISK", "AKAZE", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"BRISK", "SIFT", "BF"});
+            testConfigurations.push_back(std::vector<string>{"BRISK", "BRIEF", "BF"});
+            testConfigurations.push_back(std::vector<string>{"BRISK", "ORB", "BF"});
+            testConfigurations.push_back(std::vector<string>{"BRISK", "SURF", "BF"});
+            testConfigurations.push_back(std::vector<string>{"BRISK", "BRISK", "BF"});
+            testConfigurations.push_back(std::vector<string>{"BRISK", "FREAK", "BF"});
+            testConfigurations.push_back(std::vector<string>{"BRISK", "AKAZE", "BF"});
 
             //*********** BRISK FLANN Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"BRISK", "SIFT", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"BRISK", "BRIEF", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"BRISK", "ORB", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"BRISK", "SURF", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"BRISK", "BRISK", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"BRISK", "FREAK", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"BRISK", "AKAZE", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"BRISK", "SIFT", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"BRISK", "BRIEF", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"BRISK", "ORB", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"BRISK", "SURF", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"BRISK", "BRISK", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"BRISK", "FREAK", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"BRISK", "AKAZE", "FLANN"});
         }
 
         if (doORB) {
             //*********** ORB BF Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"ORB", "SIFT", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"ORB", "BRIEF", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"ORB", "ORB", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"ORB", "SURF", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"ORB", "BRISK", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"ORB", "FREAK", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"ORB", "AKAZE", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"ORB", "SIFT", "BF"});
+            testConfigurations.push_back(std::vector<string>{"ORB", "BRIEF", "BF"});
+            testConfigurations.push_back(std::vector<string>{"ORB", "ORB", "BF"});
+            testConfigurations.push_back(std::vector<string>{"ORB", "SURF", "BF"});
+            testConfigurations.push_back(std::vector<string>{"ORB", "BRISK", "BF"});
+            testConfigurations.push_back(std::vector<string>{"ORB", "FREAK", "BF"});
+            testConfigurations.push_back(std::vector<string>{"ORB", "AKAZE", "BF"});
 
             //*********** ORB FLANN Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"ORB", "SIFT", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"ORB", "BRIEF", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"ORB", "ORB", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"ORB", "SURF", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"ORB", "BRISK", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"ORB", "FREAK", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"ORB", "AKAZE", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"ORB", "SIFT", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"ORB", "BRIEF", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"ORB", "ORB", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"ORB", "SURF", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"ORB", "BRISK", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"ORB", "FREAK", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"ORB", "AKAZE", "FLANN"});
         }
 
         if (doAKAZE) {
             //*********** AKAZE BF Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"AKAZE", "SIFT", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"AKAZE", "BRIEF", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"AKAZE", "ORB", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"AKAZE", "SURF", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"AKAZE", "BRISK", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"AKAZE", "FREAK", "BF_NORM_L2"});
-            testConfigurations.push_back(std::vector<string>{"AKAZE", "AKAZE", "BF_NORM_L2"});
+            testConfigurations.push_back(std::vector<string>{"AKAZE", "SIFT", "BF"});
+            testConfigurations.push_back(std::vector<string>{"AKAZE", "BRIEF", "BF"});
+            testConfigurations.push_back(std::vector<string>{"AKAZE", "ORB", "BF"});
+            testConfigurations.push_back(std::vector<string>{"AKAZE", "SURF", "BF"});
+            testConfigurations.push_back(std::vector<string>{"AKAZE", "BRISK", "BF"});
+            testConfigurations.push_back(std::vector<string>{"AKAZE", "FREAK", "BF"});
+            testConfigurations.push_back(std::vector<string>{"AKAZE", "AKAZE", "BF"});
 
             //*********** AKAZE FLANN Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"AKAZE", "SIFT", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"AKAZE", "BRIEF", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"AKAZE", "ORB", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"AKAZE", "SURF", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"AKAZE", "BRISK", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"AKAZE", "FREAK", "FLANN_X"});
-            testConfigurations.push_back(std::vector<string>{"AKAZE", "AKAZE", "FLANN_X"});
+            testConfigurations.push_back(std::vector<string>{"AKAZE", "SIFT", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"AKAZE", "BRIEF", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"AKAZE", "ORB", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"AKAZE", "SURF", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"AKAZE", "BRISK", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"AKAZE", "FREAK", "FLANN"});
+            testConfigurations.push_back(std::vector<string>{"AKAZE", "AKAZE", "FLANN"});
         }
 
         for (auto &configuration : testConfigurations) {

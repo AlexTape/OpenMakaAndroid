@@ -76,31 +76,32 @@ Analyzer *Analyzer::getInstance() {
 
 void Analyzer::initDetector(std::string &type) {
     if (type == "SIFT") {
-        detector = cv::Ptr<cv::FeatureDetector>(new cv::SIFT(400, 5, 0.04, 25, 2.6));
+        detector = cv::Ptr<cv::FeatureDetector>(new cv::SIFT(400, 3, 0.04, 25, 1.6));
     }
     else if (type == "FAST") {
-        detector = cv::Ptr<cv::FeatureDetector>(new cv::FastFeatureDetector());
+        detector = cv::Ptr<cv::FeatureDetector>(new cv::FastFeatureDetector(20, true));
     }
     else if (type == "GFTT") {
-        detector = cv::Ptr<cv::FeatureDetector>(new cv::GFTTDetector());
+        detector = cv::Ptr<cv::FeatureDetector>(new cv::GFTTDetector(1000, 0.01, 1, 3, false, 0.04));
     }
     else if (type == "MSER") {
-        detector = cv::Ptr<cv::FeatureDetector>(new cv::MSER());
+        detector = cv::Ptr<cv::FeatureDetector>(new cv::MSER(5, 60, 14400, 0.25, .2, 200, 1.01, 0.003, 5));
     }
     else if (type == "DENSE") {
-        detector = cv::Ptr<cv::FeatureDetector>(new cv::DenseFeatureDetector());
+        detector = cv::Ptr<cv::FeatureDetector>(new cv::DenseFeatureDetector(1.f, 1, 0.1f, 6, 0, true, false));
     }
     else if (type == "STAR") {
-        detector = cv::Ptr<cv::FeatureDetector>(new cv::StarFeatureDetector());
+        detector = cv::Ptr<cv::FeatureDetector>(new cv::StarFeatureDetector(45, 30, 10, 8, 5));
     }
     else if (type == "SURF") {
-        detector = cv::Ptr<cv::FeatureDetector>(new cv::SURF(600.0));
+        detector = cv::Ptr<cv::FeatureDetector>(new cv::SURF(600.0, 4, 2, true, false));
     }
     else if (type == "BRISK") {
-        detector = cv::Ptr<cv::FeatureDetector>(new cv::BRISK(60, 4, 1.0f));
+        detector = cv::Ptr<cv::FeatureDetector>(new cv::BRISK(30, 3, 1.0f));
     }
     else if (type == "ORB") {
-        detector = cv::Ptr<cv::FeatureDetector>(new cv::ORB(1000));
+        detector = cv::Ptr<cv::FeatureDetector>(new cv::ORB(500, 1.2f, 8, 31,
+                                                            0, 2, cv::ORB::HARRIS_SCORE, 31));
     }
     else if (type == "AKAZE") {
         detector = cv::Ptr<cv::FeatureDetector>(new cv::AKAZE());
@@ -109,41 +110,41 @@ void Analyzer::initDetector(std::string &type) {
 
 void Analyzer::initExtractor(std::string &type) {
     if (type == "SIFT") {
-        extractor = cv::Ptr<cv::DescriptorExtractor>(new cv::SIFT());
+        extractor = cv::Ptr<cv::DescriptorExtractor>(new cv::SIFT(0, 3, 0.04, 10, 1.6));
+        distance = cv::NORM_L2SQR;
     }
     else if (type == "BRIEF") {
-        extractor = cv::Ptr<cv::DescriptorExtractor>(new cv::BriefDescriptorExtractor());
+        extractor = cv::Ptr<cv::DescriptorExtractor>(new cv::BriefDescriptorExtractor(32));
+        distance = cv::NORM_HAMMING;
     }
     else if (type == "ORB") {
-        extractor = cv::Ptr<cv::DescriptorExtractor>(new cv::ORB());
+        extractor = cv::Ptr<cv::DescriptorExtractor>(new cv::ORB(500, 1.2f, 8, 31, 0, 2, cv::ORB::HARRIS_SCORE, 31));
+        distance = cv::NORM_HAMMING;
     }
     else if (type == "SURF") {
-        extractor = cv::Ptr<cv::DescriptorExtractor>(new cv::SURF(600.0));
+        extractor = cv::Ptr<cv::DescriptorExtractor>(new cv::SURF(600.0, 4, 2, true, false));
+        distance = cv::NORM_L2SQR;
     }
     else if (type == "BRISK") {
-        extractor = cv::Ptr<cv::DescriptorExtractor>(new cv::BRISK());
+        extractor = cv::Ptr<cv::DescriptorExtractor>(new cv::BRISK(30, 3, 1.0f));
+        distance = cv::NORM_HAMMING;
     }
     else if (type == "FREAK") {
-        extractor = cv::Ptr<cv::DescriptorExtractor>(new cv::FREAK(false, false));
+        extractor = cv::Ptr<cv::DescriptorExtractor>(new cv::FREAK(false, false, 22.0f, 4, vector<int>()));
+        distance = cv::NORM_HAMMING;
     }
     else if (type == "AKAZE") {
         extractor = cv::Ptr<cv::DescriptorExtractor>(new cv::AKAZE());
+        distance = cv::NORM_L2SQR;
     }
 }
 
 void Analyzer::initMatcher(std::string &type) {
 
-    if (type == "BF_NORM_L2") {
+    if (type == "BF") {
 
         // NOTE: OpenCV Error: Assertion failed (K == 1 && update == 0 && mask.empty()) in batchDistance
         // https://github.com/MasteringOpenCV/code/issues/
-
-        // TODO Configure distances
-        // One of NORM_L1, NORM_L2, NORM_HAMMING, NORM_HAMMING2.
-        // L1 and L2 norms are preferable choices for SIFT and SURF descriptors,
-        // NORM_HAMMING should be used with ORB, BRISK and BRIEF,
-        // NORM_HAMMING2 should be used with ORB when WTA_K==3 or 4 (see ORB::ORB constructor description).
-        int distance = cv::NORM_L2;
         matcher = cv::Ptr<cv::DescriptorMatcher>(new cv::BFMatcher(distance, false));
         // matcher = cv::Ptr<cv::DescriptorMatcher>(new cv::BFMatcher(cv::NORM_HAMMING, false));
 
@@ -305,11 +306,11 @@ void Analyzer::matchBinaryDescriptors(SceneFrame &sceneFrame, std::vector<cv::Po
     if (IS_BRUTEFORCE_MATCHER) {
 
         if (Controller::MODE_DEBUG) {
-            cout << "BruteForce NORM_L2 matching.." << endl;
+            cout << "BruteForce matching.." << endl;
         }
 
         if (Controller::MODE_STATISTICS) {
-            Controller::statistics("Matcher", (string) "BF_NORM_L2");
+            Controller::statistics("Matcher", (string) "BF");
         }
 
         // TODO train first
@@ -413,7 +414,7 @@ void Analyzer::matchFloatDescriptors(SceneFrame &sceneFrame, std::vector<cv::Poi
         }
 
         if (Controller::MODE_STATISTICS) {
-            Controller::statistics("Matcher", (string) "BF_NORM_L2");
+            Controller::statistics("Matcher", (string) "BF");
         }
 
         // knnMatch
@@ -524,7 +525,7 @@ bool Analyzer::process(SceneFrame &sceneFrame) {
         clock->restart();
     }
 
-    bool foundObject = false;
+    bool enoughInliers = false;
 
     if (isInitialized) {
 
@@ -605,10 +606,10 @@ bool Analyzer::process(SceneFrame &sceneFrame) {
 
         }
 
-        foundObject = (inliers >= MINIMUM_INLIERS);
+        enoughInliers = (inliers >= MINIMUM_INLIERS);
 
         // find perspective and draw rectangle
-        if (foundObject) {
+        if (enoughInliers) {
 
             if (Controller::MODE_STATISTICS) {
                 timer->restart();
@@ -654,23 +655,85 @@ bool Analyzer::process(SceneFrame &sceneFrame) {
         }
     }
 
+    // basic rule to devide if object was found or not
+    bool objectFound = false;
+    if (enoughInliers) {
+        objectFound = isRectangle(sceneFrame.objectPosition);
+    }
+
+    // add text to window(s)
     if (Controller::USE_WINDOWS) {
-        // add text to window(s)
-        if (foundObject) {
-            cv::putText(sceneFrame.gray, " Found Object: true" + foundObject, cv::Point(10, 15), CV_FONT_HERSHEY_PLAIN,
-                        1,
-                        CV_RGB(0, 200, 0));
+
+        // create text
+        char text[255];
+        string gotObject = "";
+        if (objectFound) {
+            gotObject = "true";
         } else {
-            cv::putText(sceneFrame.gray, " Found Object: false" + foundObject, cv::Point(10, 15), CV_FONT_HERSHEY_PLAIN,
-                        1,
-                        CV_RGB(0, 200, 0));
+            gotObject = "false";
         }
+        sprintf(text, "%s-%s-%s Found:%s", DETECTOR.c_str(), EXTRACTOR.c_str(), MATCHER.c_str(), gotObject.c_str());
+
+        // draw text background (white)
+        cv::rectangle(sceneFrame.gray, cv::Point(0, 0), cv::Point(305, 25), CV_RGB(255, 255, 255), -1);
+
+        // draw text
+        cv::putText(sceneFrame.gray, text, cv::Point(10, 15), CV_FONT_HERSHEY_PLAIN,
+                    1,
+                    CV_RGB(255, 0, 0));
 
         // open custom windows
         imshow(DETECTOR + "-" + EXTRACTOR + "-" + MATCHER, sceneFrame.gray);
+
+        // save image?
+        imwrite(Controller::STORAGE_PATH + "/images/test-result-images/" + DETECTOR
+                + "-" + EXTRACTOR + "-" + MATCHER + ".jpg", sceneFrame.gray);
     }
 
-    return foundObject;
+    return objectFound;
+}
+
+bool Analyzer::isRectangle(vector<cv::Point2f> &rectanglePoints) {
+
+    // check the validity of transformed rectangle shape
+    // the sign of outer products of each edge vector must be the same
+    bool returnThis = true;
+
+    if (rectanglePoints.size() == 4) {
+
+        float vector[4][2];
+        int i;
+
+        vector[0][0] = rectanglePoints[1].x - rectanglePoints[0].x;
+        vector[0][1] = rectanglePoints[1].y - rectanglePoints[0].y;
+        vector[1][0] = rectanglePoints[2].x - rectanglePoints[1].x;
+        vector[1][1] = rectanglePoints[2].y - rectanglePoints[1].y;
+        vector[2][0] = rectanglePoints[3].x - rectanglePoints[2].x;
+        vector[2][1] = rectanglePoints[3].y - rectanglePoints[2].y;
+        vector[3][0] = rectanglePoints[0].x - rectanglePoints[3].x;
+        vector[3][1] = rectanglePoints[0].y - rectanglePoints[3].y;
+
+        int multiplicator;
+        float product = vector[3][0] * vector[0][1] - vector[3][1] * vector[0][0];
+        if (product > 0) {
+            multiplicator = 1;
+        } else {
+            multiplicator = -1;
+        }
+
+        for (i = 0; i < 3; i++) {
+            product = vector[i][0] * vector[i + 1][1] - vector[i][1] * vector[i + 1][0];
+            if (product * multiplicator <= 0) {
+                returnThis = false;
+                break;
+            }
+        }
+
+    } else {
+        returnThis = false;
+    }
+
+    return returnThis;
 }
 
 int Analyzer::calcInliers(SceneFrame &sceneFrame, std::vector<cv::Point2f> &goodTrainKeypoints,
