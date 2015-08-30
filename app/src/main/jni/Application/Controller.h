@@ -96,7 +96,8 @@ namespace om {
 
         static bool MODE_STATISTICS;
         static bool MODE_DEBUG;
-        static bool USE_WINDOWS;
+        static bool MODE_USE_WINDOWS;
+        static bool MODE_SAVE_RESULT_FRAMES;
 
         void isModeDebug(bool isActive);
 

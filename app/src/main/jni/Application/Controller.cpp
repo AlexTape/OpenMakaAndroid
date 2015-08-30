@@ -35,6 +35,10 @@ Controller *Controller::inst_ = NULL;
 bool Controller::MODE_OBJECT_DETECTION;
 bool Controller::MODE_TRACKING;
 bool Controller::MODE_OPENGL;
+bool Controller::MODE_STATISTICS;
+bool Controller::MODE_DEBUG;
+bool Controller::MODE_USE_WINDOWS;
+bool Controller::MODE_SAVE_RESULT_FRAMES;
 Analyzer *Controller::analyzer;
 Tracker *Controller::tracker;
 Statistics *Controller::stats;
@@ -44,9 +48,7 @@ std::string Controller::STORAGE_PATH;
 std::string Controller::CONFIG_FILE;
 std::string Controller::DEFAULT_OBJECT_IMAGE;
 std::string Controller::STATISTICS_FILE;
-bool Controller::MODE_STATISTICS;
-bool Controller::MODE_DEBUG;
-bool Controller::USE_WINDOWS;
+
 
 Controller::Controller(void) {
 
@@ -136,7 +138,7 @@ int Controller::initialize(cv::Mat &frame, std::string storagePath) {
     // load default image/pattern
     Controller::DEFAULT_OBJECT_IMAGE = (string) storage["defaultObjectImage"];
 
-	// load statistics file path
+    // load statistics file path
     Controller::STATISTICS_FILE = (string) storage["statisticsFile"];
 
     // load environment variables
@@ -145,7 +147,9 @@ int Controller::initialize(cv::Mat &frame, std::string storagePath) {
     string debug = (string) storage["debugMode"];
     Controller::MODE_DEBUG = debug == "true";
     string windows = (string) storage["useWindows"];
-    Controller::USE_WINDOWS = windows == "true";
+    Controller::MODE_USE_WINDOWS = windows == "true";
+    string saveFrames = (string) storage["saveResultFrames"];
+    Controller::MODE_SAVE_RESULT_FRAMES = saveFrames == "true";
 
     // load scene frame attributes
     cv::FileNode sceneFrameNode = storage["sceneFrame"];
@@ -182,35 +186,35 @@ int Controller::initialize(cv::Mat &frame, std::string storagePath) {
     }
 
     if (Controller::MODE_DEBUG) {
-    cout << "Loading attributes.." << endl;
-    cout << "-----------------------------------------------------" << endl;
-    cout << "C O N T R O L L E R" << endl;
-    cout << "-----------------------------------------------------" << endl;
-    cout << "::STORAGE_PATH=" << Controller::STORAGE_PATH << endl;
-    cout << "::FRAME_SIZE=" << Controller::FRAME_SIZE << endl;
-    cout << "-----------------------------------------------------" << endl;
-    cout << "S C E N E   F R A M E" << endl;
-    cout << "-----------------------------------------------------" << endl;
-    cout << "::MAX_IMAGE_SIZE=" << SceneFrame::MAX_IMAGE_SIZE << endl;
-    cout << "-----------------------------------------------------" << endl;
-    cout << "A N A L Y Z E R" << endl;
-    cout << "-----------------------------------------------------" << endl;
-    cout << "::DETECTOR=" << Analyzer::DETECTOR << endl;
-    cout << "::EXTRACTOR=" << Analyzer::EXTRACTOR << endl;
-    cout << "::MATCHER=" << Analyzer::MATCHER << endl;
-    cout << "::MINIMUM_INLIERS=" << Analyzer::MINIMUM_INLIERS << endl;
-    cout << "::MINIMUM_MATCHES=" << Analyzer::MINIMUM_MATCHES << endl;
-    cout << "::NN_DISTANCE_RATIO=" << Analyzer::NN_DISTANCE_RATIO << endl;
-    cout << "::K_GROUPS=" << Analyzer::K_GROUPS << endl;
-    cout << "::RANSAC_REPROJECTION_THRESHOLD=" << Analyzer::RANSAC_REPROJECTION_THRESHOLD << endl;
-    cout << "-----------------------------------------------------" << endl;
-    cout << "T R A C K E R" << endl;
-    cout << "-----------------------------------------------------" << endl;
-    cout << "::MAX_CORNERS=" << Tracker::MAX_CORNERS << endl;
-    cout << "::QUALITY_LEVEL=" << Tracker::QUALITY_LEVEL << endl;
-    cout << "::MINIMUM_DISTANCE=" << Tracker::MINIMUM_DISTANCE << endl;
-    cout << "-----------------------------------------------------" << endl;
-    cout << "Loading done!" << endl;
+        cout << "Loading attributes.." << endl;
+        cout << "-----------------------------------------------------" << endl;
+        cout << "C O N T R O L L E R" << endl;
+        cout << "-----------------------------------------------------" << endl;
+        cout << "::STORAGE_PATH=" << Controller::STORAGE_PATH << endl;
+        cout << "::FRAME_SIZE=" << Controller::FRAME_SIZE << endl;
+        cout << "-----------------------------------------------------" << endl;
+        cout << "S C E N E   F R A M E" << endl;
+        cout << "-----------------------------------------------------" << endl;
+        cout << "::MAX_IMAGE_SIZE=" << SceneFrame::MAX_IMAGE_SIZE << endl;
+        cout << "-----------------------------------------------------" << endl;
+        cout << "A N A L Y Z E R" << endl;
+        cout << "-----------------------------------------------------" << endl;
+        cout << "::DETECTOR=" << Analyzer::DETECTOR << endl;
+        cout << "::EXTRACTOR=" << Analyzer::EXTRACTOR << endl;
+        cout << "::MATCHER=" << Analyzer::MATCHER << endl;
+        cout << "::MINIMUM_INLIERS=" << Analyzer::MINIMUM_INLIERS << endl;
+        cout << "::MINIMUM_MATCHES=" << Analyzer::MINIMUM_MATCHES << endl;
+        cout << "::NN_DISTANCE_RATIO=" << Analyzer::NN_DISTANCE_RATIO << endl;
+        cout << "::K_GROUPS=" << Analyzer::K_GROUPS << endl;
+        cout << "::RANSAC_REPROJECTION_THRESHOLD=" << Analyzer::RANSAC_REPROJECTION_THRESHOLD << endl;
+        cout << "-----------------------------------------------------" << endl;
+        cout << "T R A C K E R" << endl;
+        cout << "-----------------------------------------------------" << endl;
+        cout << "::MAX_CORNERS=" << Tracker::MAX_CORNERS << endl;
+        cout << "::QUALITY_LEVEL=" << Tracker::QUALITY_LEVEL << endl;
+        cout << "::MINIMUM_DISTANCE=" << Tracker::MINIMUM_DISTANCE << endl;
+        cout << "-----------------------------------------------------" << endl;
+        cout << "Loading done!" << endl;
     }
 
     // instance is initialized
@@ -395,6 +399,40 @@ int Controller::displayFunction(cv::Mat &mRgbaFrame, cv::Mat &mGrayFrame) {
 
     }
 
+    // add text to window(s)
+    if (Controller::MODE_USE_WINDOWS || Controller::MODE_SAVE_RESULT_FRAMES) {
+
+        // create text
+        char text[255];
+        string gotObject = "";
+        if (STATE_OBJECT_FOUND) {
+            gotObject = "true";
+        } else {
+            gotObject = "false";
+        }
+        sprintf(text, "%s-%s-%s Found:%s", Analyzer::DETECTOR.c_str(), Analyzer::EXTRACTOR.c_str(),
+                Analyzer::MATCHER.c_str(), gotObject.c_str());
+
+        // draw text background (white)
+        cv::rectangle(mRgbaFrame, cv::Point(0, 0), cv::Point(305, 25), CV_RGB(255, 255, 255), -1);
+
+        // draw text
+        cv::putText(mRgbaFrame, text, cv::Point(10, 15), CV_FONT_HERSHEY_PLAIN,
+                    1,
+                    CV_RGB(255, 0, 0));
+
+        // display image?
+        if (Controller::MODE_USE_WINDOWS) {
+            imshow(Analyzer::DETECTOR + "-" + Analyzer::EXTRACTOR + "-" + Analyzer::MATCHER, mRgbaFrame);
+        }
+
+        // save image?
+        if (Controller::MODE_SAVE_RESULT_FRAMES) {
+            imwrite(Controller::STORAGE_PATH + "/test-results/" + Analyzer::DETECTOR
+                    + "-" + Analyzer::EXTRACTOR + "-" + Analyzer::MATCHER + ".jpg", mRgbaFrame);
+        }
+    }
+
     // return state
     if (STATE_OBJECT_FOUND || STATE_TRACKING_OBJECT) {
         returnThis = 1;
@@ -415,7 +453,7 @@ void Controller::glResize(int height, int width) {
 
 int Controller::setDetector(std::string type) {
     int returnThis = 0;
-    bool result = configure(type, Analyzer::EXTRACTOR, Analyzer::MATCHER);
+    bool result = Controller::configure(type, Analyzer::EXTRACTOR, Analyzer::MATCHER);
     if (result) {
         returnThis = 1;
     }
@@ -476,6 +514,7 @@ bool Controller::configure(std::string detector, std::string extractor, std::str
 
     // disable analyzer
     analyzer->isInitialized = false;
+    isInitialized = false;
 
     // set values
     Analyzer::DETECTOR = detector;
@@ -532,8 +571,6 @@ int Controller::test(int test, int quantifier) {
     }
 
     // some variables to control testing routine
-    bool shouldQuit = false;
-    int isRun = 0;
     int doRuns = quantifier;
 
     // default test configuration
@@ -596,252 +633,255 @@ int Controller::test(int test, int quantifier) {
             return 0;
     }
 
-    do {
 
-        // start first test run
-        isRun++;
+    // init variables
+    Mat sceneRgbImage, sceneGrayImage;
+    std::vector<std::vector<string>> testConfigurations;
 
-        // init variables
-        Mat sceneRgbImage, sceneGrayImage;
-        std::vector<std::vector<string>> testConfigurations;
+    if (doSIFT) {
+        //*********** SIFT BF Tests ***********//
+        testConfigurations.push_back(std::vector<string>{"SIFT", "SIFT", "BF"});
+        testConfigurations.push_back(std::vector<string>{"SIFT", "BRIEF", "BF"});
+        // TODO fix testConfigurations.push_back(std::vector<string>{"SIFT", "ORB", "BF"});
+        testConfigurations.push_back(std::vector<string>{"SIFT", "SURF", "BF"});
+        testConfigurations.push_back(std::vector<string>{"SIFT", "BRISK", "BF"});
+        testConfigurations.push_back(std::vector<string>{"SIFT", "FREAK", "BF"});
+        testConfigurations.push_back(std::vector<string>{"SIFT", "AKAZE", "BF"});
 
-        if (doSIFT) {
-            //*********** SIFT BF Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"SIFT", "SIFT", "BF"});
-            testConfigurations.push_back(std::vector<string>{"SIFT", "BRIEF", "BF"});
-            // TODO fix testConfigurations.push_back(std::vector<string>{"SIFT", "ORB", "BF"});
-            testConfigurations.push_back(std::vector<string>{"SIFT", "SURF", "BF"});
-            testConfigurations.push_back(std::vector<string>{"SIFT", "BRISK", "BF"});
-            testConfigurations.push_back(std::vector<string>{"SIFT", "FREAK", "BF"});
-            testConfigurations.push_back(std::vector<string>{"SIFT", "AKAZE", "BF"});
+        //*********** SIFT FLANN Tests ***********//
+        testConfigurations.push_back(std::vector<string>{"SIFT", "SIFT", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"SIFT", "BRIEF", "FLANN"});
+        // TODO fix testConfigurations.push_back(std::vector<string>{"SIFT", "ORB", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"SIFT", "SURF", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"SIFT", "BRISK", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"SIFT", "FREAK", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"SIFT", "AKAZE", "FLANN"});
+    }
 
-            //*********** SIFT FLANN Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"SIFT", "SIFT", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"SIFT", "BRIEF", "FLANN"});
-            // TODO fix testConfigurations.push_back(std::vector<string>{"SIFT", "ORB", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"SIFT", "SURF", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"SIFT", "BRISK", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"SIFT", "FREAK", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"SIFT", "AKAZE", "FLANN"});
-        }
+    if (doFAST) {
+        //*********** FAST BF Tests ***********//
+        testConfigurations.push_back(std::vector<string>{"FAST", "SIFT", "BF"});
+        testConfigurations.push_back(std::vector<string>{"FAST", "BRIEF", "BF"});
+        testConfigurations.push_back(std::vector<string>{"FAST", "ORB", "BF"});
+        testConfigurations.push_back(std::vector<string>{"FAST", "SURF", "BF"});
+        testConfigurations.push_back(std::vector<string>{"FAST", "BRISK", "BF"});
+        testConfigurations.push_back(std::vector<string>{"FAST", "FREAK", "BF"});
+        testConfigurations.push_back(std::vector<string>{"FAST", "AKAZE", "BF"});
 
-        if (doFAST) {
-            //*********** FAST BF Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"FAST", "SIFT", "BF"});
-            testConfigurations.push_back(std::vector<string>{"FAST", "BRIEF", "BF"});
-            testConfigurations.push_back(std::vector<string>{"FAST", "ORB", "BF"});
-            testConfigurations.push_back(std::vector<string>{"FAST", "SURF", "BF"});
-            testConfigurations.push_back(std::vector<string>{"FAST", "BRISK", "BF"});
-            testConfigurations.push_back(std::vector<string>{"FAST", "FREAK", "BF"});
-            testConfigurations.push_back(std::vector<string>{"FAST", "AKAZE", "BF"});
+        //*********** FAST FLANN Tests ***********//
+        testConfigurations.push_back(std::vector<string>{"FAST", "SIFT", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"FAST", "BRIEF", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"FAST", "ORB", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"FAST", "SURF", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"FAST", "BRISK", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"FAST", "FREAK", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"FAST", "AKAZE", "FLANN"});
+    }
 
-            //*********** FAST FLANN Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"FAST", "SIFT", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"FAST", "BRIEF", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"FAST", "ORB", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"FAST", "SURF", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"FAST", "BRISK", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"FAST", "FREAK", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"FAST", "AKAZE", "FLANN"});
-        }
+    if (doGFTT) {
+        //*********** GFTT BF Tests ***********//
+        testConfigurations.push_back(std::vector<string>{"GFTT", "SIFT", "BF"});
+        testConfigurations.push_back(std::vector<string>{"GFTT", "BRIEF", "BF"});
+        testConfigurations.push_back(std::vector<string>{"GFTT", "ORB", "BF"});
+        testConfigurations.push_back(std::vector<string>{"GFTT", "SURF", "BF"});
+        testConfigurations.push_back(std::vector<string>{"GFTT", "BRISK", "BF"});
+        testConfigurations.push_back(std::vector<string>{"GFTT", "FREAK", "BF"});
+        testConfigurations.push_back(std::vector<string>{"GFTT", "AKAZE", "BF"});
 
-        if (doGFTT) {
-            //*********** GFTT BF Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"GFTT", "SIFT", "BF"});
-            testConfigurations.push_back(std::vector<string>{"GFTT", "BRIEF", "BF"});
-            testConfigurations.push_back(std::vector<string>{"GFTT", "ORB", "BF"});
-            testConfigurations.push_back(std::vector<string>{"GFTT", "SURF", "BF"});
-            testConfigurations.push_back(std::vector<string>{"GFTT", "BRISK", "BF"});
-            testConfigurations.push_back(std::vector<string>{"GFTT", "FREAK", "BF"});
-            testConfigurations.push_back(std::vector<string>{"GFTT", "AKAZE", "BF"});
+        //*********** GFTT FLANN Tests ***********//
+        testConfigurations.push_back(std::vector<string>{"GFTT", "SIFT", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"GFTT", "BRIEF", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"GFTT", "ORB", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"GFTT", "SURF", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"GFTT", "BRISK", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"GFTT", "FREAK", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"GFTT", "AKAZE", "FLANN"});
+    }
 
-            //*********** GFTT FLANN Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"GFTT", "SIFT", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"GFTT", "BRIEF", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"GFTT", "ORB", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"GFTT", "SURF", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"GFTT", "BRISK", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"GFTT", "FREAK", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"GFTT", "AKAZE", "FLANN"});
-        }
+    if (doMSER) {
+        //*********** MSER BF Tests ***********//
+        testConfigurations.push_back(std::vector<string>{"MSER", "SIFT", "BF"});
+        testConfigurations.push_back(std::vector<string>{"MSER", "BRIEF", "BF"});
+        testConfigurations.push_back(std::vector<string>{"MSER", "ORB", "BF"});
+        testConfigurations.push_back(std::vector<string>{"MSER", "SURF", "BF"});
+        testConfigurations.push_back(std::vector<string>{"MSER", "BRISK", "BF"});
+        testConfigurations.push_back(std::vector<string>{"MSER", "FREAK", "BF"});
+        testConfigurations.push_back(std::vector<string>{"MSER", "AKAZE", "BF"});
 
-        if (doMSER) {
-            //*********** MSER BF Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"MSER", "SIFT", "BF"});
-            testConfigurations.push_back(std::vector<string>{"MSER", "BRIEF", "BF"});
-            testConfigurations.push_back(std::vector<string>{"MSER", "ORB", "BF"});
-            testConfigurations.push_back(std::vector<string>{"MSER", "SURF", "BF"});
-            testConfigurations.push_back(std::vector<string>{"MSER", "BRISK", "BF"});
-            testConfigurations.push_back(std::vector<string>{"MSER", "FREAK", "BF"});
-            testConfigurations.push_back(std::vector<string>{"MSER", "AKAZE", "BF"});
+        //*********** MSER FLANN Tests ***********//
+        testConfigurations.push_back(std::vector<string>{"MSER", "SIFT", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"MSER", "BRIEF", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"MSER", "ORB", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"MSER", "SURF", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"MSER", "BRISK", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"MSER", "FREAK", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"MSER", "AKAZE", "FLANN"});
+    }
 
-            //*********** MSER FLANN Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"MSER", "SIFT", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"MSER", "BRIEF", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"MSER", "ORB", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"MSER", "SURF", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"MSER", "BRISK", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"MSER", "FREAK", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"MSER", "AKAZE", "FLANN"});
-        }
+    if (doDENSE) {
+        //*********** DENSE BF Tests ***********//
+        testConfigurations.push_back(std::vector<string>{"DENSE", "SIFT", "BF"});
+        testConfigurations.push_back(std::vector<string>{"DENSE", "BRIEF", "BF"});
+        testConfigurations.push_back(std::vector<string>{"DENSE", "ORB", "BF"});
+        testConfigurations.push_back(std::vector<string>{"DENSE", "SURF", "BF"});
+        testConfigurations.push_back(std::vector<string>{"DENSE", "BRISK", "BF"});
+        testConfigurations.push_back(std::vector<string>{"DENSE", "FREAK", "BF"});
+        testConfigurations.push_back(std::vector<string>{"DENSE", "AKAZE", "BF"});
 
-        if (doDENSE) {
-            //*********** DENSE BF Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"DENSE", "SIFT", "BF"});
-            testConfigurations.push_back(std::vector<string>{"DENSE", "BRIEF", "BF"});
-            testConfigurations.push_back(std::vector<string>{"DENSE", "ORB", "BF"});
-            testConfigurations.push_back(std::vector<string>{"DENSE", "SURF", "BF"});
-            testConfigurations.push_back(std::vector<string>{"DENSE", "BRISK", "BF"});
-            testConfigurations.push_back(std::vector<string>{"DENSE", "FREAK", "BF"});
-            testConfigurations.push_back(std::vector<string>{"DENSE", "AKAZE", "BF"});
+        //*********** DENSE FLANN Tests ***********//
+        testConfigurations.push_back(std::vector<string>{"DENSE", "SIFT", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"DENSE", "BRIEF", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"DENSE", "ORB", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"DENSE", "SURF", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"DENSE", "BRISK", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"DENSE", "FREAK", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"DENSE", "AKAZE", "FLANN"});
+    }
 
-            //*********** DENSE FLANN Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"DENSE", "SIFT", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"DENSE", "BRIEF", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"DENSE", "ORB", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"DENSE", "SURF", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"DENSE", "BRISK", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"DENSE", "FREAK", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"DENSE", "AKAZE", "FLANN"});
-        }
+    if (doSTAR) {
+        //*********** STAR BF Tests ***********//
+        testConfigurations.push_back(std::vector<string>{"STAR", "SIFT", "BF"});
+        testConfigurations.push_back(std::vector<string>{"STAR", "BRIEF", "BF"});
+        testConfigurations.push_back(std::vector<string>{"STAR", "ORB", "BF"});
+        testConfigurations.push_back(std::vector<string>{"STAR", "SURF", "BF"});
+        testConfigurations.push_back(std::vector<string>{"STAR", "BRISK", "BF"});
+        testConfigurations.push_back(std::vector<string>{"STAR", "FREAK", "BF"});
+        testConfigurations.push_back(std::vector<string>{"STAR", "AKAZE", "BF"});
 
-        if (doSTAR) {
-            //*********** STAR BF Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"STAR", "SIFT", "BF"});
-            testConfigurations.push_back(std::vector<string>{"STAR", "BRIEF", "BF"});
-            testConfigurations.push_back(std::vector<string>{"STAR", "ORB", "BF"});
-            testConfigurations.push_back(std::vector<string>{"STAR", "SURF", "BF"});
-            testConfigurations.push_back(std::vector<string>{"STAR", "BRISK", "BF"});
-            testConfigurations.push_back(std::vector<string>{"STAR", "FREAK", "BF"});
-            testConfigurations.push_back(std::vector<string>{"STAR", "AKAZE", "BF"});
+        //*********** STAR FLANN Tests ***********//
+        testConfigurations.push_back(std::vector<string>{"STAR", "SIFT", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"STAR", "BRIEF", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"STAR", "ORB", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"STAR", "SURF", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"STAR", "BRISK", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"STAR", "FREAK", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"STAR", "AKAZE", "FLANN"});
+    }
 
-            //*********** STAR FLANN Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"STAR", "SIFT", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"STAR", "BRIEF", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"STAR", "ORB", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"STAR", "SURF", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"STAR", "BRISK", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"STAR", "FREAK", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"STAR", "AKAZE", "FLANN"});
-        }
+    if (doSURF) {
+        //*********** SURF BF Tests ***********//
+        testConfigurations.push_back(std::vector<string>{"SURF", "SIFT", "BF"});
+        testConfigurations.push_back(std::vector<string>{"SURF", "BRIEF", "BF"});
+        testConfigurations.push_back(std::vector<string>{"SURF", "ORB", "BF"});
+        testConfigurations.push_back(std::vector<string>{"SURF", "SURF", "BF"});
+        testConfigurations.push_back(std::vector<string>{"SURF", "BRISK", "BF"});
+        testConfigurations.push_back(std::vector<string>{"SURF", "FREAK", "BF"});
+        testConfigurations.push_back(std::vector<string>{"SURF", "AKAZE", "BF"});
 
-        if (doSURF) {
-            //*********** SURF BF Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"SURF", "SIFT", "BF"});
-            testConfigurations.push_back(std::vector<string>{"SURF", "BRIEF", "BF"});
-            testConfigurations.push_back(std::vector<string>{"SURF", "ORB", "BF"});
-            testConfigurations.push_back(std::vector<string>{"SURF", "SURF", "BF"});
-            testConfigurations.push_back(std::vector<string>{"SURF", "BRISK", "BF"});
-            testConfigurations.push_back(std::vector<string>{"SURF", "FREAK", "BF"});
-            testConfigurations.push_back(std::vector<string>{"SURF", "AKAZE", "BF"});
+        //*********** SURF FLANN Tests ***********//
+        testConfigurations.push_back(std::vector<string>{"SURF", "SIFT", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"SURF", "BRIEF", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"SURF", "ORB", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"SURF", "SURF", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"SURF", "BRISK", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"SURF", "FREAK", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"SURF", "AKAZE", "FLANN"});
+    }
 
-            //*********** SURF FLANN Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"SURF", "SIFT", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"SURF", "BRIEF", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"SURF", "ORB", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"SURF", "SURF", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"SURF", "BRISK", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"SURF", "FREAK", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"SURF", "AKAZE", "FLANN"});
-        }
+    if (doBRISK) {
+        //*********** BRISK BF Tests ***********//
+        testConfigurations.push_back(std::vector<string>{"BRISK", "SIFT", "BF"});
+        testConfigurations.push_back(std::vector<string>{"BRISK", "BRIEF", "BF"});
+        testConfigurations.push_back(std::vector<string>{"BRISK", "ORB", "BF"});
+        testConfigurations.push_back(std::vector<string>{"BRISK", "SURF", "BF"});
+        testConfigurations.push_back(std::vector<string>{"BRISK", "BRISK", "BF"});
+        testConfigurations.push_back(std::vector<string>{"BRISK", "FREAK", "BF"});
+        testConfigurations.push_back(std::vector<string>{"BRISK", "AKAZE", "BF"});
 
-        if (doBRISK) {
-            //*********** BRISK BF Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"BRISK", "SIFT", "BF"});
-            testConfigurations.push_back(std::vector<string>{"BRISK", "BRIEF", "BF"});
-            testConfigurations.push_back(std::vector<string>{"BRISK", "ORB", "BF"});
-            testConfigurations.push_back(std::vector<string>{"BRISK", "SURF", "BF"});
-            testConfigurations.push_back(std::vector<string>{"BRISK", "BRISK", "BF"});
-            testConfigurations.push_back(std::vector<string>{"BRISK", "FREAK", "BF"});
-            testConfigurations.push_back(std::vector<string>{"BRISK", "AKAZE", "BF"});
+        //*********** BRISK FLANN Tests ***********//
+        testConfigurations.push_back(std::vector<string>{"BRISK", "SIFT", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"BRISK", "BRIEF", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"BRISK", "ORB", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"BRISK", "SURF", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"BRISK", "BRISK", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"BRISK", "FREAK", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"BRISK", "AKAZE", "FLANN"});
+    }
 
-            //*********** BRISK FLANN Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"BRISK", "SIFT", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"BRISK", "BRIEF", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"BRISK", "ORB", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"BRISK", "SURF", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"BRISK", "BRISK", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"BRISK", "FREAK", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"BRISK", "AKAZE", "FLANN"});
-        }
+    if (doORB) {
+        //*********** ORB BF Tests ***********//
+        testConfigurations.push_back(std::vector<string>{"ORB", "SIFT", "BF"});
+        testConfigurations.push_back(std::vector<string>{"ORB", "BRIEF", "BF"});
+        testConfigurations.push_back(std::vector<string>{"ORB", "ORB", "BF"});
+        testConfigurations.push_back(std::vector<string>{"ORB", "SURF", "BF"});
+        testConfigurations.push_back(std::vector<string>{"ORB", "BRISK", "BF"});
+        testConfigurations.push_back(std::vector<string>{"ORB", "FREAK", "BF"});
+        testConfigurations.push_back(std::vector<string>{"ORB", "AKAZE", "BF"});
 
-        if (doORB) {
-            //*********** ORB BF Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"ORB", "SIFT", "BF"});
-            testConfigurations.push_back(std::vector<string>{"ORB", "BRIEF", "BF"});
-            testConfigurations.push_back(std::vector<string>{"ORB", "ORB", "BF"});
-            testConfigurations.push_back(std::vector<string>{"ORB", "SURF", "BF"});
-            testConfigurations.push_back(std::vector<string>{"ORB", "BRISK", "BF"});
-            testConfigurations.push_back(std::vector<string>{"ORB", "FREAK", "BF"});
-            testConfigurations.push_back(std::vector<string>{"ORB", "AKAZE", "BF"});
+        //*********** ORB FLANN Tests ***********//
+        testConfigurations.push_back(std::vector<string>{"ORB", "SIFT", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"ORB", "BRIEF", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"ORB", "ORB", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"ORB", "SURF", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"ORB", "BRISK", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"ORB", "FREAK", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"ORB", "AKAZE", "FLANN"});
+    }
 
-            //*********** ORB FLANN Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"ORB", "SIFT", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"ORB", "BRIEF", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"ORB", "ORB", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"ORB", "SURF", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"ORB", "BRISK", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"ORB", "FREAK", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"ORB", "AKAZE", "FLANN"});
-        }
+    if (doAKAZE) {
+        //*********** AKAZE BF Tests ***********//
+        testConfigurations.push_back(std::vector<string>{"AKAZE", "SIFT", "BF"});
+        testConfigurations.push_back(std::vector<string>{"AKAZE", "BRIEF", "BF"});
+        testConfigurations.push_back(std::vector<string>{"AKAZE", "ORB", "BF"});
+        testConfigurations.push_back(std::vector<string>{"AKAZE", "SURF", "BF"});
+        testConfigurations.push_back(std::vector<string>{"AKAZE", "BRISK", "BF"});
+        testConfigurations.push_back(std::vector<string>{"AKAZE", "FREAK", "BF"});
+        testConfigurations.push_back(std::vector<string>{"AKAZE", "AKAZE", "BF"});
 
-        if (doAKAZE) {
-            //*********** AKAZE BF Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"AKAZE", "SIFT", "BF"});
-            testConfigurations.push_back(std::vector<string>{"AKAZE", "BRIEF", "BF"});
-            testConfigurations.push_back(std::vector<string>{"AKAZE", "ORB", "BF"});
-            testConfigurations.push_back(std::vector<string>{"AKAZE", "SURF", "BF"});
-            testConfigurations.push_back(std::vector<string>{"AKAZE", "BRISK", "BF"});
-            testConfigurations.push_back(std::vector<string>{"AKAZE", "FREAK", "BF"});
-            testConfigurations.push_back(std::vector<string>{"AKAZE", "AKAZE", "BF"});
+        //*********** AKAZE FLANN Tests ***********//
+        testConfigurations.push_back(std::vector<string>{"AKAZE", "SIFT", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"AKAZE", "BRIEF", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"AKAZE", "ORB", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"AKAZE", "SURF", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"AKAZE", "BRISK", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"AKAZE", "FREAK", "FLANN"});
+        testConfigurations.push_back(std::vector<string>{"AKAZE", "AKAZE", "FLANN"});
+    }
 
-            //*********** AKAZE FLANN Tests ***********//
-            testConfigurations.push_back(std::vector<string>{"AKAZE", "SIFT", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"AKAZE", "BRIEF", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"AKAZE", "ORB", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"AKAZE", "SURF", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"AKAZE", "BRISK", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"AKAZE", "FREAK", "FLANN"});
-            testConfigurations.push_back(std::vector<string>{"AKAZE", "AKAZE", "FLANN"});
-        }
+    for (auto &configuration : testConfigurations) {
 
-        for (auto &configuration : testConfigurations) {
+        // clone images to clean previous drawings
+        sceneRgbImage = sceneRgbImageData.clone();
+        sceneGrayImage = sceneGrayImageData.clone();
 
+        // configure controller
+        configure(configuration.at(0), configuration.at(1), configuration.at(2));
 
-            // clone images to clean previous drawings
-            sceneRgbImage = sceneRgbImageData.clone();
-            sceneGrayImage = sceneGrayImageData.clone();
+        cout << "-----------------------------------------------------" << endl;
+        cout << "Testing.. [Detector=" << Analyzer::DETECTOR << ", Extractor=" << Analyzer::EXTRACTOR <<
+        ", Matcher=" << Analyzer::MATCHER << "]" << endl;
+        cout << "-----------------------------------------------------" << endl;
 
-            // configure controller
-            configure(configuration.at(0), configuration.at(1), configuration.at(2));
+        // (re-)create object pattern
+        createObjectPattern(objectRgbImage, objectGrayImage);
 
-            cout << "Testing.. [Detector=" << Analyzer::DETECTOR << ", Extractor=" << Analyzer::EXTRACTOR <<
-            ", Matcher=" << Analyzer::MATCHER << "]" << endl;
+        // do testruns
+        bool shouldQuit = false;
+        int isRun = 0;
+        do {
 
-            // (re-)create object pattern
-            createObjectPattern(objectRgbImage, objectGrayImage);
+            // count testrun
+            isRun++;
 
-            if (Controller::MODE_DEBUG) {
-                cout << "::Run_" << isRun << "/" << doRuns << "::" << endl;
-            }
-
+            // do test
             int result = displayFunction(sceneRgbImage, sceneGrayImage);
 
+            // print result
             if (result == 1) {
-                    cout << "Result: Object found!" << endl;
-                    cout << "-----------------------------------------------------" << endl;
+                cout << "Test(" << isRun << "/" << doRuns << ") Result: Object found!" << endl;
             } else {
-                    cout << "Result: Object NOT found!" << endl;
-                    cout << "-----------------------------------------------------" << endl;
+                cout << "Test(" << isRun << "/" << doRuns << ") Result: Failed!" << endl;
+
             }
 
-        }
+            // continue?
+            if (isRun == doRuns) {
+                shouldQuit = true;
+            }
 
-        if (isRun == doRuns) {
-            shouldQuit = true;
-        }
+        } while (!shouldQuit);
 
-    } while (!shouldQuit);
+    }
 
     // restore last state
     isModeObjectDetection(wasObjectDetection);

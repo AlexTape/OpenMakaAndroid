@@ -345,7 +345,7 @@ void Analyzer::matchBinaryDescriptors(SceneFrame &sceneFrame, std::vector<cv::Po
         }
 
         if (Controller::MODE_STATISTICS) {
-            Controller::statistics("Matcher", (string) "Flann_LSH");
+            Controller::statistics("Matcher", (string) "Flann");
         }
 
         resultIndex = cv::Mat(activeObjectPattern->descriptors.rows, K_GROUPS, CV_32SC1);
@@ -462,7 +462,7 @@ void Analyzer::matchFloatDescriptors(SceneFrame &sceneFrame, std::vector<cv::Poi
         }
 
         if (Controller::MODE_STATISTICS) {
-            Controller::statistics("Matcher", (string) "Flann_KDTree");
+            Controller::statistics("Matcher", (string) "Flann");
         }
 
         resultIndex = cv::Mat(activeObjectPattern->descriptors.rows, K_GROUPS, CV_32SC1); // Results index
@@ -622,7 +622,7 @@ bool Analyzer::process(SceneFrame &sceneFrame) {
                 Controller::statistics("PerspectiveTransform(ms)", (double) timer->getMillis());
             }
 
-            if (Controller::USE_WINDOWS) {
+            if (Controller::MODE_USE_WINDOWS) {
 
                 // drawing contours
                 Drawer::drawContour(sceneFrame.gray, sceneFrame.objectPosition, cv::Scalar(0, 255, 0));
@@ -659,35 +659,6 @@ bool Analyzer::process(SceneFrame &sceneFrame) {
     bool objectFound = false;
     if (enoughInliers) {
         objectFound = isRectangle(sceneFrame.objectPosition);
-    }
-
-    // add text to window(s)
-    if (Controller::USE_WINDOWS) {
-
-        // create text
-        char text[255];
-        string gotObject = "";
-        if (objectFound) {
-            gotObject = "true";
-        } else {
-            gotObject = "false";
-        }
-        sprintf(text, "%s-%s-%s Found:%s", DETECTOR.c_str(), EXTRACTOR.c_str(), MATCHER.c_str(), gotObject.c_str());
-
-        // draw text background (white)
-        cv::rectangle(sceneFrame.gray, cv::Point(0, 0), cv::Point(305, 25), CV_RGB(255, 255, 255), -1);
-
-        // draw text
-        cv::putText(sceneFrame.gray, text, cv::Point(10, 15), CV_FONT_HERSHEY_PLAIN,
-                    1,
-                    CV_RGB(255, 0, 0));
-
-        // open custom windows
-        imshow(DETECTOR + "-" + EXTRACTOR + "-" + MATCHER, sceneFrame.gray);
-
-        // save image?
-        imwrite(Controller::STORAGE_PATH + "/images/test-result-images/" + DETECTOR
-                + "-" + EXTRACTOR + "-" + MATCHER + ".jpg", sceneFrame.gray);
     }
 
     return objectFound;

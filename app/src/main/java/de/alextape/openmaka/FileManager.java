@@ -22,7 +22,7 @@ public class FileManager {
     public static String CONFIG_FILE_PATH;
     public static String STATISTICS_FILE = "/statistics.csv";
     public static String STATISTICS_FILE_PATH;
-    public static String[] STORAGE_FOLDERS = new String[]{"config", "images"};
+    public static String[] STORAGE_FOLDERS = new String[]{"config", "images", "test-results"};
     public static String[] COPY_ASSETS = new String[]{"images/card.jpg", "images/card_frame.jpg", "config/config.xml"};
 
     public FileManager(Context context) {

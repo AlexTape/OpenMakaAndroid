@@ -36,6 +36,7 @@ public class SettingsActivity extends AppCompatActivity implements CompoundButto
 
     private CheckBox mStatisticBox;
     private CheckBox mDebugBox;
+    private CheckBox mResultImageBox;
 
     private EditText mMaxResolutionEditText;
 
@@ -51,6 +52,7 @@ public class SettingsActivity extends AppCompatActivity implements CompoundButto
 
     private boolean statisticsMode;
     private boolean debugMode;
+    private boolean resultImageMode;
 
     private int maxImageSize;
 
@@ -139,6 +141,9 @@ public class SettingsActivity extends AppCompatActivity implements CompoundButto
         mDebugBox = (CheckBox) findViewById(R.id.check_debug);
         mDebugBox.setOnCheckedChangeListener(this);
 
+        mResultImageBox = (CheckBox) findViewById(R.id.check_result_image_mode);
+        mResultImageBox.setOnCheckedChangeListener(this);
+
         mMaxResolutionEditText = (EditText) findViewById(R.id.edit_maximal_image_size);
 
         mMinimumInliers = (EditText) findViewById(R.id.edit_minimum_inliers);
@@ -166,6 +171,7 @@ public class SettingsActivity extends AppCompatActivity implements CompoundButto
 
             statisticsMode = Boolean.parseBoolean(document.getElementsByTagName("statisticsMode").item(0).getFirstChild().getTextContent());
             debugMode = Boolean.parseBoolean(document.getElementsByTagName("debugMode").item(0).getFirstChild().getTextContent());
+            resultImageMode = Boolean.parseBoolean(document.getElementsByTagName("saveResultFrames").item(0).getFirstChild().getTextContent());
 
             maxImageSize = Integer.parseInt(document.getElementsByTagName("maxImageSize").item(0).getFirstChild().getTextContent());
 
@@ -237,6 +243,7 @@ public class SettingsActivity extends AppCompatActivity implements CompoundButto
 
         mStatisticBox.setChecked(statisticsMode);
         mDebugBox.setChecked(debugMode);
+        mResultImageBox.setChecked(resultImageMode);
 
         mMaxResolutionEditText.setText(String.valueOf(maxImageSize));
 
@@ -258,6 +265,7 @@ public class SettingsActivity extends AppCompatActivity implements CompoundButto
 
             statisticsMode = mStatisticBox.isChecked();
             debugMode = mDebugBox.isChecked();
+            resultImageMode = mResultImageBox.isChecked();
 
             maxImageSize = Integer.parseInt(mMaxResolutionEditText.getText().toString());
 
@@ -273,6 +281,7 @@ public class SettingsActivity extends AppCompatActivity implements CompoundButto
 
             document.getElementsByTagName("statisticsMode").item(0).getFirstChild().setTextContent(String.valueOf(statisticsMode));
             document.getElementsByTagName("debugMode").item(0).getFirstChild().setTextContent(String.valueOf(debugMode));
+            document.getElementsByTagName("saveResultFrames").item(0).getFirstChild().setTextContent(String.valueOf(resultImageMode));
 
             document.getElementsByTagName("maxImageSize").item(0).getFirstChild().setTextContent(String.valueOf(maxImageSize));
 
@@ -303,6 +312,9 @@ public class SettingsActivity extends AppCompatActivity implements CompoundButto
                 break;
             case R.id.check_debug:
                 debugMode = isChecked;
+                break;
+            case R.id.check_result_image_mode:
+                resultImageMode = isChecked;
                 break;
         }
     }

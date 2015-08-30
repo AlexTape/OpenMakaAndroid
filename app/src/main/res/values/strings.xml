@@ -56,4 +56,5 @@
     <string name="test_quantifier_hint">Iterations (Number)</string>
     <string name="save">Save</string>
     <string name="close">close</string>
+    <string name="edit_result_image_mode">Save Result Images</string>
 </resources>
