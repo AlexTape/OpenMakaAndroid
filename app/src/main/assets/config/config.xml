@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <opencv_storage>
-    <storagePath>/storage/emulated/0/Android/data/de.alextape.openmaka/files</storagePath>
-    <!--<storagePath>/home/thinker/ClionProjects/OpenMakaEngine</storagePath>-->
+    <storagePath>/home/thinker/ClionProjects/OpenMakaEngine</storagePath>
     <defaultObjectImage>/images/card.jpg</defaultObjectImage>
     <statisticsMode>true</statisticsMode>
     <statisticsFile>test-results/statistics.csv</statisticsFile>
