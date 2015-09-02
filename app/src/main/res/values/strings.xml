@@ -15,6 +15,7 @@
     <string name="detector_gftt">GFTT</string>
     <string name="detector_mser">MSER</string>
     <string name="detector_star">STAR</string>
+    <string name="detector_akaze">AKAZE</string>
     <string name="feature_extractors_title">Feature Extractors</string>
     <string name="extractor_sift">SIFT</string>
     <string name="extractor_brief">BRIEF</string>
@@ -22,6 +23,7 @@
     <string name="extractor_surf">SURF</string>
     <string name="extractor_brisk">BRISK</string>
     <string name="extractor_freak">FREAK</string>
+    <string name="extractor_akaze">AKAZE</string>
     <string name="feature_matchers_title">Feature Matchers</string>
     <string name="matcher_flannbased">Flannbased Matcher</string>
     <string name="matcher_bruteforce">BruteForce Matcher</string>

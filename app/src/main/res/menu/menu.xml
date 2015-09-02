@@ -95,6 +95,11 @@
                     android:orderInCategory="100"
                     app:showAsAction="never"
                     android:title="@string/detector_star"/>
+                <item
+                    android:id="@+id/feature_detector_akaze"
+                    android:orderInCategory="100"
+                    app:showAsAction="never"
+                    android:title="@string/detector_akaze"/>
             </group>
         </menu>
     </item>
@@ -143,6 +148,11 @@
                     android:orderInCategory="100"
                     app:showAsAction="never"
                     android:title="@string/extractor_freak"/>
+                <item
+                    android:id="@+id/feature_extractor_akaze"
+                    android:orderInCategory="100"
+                    app:showAsAction="never"
+                    android:title="@string/extractor_akaze"/>
             </group>
         </menu>
     </item>

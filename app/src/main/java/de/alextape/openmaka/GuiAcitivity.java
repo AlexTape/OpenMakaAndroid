@@ -24,6 +24,8 @@ abstract class GuiAcitivity extends AppCompatActivity {
     private String extractor;
     private String matcher;
 
+    private Menu menu;
+
     public GuiAcitivity() {
         Log.i(TAG, "Instantiated new " + this.getClass());
     }
@@ -57,11 +59,12 @@ abstract class GuiAcitivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
+        this.menu = menu;
 
         // predeclare checked options
         detector = "SIFT";
         extractor = "SIFT";
-        matcher = "FLANN_X";
+        matcher = "Flann";
 
         // check checkboxes
         menu.findItem(R.id.feature_detector_sift).setChecked(true);
@@ -85,16 +88,16 @@ abstract class GuiAcitivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.enable_mode_object_detection:
-                boolean isDetection = NativeController.isModeObjectDetection();
-                NativeController.setModeObjectDetection(!isDetection);
+                boolean isDetection = item.isChecked();
+                NativeController.setModeObjectDetection(isDetection);
                 break;
             case R.id.enable_mode_tracking:
-                boolean isTracking = NativeController.isModeTracking();
-                NativeController.setModeTracking(!isTracking);
+                boolean isTracking = item.isChecked();
+                NativeController.setModeTracking(isTracking);
                 break;
             case R.id.enable_mode_opengl:
-                boolean isOpenGL = NativeController.isModeOpenGl();
-                NativeController.setModeOpenGl(!isOpenGL);
+                boolean isOpenGL = item.isChecked();
+                NativeController.setModeOpenGl(isOpenGL);
                 break;
             case R.id.general_options:
                 Intent intent = new Intent(this, SettingsActivity.class);
@@ -144,6 +147,10 @@ abstract class GuiAcitivity extends AppCompatActivity {
                 detector ="STAR";
                 update();
                 break;
+            case R.id.feature_detector_akaze:
+                detector ="AKAZE";
+                update();
+                break;
             // extractor switching
             case R.id.feature_extractor_sift:
                 extractor ="SIFT";
@@ -169,13 +176,17 @@ abstract class GuiAcitivity extends AppCompatActivity {
                 extractor ="FREAK";
                 update();
                 break;
+            case R.id.feature_extractor_akaze:
+                extractor ="AKAZE";
+                update();
+                break;
             // matcher switching
             case R.id.matcher_bruteforce:
-                matcher = "BF_NORM_L2";
+                matcher = "BF";
                 update();
                 break;
             case R.id.matcher_flannbased:
-                matcher = "FLANN_X";
+                matcher = "Flann";
                 update();
                 break;
         }
@@ -187,7 +198,9 @@ abstract class GuiAcitivity extends AppCompatActivity {
 
     private void update() {
         NativeController.setModeObjectDetection(false);
+        this.menu.findItem(R.id.enable_mode_object_detection).setChecked(false);
         NativeController.setModeTracking(false);
+        this.menu.findItem(R.id.enable_mode_tracking).setChecked(false);
         Toast.makeText(getApplicationContext(), "Processing disabled.. configuring..", Toast.LENGTH_SHORT).show();
         NativeController.configure(detector, extractor, matcher);
     }
