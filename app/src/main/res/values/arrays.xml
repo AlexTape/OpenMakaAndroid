@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="tests_array">
+        <item>All</item>
+        <item>Test SIFT</item>
+        <item>Test FAST</item>
+        <item>Test GFTT</item>
+        <item>Test MSER</item>
+        <item>Test DENSE</item>
+        <item>Test STAR</item>
+        <item>Test SURF</item>
+        <item>Test BRISK</item>
+        <item>Test ORB</item>
+        <item>Test AKAZE</item>
+    </string-array>
+</resources>

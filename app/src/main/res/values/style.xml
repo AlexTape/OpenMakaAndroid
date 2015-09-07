@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="open_maka_base_theme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:textColorPrimary">#000000</item>
+        <item name="android:textColorSecondary">#000000</item>
+        <item name="android:textColorTertiary">#000000</item>
+        <item name="colorPrimary">#c0c0c0</item>
+        <item name="colorPrimaryDark">@android:color/darker_gray</item>
+        <item name="android:windowBackground">@android:color/white</item>
+    </style>
+
+    <!-- Transparent ActionBar Style -->
+    <style name="YourAppTheme.Light.ActionBar.Transparent" parent="@style/Widget.AppCompat.Light.ActionBar">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="background">@android:color/transparent</item>
+    </style>
+
+    <style name="open_maka_base_transparent" parent="open_maka_base_theme">
+        <item name="android:actionBarStyle">@style/YourAppTheme.Light.ActionBar.Transparent</item>
+        <item name="actionBarStyle">@style/YourAppTheme.Light.ActionBar.Transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="windowActionBarOverlay">true</item>
+    </style>
+
+    <style name="open_maka_base" parent="open_maka_base_theme">
+    </style>
+
+</resources>
