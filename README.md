@@ -1,20 +1,12 @@
-# OpenMaka
+# OpenMakaAndroid App
 
-** THIS APPLICATION IS NOT RELEASED YET **
+## Master-Branch
 
-This project contains two different repositories.
+This branch implements the OpenMakaEngine as an Android Application. It is using the Android4OpenCV Library to deliver frames via the JNI Interface for processing with OpenMakaEngine.
 
 ## Custom-Branch
 
-This branch implements a custom Camera API to deliver single frames via AsyncTasks to the JNI interface.
-
-## OpenCV-Branch
-
-This branch implements the Android4OpenCV Library to deliver frames to the JNI interface.
-
-## JNI
-
-Both branches will be contain the same C++/JNI/NDK Code to process image frames.
+This branch implements a custom Camera API to deliver single frames via AsyncTasks to the JNI interface. OpenMakaEngine not ported yet.
 
 ## Setup
 
