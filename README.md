@@ -2,7 +2,7 @@
 
 ## Master-Branch
 
-This branch implements the OpenMakaEngine as an Android Application. It is using the Android4OpenCV Library to deliver frames via the JNI Interface for processing with OpenMakaEngine.
+This branch implements the OpenMakaEngine as an Android Application. It is using a spindown of Android4OpenCV Library to deliver frames via the JNI Interface for processing with OpenMakaEngine.
 
 ## Custom-Branch
 
